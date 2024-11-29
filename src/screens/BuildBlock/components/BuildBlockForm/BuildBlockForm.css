@@ -1,0 +1,28 @@
+.flex-horizontal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.input-spacing {
+  margin-bottom: 10px;
+}
+
+.section-spacing {
+  margin-top: 15px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
