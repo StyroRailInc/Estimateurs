@@ -1,3 +1,20 @@
 {
-  "Wall dimensions": "Dimensions du mur"
+  "Wall Dimensions": "Dimensions du Mur",
+  "Home": "Accueil",
+  "Length": "Longueur",
+  "Width": "Largeur",
+  "Height": "Hauteur",
+  "Inside 90": "Interne 90",
+  "Outside 90": "Externe 90",
+  "Inside 45": "Interne 45",
+  "Outside 45": "Externe 45",
+  "Corners": "Coins",
+  "Compute": "Calculer",
+  "Add": "Ajouter",
+  "Delete": "Supprimer",
+  "Number of Corners": "Nombre de Coins",
+  "Opening": "Ouverture",
+  "Brick Ledge": "Support à Maçon",
+  "Double Taper Top": "Double Biseaux",
+  "Re Bars": "Armatures"
 }

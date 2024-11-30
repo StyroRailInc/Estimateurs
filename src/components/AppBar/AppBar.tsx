@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,8 +9,18 @@ import "./AppBar.css";
 import LinkButton from "../LinkButton";
 import "./../../global.css";
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 export default function ButtonAppBar() {
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState<string>(i18n.language);
+  const updateLanguage = () => {
+    setLanguage((prev) => {
+      return prev === "fr" ? "eng" : "fr";
+    });
+    i18n.changeLanguage(language === "fr" ? "eng" : "fr");
+  };
   return (
     <>
       <AppBar
@@ -32,13 +42,15 @@ export default function ButtonAppBar() {
             <p>STYRORAIL</p>
           </div>
           <div className="center-container">
-            <LinkButton to={"/"}>Accueil</LinkButton>
+            <LinkButton to={"/"}>{t("Accueil")}</LinkButton>
             <LinkButton to={"/buildblock"}>Build Block</LinkButton>
             <LinkButton to={"/srf"}>SR-F</LinkButton>
             <LinkButton to={"/contact"}>Contact</LinkButton>
           </div>
           <div className="right-container">
-            <Button color="secondary">ENG</Button>
+            <Button color="secondary" onClick={updateLanguage}>
+              {language}
+            </Button>
           </div>
         </Toolbar>
       </AppBar>
