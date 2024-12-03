@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
+const FormTextField = styled(TextField)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "#ffffff",
   borderRadius: "4px",
   "& .MuiOutlinedInput-root": {
@@ -17,4 +17,4 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export default CustomTextField;
+export default FormTextField;

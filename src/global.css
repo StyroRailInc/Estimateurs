@@ -1,7 +1,51 @@
+/* Define common styles */
+:root {
+  --primary-color-light: #3c5466;
+  --secondary-color-light: #08aceb;
+  --primary-color-dark: #08aceb;
+  --secondary-color-dark: #f2f2f2;
+  --background-color-light: #f2f2f2;
+  --background-color-dark: #3c5466;
+  --text-color-light: #3c5466;
+  --text-color-dark: #3c5466;
+  --text-color-header-light: #ffffff;
+  --text-color-header-dark: #ffffff;
+}
+
 .full-height {
   height: 100%;
 }
 
+.full-width {
+  width: 100%;
+}
+
 .button-no-caps {
   text-transform: none;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.space-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-horizontal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.flex-vertical {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import Drawer from "../Drawer";
 import { Button } from "@mui/material";
-import CustomTextField from "src/components/CustomTextField";
+import CustomTextField from "src/components/FormTextField";
 import "./../../BuildBlock.css";
 
 interface SummaryProps {}

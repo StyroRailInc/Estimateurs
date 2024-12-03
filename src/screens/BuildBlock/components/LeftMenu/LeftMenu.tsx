@@ -8,10 +8,10 @@ interface LeftMenuProps {
   onChangeSection: Dispatch<React.SetStateAction<string>>;
 }
 
-// Styled button for conditional styling
-const StyledButton = styled(Button)<{ isSelected: boolean }>(({ isSelected }) => ({
-  backgroundColor: isSelected ? "white" : "transparent",
-  // color: isSelected ? "black" : "inherit",
+// Styled button for conditional styling lowercase to supress warning
+const StyledButton = styled(Button)<{ isselected: string }>(({ isselected }) => ({
+  backgroundColor: isselected === "true" ? "white" : "transparent",
+  // color: isselected ? "black" : "inherit",
   "&:hover": {
     backgroundColor: "#e6e6e6",
   },
@@ -23,7 +23,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       <StyledButton
         fullWidth
         className="button-left-aligned"
-        isSelected={activeSection === "buildBlockForm"}
+        isselected={activeSection === "buildBlockForm" ? "true" : "false"}
         onClick={() => {
           onChangeSection("buildBlockForm");
         }}
@@ -34,7 +34,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       <StyledButton
         fullWidth
         className="button-left-aligned"
-        isSelected={activeSection === "buildDeckForm"}
+        isselected={activeSection === "buildDeckForm" ? "true" : "false"}
         onClick={() => {
           onChangeSection("buildDeckForm");
         }}
@@ -45,7 +45,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       <StyledButton
         fullWidth
         className="button-left-aligned"
-        isSelected={activeSection === "summary"}
+        isselected={activeSection === "summary" ? "true" : "false"}
         onClick={() => {
           onChangeSection("summary");
         }}

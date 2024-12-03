@@ -1,26 +1,28 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import "./AppBar.css";
-
 import LinkButton from "../LinkButton";
 import "./../../global.css";
-import { Button } from "@mui/material";
+import { Button, IconButton, Palette } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+import LightMode from "@mui/icons-material/LightMode";
+import DarkMode from "@mui/icons-material/DarkMode";
+import ColorModeContext from "src/context/ColorModeContext";
+import { PaletteMode } from "@mui/material";
 
 export default function ButtonAppBar() {
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState<string>(i18n.language);
+  const { mode, setMode } = useContext(ColorModeContext);
   const updateLanguage = () => {
     setLanguage((prev) => {
       return prev === "fr" ? "eng" : "fr";
     });
     i18n.changeLanguage(language === "fr" ? "eng" : "fr");
   };
+
   return (
     <>
       <AppBar
@@ -48,6 +50,15 @@ export default function ButtonAppBar() {
             <LinkButton to={"/contact"}>Contact</LinkButton>
           </div>
           <div className="right-container">
+            <IconButton
+              color="secondary"
+              onClick={() => {
+                setMode(mode === "light" ? "dark" : "light");
+              }}
+            >
+              {mode === "light" && <LightMode />}
+              {mode === "dark" && <DarkMode />}
+            </IconButton>
             <Button color="secondary" onClick={updateLanguage}>
               {language}
             </Button>

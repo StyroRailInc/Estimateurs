@@ -16,7 +16,6 @@ const Drawer: React.FC<DrawerProps> = ({ title, isOpen = true, children }) => {
       <Button
         fullWidth
         disableElevation
-        disableTouchRipple
         className="button-left-aligned medium-font-size"
         onClick={() => {
           setIsDrawerOpen((prev) => !prev);

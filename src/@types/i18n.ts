@@ -1,6 +1,6 @@
 import "react-i18next";
 
-// Define the type for your translations
+// define the type for translations
 declare module "react-i18next" {
   interface CustomTypeOptions {
     defaultNS: "translation";

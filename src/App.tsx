@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./App.css";
 import { ThemeProvider, Button, TextField, PaletteMode, createTheme } from "@mui/material";
 import getDesignTokens from "./themes/getDesignTokens";
@@ -11,25 +11,18 @@ import NoPage from "./screens/NoPage/NoPage";
 import AppBar from "./../src/components/AppBar";
 import Home from "./screens/Home";
 import Contact from "./screens/Contact";
-
-const ColorModeContext = React.createContext({});
+import ColorModeContext from "./context/ColorModeContext";
 
 function App() {
-  const [mode, setMode] = React.useState<PaletteMode>("light");
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode: PaletteMode) => (prevMode === "light" ? "dark" : "light"));
-      },
-    }),
-    []
-  );
+  const colorMode = useContext(ColorModeContext);
+  const [mode, setMode] = useState<PaletteMode>(colorMode.mode);
+  const value = { mode, setMode };
 
-  // Update the theme only if the mode changes
+  // Update the theme only if the mode changes.
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
-    <ColorModeContext.Provider value={mode}>
+    <ColorModeContext.Provider value={value}>
       <ThemeProvider theme={theme}>
         <CssBaseline>
           <StyledEngineProvider injectFirst>
