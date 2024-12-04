@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer } from "react";
 import Drawer from "../Drawer";
 import { Button } from "@mui/material";
 import FormTextField from "src/components/FormTextField";
@@ -6,11 +6,27 @@ import "./BuildBlockForm.css";
 import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
+import { OpeningState } from "../../types/BBTypes";
+import { openingReducer, initialOpeningState } from "./../../reducer";
 
-interface BuildBlockFormProps {}
+interface BuildBlockFormProps {
+  // openingState: OpeningState;
+  // openingDispatch: React.Dispatch<OpeningState>;
+}
 
 const BuildBlockForm: React.FC<BuildBlockFormProps> = () => {
   const { t } = useTranslation();
+  const [openingState, openingDispatch] = useReducer(openingReducer, initialOpeningState);
+
+  const handleAddOpeningPress = () => {
+    openingDispatch({ type: "addOpening" });
+  };
+
+  const handleDeleteOpeningPress = () => {
+    if (openingState.openings.length > 1) {
+      openingDispatch({ type: "deleteOpening" });
+    }
+  };
 
   return (
     <div className="main-page-container">
@@ -40,25 +56,44 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = () => {
           </div>
         </Drawer>
         <Drawer title={t("Ouverture")} isOpen={true}>
-          <div className="flex-horizontal">
-            <div className="flex-vertical full-width">
-              <label htmlFor="opening-width">{t("Largeur")}</label>
-              <FormTextField id="opening-width" fullWidth size="small" className="input-spacing" />
-            </div>
-            <div className="flex-vertical full-width margin-left">
-              <label htmlFor="opening-height">{t("Hauteur")}</label>
-              <FormTextField id="opening-height" fullWidth size="small" className="input-spacing" />
-            </div>
-            <div className="flex-vertical full-width margin-left">
-              <label htmlFor="opening-length">{t("Longueur")}</label>
-              <FormTextField id="opening-length" fullWidth size="small" className="input-spacing" />
-            </div>
-          </div>
+          {openingState.openings.map(() => {
+            return (
+              <div className="flex-horizontal">
+                <div className="flex-vertical full-width">
+                  <label htmlFor="opening-width">{t("Largeur")}</label>
+                  <FormTextField
+                    id="opening-width"
+                    fullWidth
+                    size="small"
+                    className="input-spacing"
+                  />
+                </div>
+                <div className="flex-vertical full-width margin-left">
+                  <label htmlFor="opening-height">{t("Hauteur")}</label>
+                  <FormTextField
+                    id="opening-height"
+                    fullWidth
+                    size="small"
+                    className="input-spacing"
+                  />
+                </div>
+                <div className="flex-vertical full-width margin-left">
+                  <label htmlFor="opening-length">{t("Longueur")}</label>
+                  <FormTextField
+                    id="opening-length"
+                    fullWidth
+                    size="small"
+                    className="input-spacing"
+                  />
+                </div>
+              </div>
+            );
+          })}
           <div className="space-between">
-            <Button variant="contained" color="success">
+            <Button variant="contained" color="success" onClick={handleAddOpeningPress}>
               {t("Ajouter")}
             </Button>
-            <Button variant="contained" color="error">
+            <Button variant="contained" color="error" onClick={handleDeleteOpeningPress}>
               {t("Supprimer")}
             </Button>
           </div>

@@ -10,7 +10,6 @@ import { useTranslation } from "react-i18next";
 import LightMode from "@mui/icons-material/LightMode";
 import DarkMode from "@mui/icons-material/DarkMode";
 import ColorModeContext from "src/context/ColorModeContext";
-import { PaletteMode } from "@mui/material";
 
 export default function ButtonAppBar() {
   const { t, i18n } = useTranslation();
@@ -25,31 +24,19 @@ export default function ButtonAppBar() {
 
   return (
     <>
-      <AppBar
-        position="sticky"
-        elevation={0}
-        sx={{
-          height: "48px !important", // Force the height
-        }}
-      >
-        <Toolbar
-          sx={{
-            height: "48px !important", // Force the height
-            padding: "0 16px",
-            minHeight: "48px !important", // Override minHeight
-          }}
-        >
-          <div className="left-container">
+      <AppBar position="sticky" elevation={0} className="app-bar">
+        <Toolbar className="toolbar">
+          <div className="left-container flex-start">
             <img src="/styro.png" alt="Company-logo" className="image"></img>
-            <p>STYRORAIL</p>
+            <p className="styrorail">STYRORAIL</p>
           </div>
-          <div className="center-container">
+          <div className="center-container flex-center">
             <LinkButton to={"/"}>{t("Accueil")}</LinkButton>
             <LinkButton to={"/buildblock"}>Build Block</LinkButton>
             <LinkButton to={"/srf"}>SR-F</LinkButton>
             <LinkButton to={"/contact"}>Contact</LinkButton>
           </div>
-          <div className="right-container">
+          <div className="right-container flex-end">
             <IconButton
               color="secondary"
               onClick={() => {

@@ -1,0 +1,19 @@
+.inner-page {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* Adjust column widths as needed */
+  gap: 1rem; /* Add space between columns */
+}
+
+.content {
+  grid-column: 2; /* Center column for main content */
+}
+
+.left-menu {
+  grid-column: 1;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.extra-content {
+  grid-column: 3; /* Right column for additional content */
+}
