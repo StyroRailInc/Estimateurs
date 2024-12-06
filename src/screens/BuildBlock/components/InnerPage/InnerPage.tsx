@@ -12,13 +12,13 @@ function InnerPage() {
   const renderContent = () => {
     switch (activeSection) {
       case "buildBlockForm":
-        return <BuildBlockForm />;
+        return <BuildBlockForm setInnerPage={setActiveSection} />;
       case "buildDeckForm":
         return <BuildDeckForm />;
       case "summary":
         return <Summary />;
       default:
-        return <BuildBlockForm />;
+        return <BuildBlockForm setInnerPage={setActiveSection} />;
     }
   };
 
@@ -29,7 +29,8 @@ function InnerPage() {
       </div>
 
       <div className="content">{renderContent()}</div>
-      <div className="extra-content">Extra content goes here</div>
+
+      <div className="right-menu"></div>
     </div>
   );
 }

@@ -1,19 +1,19 @@
 .inner-page {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr; /* Adjust column widths as needed */
-  gap: 1rem; /* Add space between columns */
+  grid-template-columns: 1fr 4fr 1fr;
+  margin: 0 auto;
 }
 
-.content {
-  grid-column: 2; /* Center column for main content */
+.left-menu,
+.content,
+.right-menu {
+  margin-top: 16px;
 }
 
 .left-menu {
-  grid-column: 1;
-  align-items: flex-start;
+  display: flex;
   justify-content: space-around;
-}
-
-.extra-content {
-  grid-column: 3; /* Right column for additional content */
+  align-items: flex-start;
+  margin-top: 80px;
+  /* position: fixed; */
 }

@@ -1,14 +1,17 @@
 import { height } from "@mui/system";
 import {
-  InputState,
-  InputAction,
+  BuildBlockFormState,
+  BuildBlockFormAction,
   OpeningAction,
   OpeningState,
   WallState,
   WallAction,
 } from "./types/BBTypes";
 
-function inputReducer(state: InputState, action: InputAction): InputState {
+function buildBlockFormReducer(
+  state: BuildBlockFormState,
+  action: BuildBlockFormAction
+): BuildBlockFormState {
   switch (action.type) {
     case "setLength":
       return { ...state, length: action.payload };
@@ -29,7 +32,7 @@ function inputReducer(state: InputState, action: InputAction): InputState {
     case "setBrickLedgeLength":
       return { ...state, brickLedgeLength: action.payload };
     case "resetInputs":
-      return { ...initialInputState };
+      return { ...initialbuildBlockFormState };
     case "setInputs":
       return { ...action.payload };
     case "setIsValidLength":
@@ -43,7 +46,7 @@ function inputReducer(state: InputState, action: InputAction): InputState {
   }
 }
 
-const initialInputState: InputState = {
+const initialbuildBlockFormState: BuildBlockFormState = {
   length: "",
   height: "",
   width: '8"',
@@ -134,7 +137,7 @@ function wallReducer(state: WallState, action: WallAction) {
     case "modifyWall": {
       const updatedWalls = [...state.walls];
       updatedWalls[action.payload.index] = {
-        inputState: action.payload.inputState,
+        buildBlockFormState: action.payload.buildBlockFormState,
         openingState: action.payload.openingState,
       };
 
@@ -144,10 +147,11 @@ function wallReducer(state: WallState, action: WallAction) {
       };
     }
     case "addWall": {
+      // Remove payload from type
       const updatedWalls = [...state.walls];
       updatedWalls.push({
-        inputState: action.payload.inputState,
-        openingState: action.payload.openingState,
+        buildBlockFormState: initialbuildBlockFormState,
+        openingState: initialOpeningState,
       });
 
       return { ...state, walls: updatedWalls };
@@ -163,8 +167,8 @@ function wallReducer(state: WallState, action: WallAction) {
       return { ...state, walls: updatedWalls };
     }
 
-    case "setPressedWallIndex":
-      return { ...state, pressedWallIndex: action.payload };
+    case "setClickedWallIndex":
+      return { ...state, clickedWallIndex: action.payload };
 
     default:
       return state;
@@ -172,13 +176,13 @@ function wallReducer(state: WallState, action: WallAction) {
 }
 
 const initialWallState: WallState = {
-  walls: [{ inputState: initialInputState, openingState: initialOpeningState }],
-  pressedWallIndex: 0,
+  walls: [{ buildBlockFormState: initialbuildBlockFormState, openingState: initialOpeningState }],
+  clickedWallIndex: 0,
 };
 
 export {
-  inputReducer,
-  initialInputState,
+  buildBlockFormReducer,
+  initialbuildBlockFormState,
   openingReducer,
   initialOpeningState,
   wallReducer,

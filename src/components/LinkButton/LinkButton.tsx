@@ -39,6 +39,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ to, children, props }) => {
       to={to}
       className="button-no-caps"
       {...props}
+      sx={{ color: "white" }}
     >
       {children}
     </Button>

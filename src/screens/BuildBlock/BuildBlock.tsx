@@ -5,9 +5,9 @@ interface BuildBlockProps {}
 
 const BuildBlock: React.FC<BuildBlockProps> = () => {
   return (
-    <div>
+    <main>
       <InnerPage />
-    </div>
+    </main>
   );
 };
 

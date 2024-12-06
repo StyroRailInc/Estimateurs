@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { ReactEventHandler, useEffect, useReducer } from "react";
 import Drawer from "../Drawer";
 import { Button } from "@mui/material";
 import FormTextField from "src/components/FormTextField";
@@ -6,57 +6,157 @@ import "./BuildBlockForm.css";
 import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
-import { OpeningState } from "../../types/BBTypes";
-import { openingReducer, initialOpeningState } from "./../../reducer";
+import { InnerPage } from "../../types/BBTypes";
+import {
+  openingReducer,
+  initialOpeningState,
+  buildBlockFormReducer,
+  initialbuildBlockFormState,
+} from "./../../reducer";
+import WallTab from "../WallTab";
 
 interface BuildBlockFormProps {
-  // openingState: OpeningState;
-  // openingDispatch: React.Dispatch<OpeningState>;
+  setInnerPage: React.Dispatch<InnerPage>;
 }
 
-const BuildBlockForm: React.FC<BuildBlockFormProps> = () => {
+const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
   const { t } = useTranslation();
   const [openingState, openingDispatch] = useReducer(openingReducer, initialOpeningState);
+  const [buildBlockFormState, buildBlockFormDispatch] = useReducer(
+    buildBlockFormReducer,
+    initialbuildBlockFormState
+  );
 
-  const handleAddOpeningPress = () => {
+  const handleAddOpeningClick = () => {
     openingDispatch({ type: "addOpening" });
   };
 
-  const handleDeleteOpeningPress = () => {
+  const handleDeleteOpeningClick = () => {
     if (openingState.openings.length > 1) {
       openingDispatch({ type: "deleteOpening" });
+    } else {
+      openingDispatch({ type: "resetOpening" });
     }
+  };
+
+  const handleComputeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setInnerPage("summary");
   };
 
   return (
     <div className="main-page-container">
+      <WallTab
+        buildBlockFormState={buildBlockFormState}
+        openingState={openingState}
+        buildBlockFormDispatch={buildBlockFormDispatch}
+        openingDispatch={openingDispatch}
+      />
       <form>
         <Drawer title={t("Dimensions du Mur")} isOpen={true}>
           <label htmlFor="width">{t("Largeur")}</label>
-          <FormTextField id="width" fullWidth size="small" className="input-spacing" required />
+          <FormTextField
+            id="width"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            required
+            value={buildBlockFormState.width}
+            onChange={(e) => {
+              buildBlockFormDispatch({ type: "setWidth", payload: e.target.value });
+            }}
+          />
           <label htmlFor="height">{t("Hauteur")}</label>
-          <FormTextField id="height" fullWidth size="small" className="input-spacing" required />
+          <FormTextField
+            id="height"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            required
+            value={buildBlockFormState.height}
+            onChange={(e) => {
+              buildBlockFormDispatch({ type: "setHeight", payload: e.target.value });
+            }}
+          />
           <label htmlFor="length">{t("Longueur")}</label>
-          <FormTextField id="length" fullWidth size="small" className="input-spacing" required />
+          <FormTextField
+            id="length"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            required
+            value={buildBlockFormState.length}
+            onChange={(e) => {
+              buildBlockFormDispatch({ type: "setLength", payload: e.target.value });
+            }}
+          />
         </Drawer>
         <Drawer title={t("Nombre de Coins")} isOpen={true}>
           <div className="flex-horizontal">
             <div className="flex-vertical full-width">
               <label htmlFor="inside-90">{t("Interne 90")}</label>
-              <FormTextField id="inside-90" fullWidth size="small" className="input-spacing" />
+              <FormTextField
+                id="inside-90"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.nInsideCorners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setNInsideCorners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
               <label htmlFor="outside-90">{t("Externe 90")}</label>
-              <FormTextField id="outside-90" fullWidth size="small" className="input-spacing" />
+              <FormTextField
+                id="outside-90"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.nOutsideCorners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setNOutsideCorners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
             </div>
             <div className="flex-vertical full-width margin-left">
               <label htmlFor="inside-45">{t("Interne 45")}</label>
-              <FormTextField id="inside-45" fullWidth size="small" className="input-spacing" />
+              <FormTextField
+                id="inside-45"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.n45InsideCorners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setN45InsideCorners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
               <label htmlFor="outside-45">{t("Externe 45")}</label>
-              <FormTextField id="outside-45" fullWidth size="small" className="input-spacing" />
+              <FormTextField
+                id="outside-45"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.n45OutsideCorners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setN45OutsideCorners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
             </div>
           </div>
         </Drawer>
         <Drawer title={t("Ouverture")} isOpen={true}>
-          {openingState.openings.map(() => {
+          {openingState.openings.map((_, index) => {
             return (
               <div className="flex-horizontal">
                 <div className="flex-vertical full-width">
@@ -66,6 +166,13 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = () => {
                     fullWidth
                     size="small"
                     className="input-spacing"
+                    value={openingState.openings[index].width}
+                    onChange={(e) => {
+                      openingDispatch({
+                        type: "modifyOpening",
+                        payload: { attribute: "width", value: e.target.value, index: index },
+                      });
+                    }}
                   />
                 </div>
                 <div className="flex-vertical full-width margin-left">
@@ -75,48 +182,77 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = () => {
                     fullWidth
                     size="small"
                     className="input-spacing"
+                    value={openingState.openings[index].height}
+                    onChange={(e) => {
+                      openingDispatch({
+                        type: "modifyOpening",
+                        payload: { attribute: "height", value: e.target.value, index: index },
+                      });
+                    }}
                   />
                 </div>
                 <div className="flex-vertical full-width margin-left">
-                  <label htmlFor="opening-length">{t("Longueur")}</label>
+                  <label htmlFor="opening-quantity">{t("Quantité")}</label>
                   <FormTextField
-                    id="opening-length"
+                    id="opening-quantity"
                     fullWidth
                     size="small"
                     className="input-spacing"
+                    value={openingState.openings[index].quantity}
+                    onChange={(e) => {
+                      openingDispatch({
+                        type: "modifyOpening",
+                        payload: { attribute: "quantity", value: e.target.value, index: index },
+                      });
+                    }}
                   />
                 </div>
               </div>
             );
           })}
           <div className="space-between">
-            <Button variant="contained" color="success" onClick={handleAddOpeningPress}>
+            <Button variant="contained" color="success" onClick={handleAddOpeningClick}>
               {t("Ajouter")}
             </Button>
-            <Button variant="contained" color="error" onClick={handleDeleteOpeningPress}>
+            <Button variant="contained" color="error" onClick={handleDeleteOpeningClick}>
               {t("Supprimer")}
             </Button>
           </div>
         </Drawer>
         <Drawer title={t("Support à Maçon")} isOpen={false}>
-          <label htmlFor="brick-ledge-width">{t("Largeur")}</label>
-          <FormTextField id="brick-ledge-width" fullWidth size="small" className="input-spacing" />
           <label htmlFor="brick-ledge-length">{t("Longueur")}</label>
-          <FormTextField id="brick-ledge-length" fullWidth size="small" className="input-spacing" />
+          <FormTextField
+            id="brick-ledge-length"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.brickLedgeLength}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setBrickLedgeLength",
+                payload: e.target.value,
+              });
+            }}
+          />
           <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
           <FormTextField id="brick-ledge-90" fullWidth size="small" className="input-spacing" />
           <label htmlFor="brick-ledge-45">{t("Coins") + "45"}</label>
           <FormTextField id="brick-ledge-45" fullWidth size="small" className="input-spacing" />
         </Drawer>
         <Drawer title={t("Double Biseaux")} isOpen={false}>
-          <label htmlFor="double-taper-width">{t("Largeur")}</label>
-          <FormTextField id="double-taper-width" fullWidth size="small" className="input-spacing" />
           <label htmlFor="double-taper-length">{t("Longueur")}</label>
           <FormTextField
             id="double-taper-length"
             fullWidth
             size="small"
             className="input-spacing"
+            value={buildBlockFormState.doubleTaperTopLength}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setDoubleTaperTopLength",
+                payload: e.target.value,
+              });
+            }}
           />
           <label htmlFor="double-taper-90">{t("Coins") + "90"}</label>
           <FormTextField id="double-taper-90" fullWidth size="small" className="input-spacing" />
@@ -127,7 +263,13 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = () => {
           <p>To be determined</p>
         </Drawer>
         <div className="flex-end" style={{ marginBottom: 100, marginTop: 20 }}>
-          <Button type="submit" variant="contained" color="secondary">
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            onClick={handleComputeClick}
+            sx={{ color: "white" }}
+          >
             {t("Calculer")}
           </Button>
         </div>

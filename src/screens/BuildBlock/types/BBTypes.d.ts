@@ -11,7 +11,7 @@ export type BlockType =
   | "brickLedge"
   | "buck";
 
-export type InputState = {
+export type BuildBlockFormState = {
   length: string;
   height: string;
   width: string;
@@ -26,7 +26,7 @@ export type InputState = {
   isValidWidth: boolean;
 };
 
-export type InputAction =
+export type BuildBlockFormAction =
   | { type: "setLength"; payload: string }
   | { type: "setHeight"; payload: string }
   | { type: "setWidth"; payload: string }
@@ -76,18 +76,22 @@ export type OpeningAction =
   | { type: "resetOpening" };
 
 export type WallState = {
-  walls: { inputState: InputState; openingState: OpeningState }[];
-  pressedWallIndex: number;
+  walls: { buildBlockFormState: BuildBlockFormState; openingState: OpeningState }[];
+  clickedWallIndex: number;
 };
 
 export type WallAction =
   | {
       type: "modifyWall";
-      payload: { inputState: InputState; openingState: OpeningState; index: number };
+      payload: {
+        buildBlockFormState: BuildBlockFormState;
+        openingState: OpeningState;
+        index: number;
+      };
     }
   | {
       type: "addWall";
-      payload: { inputState: InputState; openingState: OpeningState };
+      payload: { buildBlockFormState: BuildBlockFormState; openingState: OpeningState };
     }
   | {
       type: "deleteWall";
@@ -95,4 +99,6 @@ export type WallAction =
         index: number;
       };
     }
-  | { type: "setPressedWallIndex"; payload: number };
+  | { type: "setClickedWallIndex"; payload: number };
+
+export type InnerPage = "buildBlockForm" | "buildDeckForm" | "summary";
