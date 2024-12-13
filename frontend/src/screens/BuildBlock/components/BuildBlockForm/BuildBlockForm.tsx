@@ -25,31 +25,30 @@ import { json } from "stream/consumers";
 import { wallReducer, initialWallState } from "../../reducer";
 import { OpeningAction } from "../../types/BBTypes";
 
-// const usePersistedReducer = (key: string, reducer: any, initialState: any) => {
-//   const [state, dispatch] = useReducer(reducer, initialState, () => {
-//     const persisted = localStorage.getItem(key);
-//     return persisted ? JSON.parse(persisted) : initialState;
-//   });
-
-//   useEffect(() => {
-//     localStorage.setItem(key, JSON.stringify(state));
-//   }, [key, state]);
-
-//   return [state, dispatch];
-// };
-
 interface BuildBlockFormProps {
   setInnerPage: React.Dispatch<InnerPage>;
 }
 
 const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
   const { t } = useTranslation();
-  const [openingState, openingDispatch] = useReducer(openingReducer, initialOpeningState);
+  const [wallState, wallDispatch] = useReducer(wallReducer, initialWallState, () => {
+    const prev = sessionStorage.getItem("buildblock-estimation");
+    if (prev) {
+      const parsedPrev = JSON.parse(prev);
+      return parsedPrev as WallState;
+    }
+    return initialWallState;
+  });
+  const [openingState, openingDispatch] = useReducer(
+    openingReducer,
+    initialOpeningState,
+    () => wallState.walls[wallState.clickedWallIndex].openingState
+  );
   const [buildBlockFormState, buildBlockFormDispatch] = useReducer(
     buildBlockFormReducer,
-    initialbuildBlockFormState
+    initialbuildBlockFormState,
+    () => wallState.walls[wallState.clickedWallIndex].buildBlockFormState
   );
-  const [wallState, wallDispatch] = useReducer(wallReducer, initialWallState);
 
   const handleAddOpeningClick = () => {
     openingDispatch({ type: "addOpening" });
@@ -69,28 +68,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
 
   const handleComputeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    fetch("https://iuu1fxt4p2.execute-api.us-east-2.amazonaws.com/prod/compute/buildblock", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(wallState.walls),
-    })
-      .then((e) => e.json())
-      .then(function (e) {
-        if (e.statusCode === 400) {
-          console.log(e);
-          return;
-        }
-        console.log(e);
-        sessionStorage.setItem("buildblock-results", e.body);
-        setTimeout(() => {
-          setInnerPage("summary");
-        });
-      })
-      .catch(function (e) {
-        console.error(e);
-      });
+    setInnerPage("summary");
   };
 
   return (

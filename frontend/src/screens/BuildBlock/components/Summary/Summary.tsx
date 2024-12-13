@@ -1,152 +1,94 @@
-import React, { useState } from "react";
-import Drawer from "../Drawer";
-import { Button } from "@mui/material";
-import CustomTextField from "src/components/FormTextField";
-import "./../../BuildBlock.css";
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
-import "./../../../../global.css";
-import { WallState } from "../../types/BBTypes";
-import { initialWallState } from "../../reducer";
 
-interface SummaryProps {}
-
-function getResults() {
-  const results = sessionStorage.getItem("buildblock-results");
-  if (results) {
-    return JSON.parse(results);
-  }
-}
-
-const Summary: React.FC<SummaryProps> = () => {
+const Summary: React.FC = () => {
   const { t } = useTranslation();
-  const [data, setData] = useState(getResults());
+  const [data, setData] = useState();
 
+  useEffect(() => {
+    const estimation = sessionStorage.getItem("buildblock-estimation");
+    if (!estimation) {
+      return;
+    }
+    fetch("https://iuu1fxt4p2.execute-api.us-east-2.amazonaws.com/prod/compute/buildblock", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JSON.parse(estimation).walls),
+    })
+      .then((e) => e.json())
+      .then(function (e) {
+        console.log(e);
+        if (e.statusCode === 400) {
+          return;
+        }
+        setData(JSON.parse(e.body));
+      })
+      .catch(function (e) {
+        console.error(e);
+      });
+  }, []);
+
+  const blockTypes = [
+    { key: "straight", label: t("Blocs droits") },
+    { key: "ninetyCorner", label: t("Coins 90") },
+    { key: "fortyFiveCorner", label: t("Coins 45") },
+    { key: "brickLedge", label: t("Support à Maçon") },
+    { key: "doubleTaperTop", label: t("Double Biseaux") },
+    { key: "buck", label: t("Bucks") },
+  ];
+
+  const usedBlockTypes: string[] = [];
   return (
-    <div className="main-page-container">
-      <div className="flex-center-vertical">
-        <div className="flex-horizontal" style={{ justifyContent: "flex-start" }}>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Blocs droits")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{width}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Quantité")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{data[width]["straight"]}</p>;
-              })}
-          </div>
-          <div>
-            <p>{t("Paquets")}</p>
-          </div>
-        </div>
-
-        <div className="flex-horizontal" style={{ justifyContent: "flex-start" }}>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Coins 90")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{width}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Quantité")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{data[width]["ninetyCorner"]}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Paquets")}</p>
-          </div>
-        </div>
-        <div className="flex-horizontal full-width" style={{ justifyContent: "flex-start" }}>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Coins 45")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{width}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Quantité")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{data[width]["fortyFiveCorner"]}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Paquets")}</p>
-          </div>
-        </div>
-        <div className="flex-horizontal" style={{ justifyContent: "flex-start" }}>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Support à Maçon")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{width}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Quantité")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{data[width]["brickLedge"]}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Paquets")}</p>
-          </div>
-        </div>
-        <div className="flex-horizontal" style={{ justifyContent: "flex-start" }}>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Double Biseaux")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{width}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Quantité")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{data[width]["doubleTaperTop"]}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Paquets")}</p>
-          </div>
-        </div>
-        <div className="flex-horizontal" style={{ justifyContent: "flex-start" }}>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Bucks")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{width}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Quantité")}</p>
-            {data &&
-              Object.keys(data).map((width) => {
-                return <p>{data[width]["buck"]}</p>;
-              })}
-          </div>
-          <div className="flex-vertical" style={{ width: 200 }}>
-            <p>{t("Paquets")}</p>
-          </div>
-        </div>
-        <p>{t("Métriques")}</p>
-        <p>{t("Pieds carrés brut")}</p>
-        <p>{t("Pieds carrés net")}</p>
-        <p>{t("Pieds carrés d'ouverture")}</p>
-        <p>{t("Quantité de Béton")}</p>
-        <p>{t("Rebars")}</p>
-      </div>
-    </div>
+    <TableContainer component={Paper} style={{ marginTop: "20px" }}>
+      {data && (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t("Type de bloc")}</TableCell>
+              <TableCell>{t("Largeur")}</TableCell>
+              <TableCell>{t("Quantité")}</TableCell>
+              <TableCell>{t("Paquets")}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {blockTypes.map((type) => {
+              return Object.keys(data).map((width, index) => {
+                if (data[width][type.key]) {
+                  return (
+                    <TableRow key={`${type.key}-${width}`}>
+                      {!usedBlockTypes.includes(type.key)
+                        ? usedBlockTypes.push(type.key) && (
+                            <TableCell
+                              rowSpan={Object.keys(data).filter((h) => data[h][type.key]).length}
+                            >
+                              {type.label}
+                            </TableCell>
+                          )
+                        : null}
+                      <TableCell>{width}</TableCell>
+                      <TableCell>{data[width][type.key] || 0}</TableCell>
+                      <TableCell>{"TBD"}</TableCell>
+                    </TableRow>
+                  );
+                }
+                return null;
+              });
+            })}
+          </TableBody>
+        </Table>
+      )}
+    </TableContainer>
   );
 };
 

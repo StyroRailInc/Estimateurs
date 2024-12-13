@@ -11,6 +11,7 @@ import {
   WallState,
   WallAction,
 } from "../../types/BBTypes";
+import { initialWallState } from "../../reducer";
 
 interface WallTabProps {
   buildBlockFormState: BuildBlockFormState;
@@ -35,6 +36,7 @@ const StyledButton = styled(Button)<{ isSelected?: boolean }>(({ isSelected }) =
   fontSize: "1rem",
   textTransform: "none",
   marginRight: "10px",
+  height: "40px",
 }));
 
 const WallTab: React.FC<WallTabProps> = ({
@@ -72,6 +74,17 @@ const WallTab: React.FC<WallTabProps> = ({
     wallDispatch({ type: "setClickedWallIndex", payload: wallState.walls.length });
   };
 
+  const handleDeleteWallTabClick = () => {
+    const { clickedWallIndex, walls } = wallState;
+    if (walls.length === 1) {
+      wallDispatch({ type: "setWalls", payload: initialWallState });
+      return;
+    }
+    wallDispatch({ type: "deleteWall", payload: { index: clickedWallIndex } });
+    const newClickedIndex = Math.min(clickedWallIndex, walls.length - 2);
+    wallDispatch({ type: "setClickedWallIndex", payload: newClickedIndex });
+  };
+
   useEffect(() => {
     buildBlockFormDispatch({
       type: "setInputs",
@@ -96,35 +109,61 @@ const WallTab: React.FC<WallTabProps> = ({
 
   return (
     <div
+      className="flex-horizontal"
       style={{
         display: "flex",
         justifyContent: "flex-start",
-        alignItems: "stretch",
         width: "100%",
         padding: "10px 0",
         borderBottom: "2px solid #ddd",
-        // overflowX: "scroll",
+        overflow: "auto",
       }}
     >
-      {wallState.walls.map((_, index) => (
-        <StyledButton
-          key={index}
-          isSelected={wallState.clickedWallIndex === index}
-          onClick={() => handleWallTabClick(index)}
-        >
-          {t("Mur") + " " + (index + 1)}
-        </StyledButton>
-      ))}
-
-      <Button
-        onClick={handleAddWallTabClick}
-        disableRipple
-        color={"success"}
-        variant="contained"
-        disableElevation
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          width: "100%",
+          overflow: "auto",
+        }}
       >
-        +
-      </Button>
+        {wallState.walls.map((_, index) => (
+          <StyledButton
+            key={index}
+            isSelected={wallState.clickedWallIndex === index}
+            onClick={() => handleWallTabClick(index)}
+          >
+            {t("Mur") + " " + (index + 1)}
+          </StyledButton>
+        ))}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button
+          onClick={handleAddWallTabClick}
+          disableRipple
+          color={"success"}
+          variant="contained"
+          disableElevation
+          style={{ marginRight: "10px" }}
+        >
+          +
+        </Button>
+        <Button
+          onClick={handleDeleteWallTabClick}
+          disableRipple
+          color={"error"}
+          variant="contained"
+          disableElevation
+        >
+          -
+        </Button>
+      </div>
     </div>
   );
 };

@@ -13,24 +13,12 @@ class Opening {
     return this.width;
   }
 
-  setWidth(value: number): void {
-    this.width = value;
-  }
-
   getHeight(): number {
     return this.height;
   }
 
-  setHeight(value: number): void {
-    this.height = value;
-  }
-
   getQuantity(): number {
     return this.quantity;
-  }
-
-  setQuantity(value: number): void {
-    this.quantity = value;
   }
 }
 

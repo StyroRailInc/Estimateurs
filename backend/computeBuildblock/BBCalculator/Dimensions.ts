@@ -31,18 +31,6 @@ class Dimensions {
   getWidth(): Width {
     return this.width;
   }
-
-  setHeight(height: number) {
-    this.height = height;
-  }
-
-  setLength(length: number) {
-    this.length = length;
-  }
-
-  setWidth(width: Width) {
-    this.width = width;
-  }
 }
 
 export default Dimensions;

@@ -7,12 +7,15 @@ import { parseInput, parseIntegerInput } from "./utils/inputParser.js";
 import { Width } from "./BBCalculator/types.js";
 import SpecialBlocks from "./BBCalculator/SpecialBlocks.js";
 import Corners from "./BBCalculator/Corners.js";
+import { HTTP_STATUS } from "./utils/http.js";
 
 export const handler = async (event: any) => {
   const walls = [];
   const emptyStringIsValid = true;
   const isFeet = true;
-  let response;
+  let statusCode;
+  let body;
+
   try {
     for (let wall of event) {
       const dimensions = new Dimensions(
@@ -51,21 +54,21 @@ export const handler = async (event: any) => {
       const house = new House(walls);
       house.computeHouse();
 
-      response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify(house.getBlockQuantities()),
-      };
+      statusCode = HTTP_STATUS.SUCCESS;
+
+      body = JSON.stringify(house.getBlockQuantities());
     }
   } catch (error) {
-    response = {
-      statusCode: 400,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
+    statusCode = HTTP_STATUS.BAD_REQUEST;
+    body = "Missing critical input data";
   }
+
+  const response = {
+    statusCode: statusCode,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: body,
+  };
   return response;
 };
