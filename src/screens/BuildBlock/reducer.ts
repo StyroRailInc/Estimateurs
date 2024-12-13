@@ -170,6 +170,9 @@ function wallReducer(state: WallState, action: WallAction) {
     case "setClickedWallIndex":
       return { ...state, clickedWallIndex: action.payload };
 
+    case "setWalls":
+      return { ...action.payload };
+
     default:
       return state;
   }

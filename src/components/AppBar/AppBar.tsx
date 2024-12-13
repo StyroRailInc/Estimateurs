@@ -47,7 +47,7 @@ export default function ButtonAppBar() {
               {mode === "dark" && <LightMode />}
               {mode === "light" && <DarkMode />}
             </IconButton>
-            <Button color="secondary" onClick={updateLanguage} sx={{ color: "white" }}>
+            <Button color="secondary" onClick={updateLanguage}>
               {language}
             </Button>
           </div>

@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { wallReducer, initialWallState } from "../../reducer";
 import { useEffect, useReducer } from "react";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
@@ -9,13 +8,17 @@ import {
   BuildBlockFormState,
   BuildBlockFormAction,
   OpeningAction,
+  WallState,
+  WallAction,
 } from "../../types/BBTypes";
 
 interface WallTabProps {
   buildBlockFormState: BuildBlockFormState;
   openingState: OpeningState;
+  wallState: WallState;
   buildBlockFormDispatch: React.Dispatch<BuildBlockFormAction>;
   openingDispatch: React.Dispatch<OpeningAction>;
+  wallDispatch: React.Dispatch<WallAction>;
 }
 
 const StyledButton = styled(Button)<{ isSelected?: boolean }>(({ isSelected }) => ({
@@ -37,11 +40,12 @@ const StyledButton = styled(Button)<{ isSelected?: boolean }>(({ isSelected }) =
 const WallTab: React.FC<WallTabProps> = ({
   buildBlockFormState,
   openingState,
+  wallState,
   buildBlockFormDispatch,
   openingDispatch,
+  wallDispatch,
 }) => {
   const { t } = useTranslation();
-  const [wallState, wallDispatch] = useReducer(wallReducer, initialWallState);
 
   const handleWallTabClick = (index: number) => {
     wallDispatch({
@@ -64,7 +68,6 @@ const WallTab: React.FC<WallTabProps> = ({
         index: wallState.clickedWallIndex,
       },
     });
-
     wallDispatch({ type: "addWall", payload: { buildBlockFormState, openingState } });
     wallDispatch({ type: "setClickedWallIndex", payload: wallState.walls.length });
   };
@@ -74,12 +77,22 @@ const WallTab: React.FC<WallTabProps> = ({
       type: "setInputs",
       payload: wallState.walls[wallState.clickedWallIndex].buildBlockFormState,
     });
-
     openingDispatch({
       type: "setOpenings",
       payload: wallState.walls[wallState.clickedWallIndex].openingState,
     });
   }, [wallState.clickedWallIndex]);
+
+  useEffect(() => {
+    wallDispatch({
+      type: "modifyWall",
+      payload: {
+        buildBlockFormState: buildBlockFormState,
+        openingState: openingState,
+        index: wallState.clickedWallIndex,
+      },
+    });
+  }, [buildBlockFormState, openingState]);
 
   return (
     <div

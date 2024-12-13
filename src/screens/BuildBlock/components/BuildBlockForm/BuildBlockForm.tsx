@@ -6,7 +6,14 @@ import "./BuildBlockForm.css";
 import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
-import { InnerPage } from "../../types/BBTypes";
+import {
+  BuildBlockFormAction,
+  BuildBlockFormState,
+  InnerPage,
+  OpeningState,
+  WallAction,
+  WallState,
+} from "../../types/BBTypes";
 import {
   openingReducer,
   initialOpeningState,
@@ -14,6 +21,22 @@ import {
   initialbuildBlockFormState,
 } from "./../../reducer";
 import WallTab from "../WallTab";
+import { json } from "stream/consumers";
+import { wallReducer, initialWallState } from "../../reducer";
+import { OpeningAction } from "../../types/BBTypes";
+
+// const usePersistedReducer = (key: string, reducer: any, initialState: any) => {
+//   const [state, dispatch] = useReducer(reducer, initialState, () => {
+//     const persisted = localStorage.getItem(key);
+//     return persisted ? JSON.parse(persisted) : initialState;
+//   });
+
+//   useEffect(() => {
+//     localStorage.setItem(key, JSON.stringify(state));
+//   }, [key, state]);
+
+//   return [state, dispatch];
+// };
 
 interface BuildBlockFormProps {
   setInnerPage: React.Dispatch<InnerPage>;
@@ -26,6 +49,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
     buildBlockFormReducer,
     initialbuildBlockFormState
   );
+  const [wallState, wallDispatch] = useReducer(wallReducer, initialWallState);
 
   const handleAddOpeningClick = () => {
     openingDispatch({ type: "addOpening" });
@@ -39,9 +63,34 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
     }
   };
 
+  useEffect(() => {
+    sessionStorage.setItem("buildblock-estimation", JSON.stringify(wallState));
+  }, [wallState, buildBlockFormState, openingState]);
+
   const handleComputeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setInnerPage("summary");
+    fetch("https://iuu1fxt4p2.execute-api.us-east-2.amazonaws.com/prod/compute/buildblock", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(wallState.walls),
+    })
+      .then((e) => e.json())
+      .then(function (e) {
+        if (e.statusCode === 400) {
+          console.log(e);
+          return;
+        }
+        console.log(e);
+        sessionStorage.setItem("buildblock-results", e.body);
+        setTimeout(() => {
+          setInnerPage("summary");
+        });
+      })
+      .catch(function (e) {
+        console.error(e);
+      });
   };
 
   return (
@@ -49,8 +98,10 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
       <WallTab
         buildBlockFormState={buildBlockFormState}
         openingState={openingState}
+        wallState={wallState}
         buildBlockFormDispatch={buildBlockFormDispatch}
         openingDispatch={openingDispatch}
+        wallDispatch={wallDispatch}
       />
       <form>
         <Drawer title={t("Dimensions du Mur")} isOpen={true}>

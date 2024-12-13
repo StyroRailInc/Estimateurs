@@ -6,24 +6,6 @@ import { ButtonProps } from "@mui/material";
 import { LinkProps } from "react-router-dom";
 import "./../../global.css";
 
-const ThemedButton = styled(Button)(({ theme }) => ({
-  textDecoration: "none",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: "100%",
-  fontSize: "1rem",
-  padding: theme.spacing(1, 2),
-  color:
-    theme.palette.mode === "light"
-      ? "var(--text-color-header-light)"
-      : "var(--text-color-header-dark)",
-  ":hover": {
-    color:
-      theme.palette.mode === "light" ? "var(--secondary-color-light)" : "var(--primary-color-dark)",
-  },
-}));
-
 interface LinkButtonProps extends ButtonProps {
   to: LinkProps["to"];
   children: ReactNode | ReactNode[];

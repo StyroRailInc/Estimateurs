@@ -1,4 +1,3 @@
-// Class
 import Opening from "../utils/BBCalculator/Opening";
 
 export type Width = '4"' | '6"' | '8"';
@@ -99,6 +98,7 @@ export type WallAction =
         index: number;
       };
     }
-  | { type: "setClickedWallIndex"; payload: number };
+  | { type: "setClickedWallIndex"; payload: number }
+  | { type: "setWalls"; payload: WallState };
 
 export type InnerPage = "buildBlockForm" | "buildDeckForm" | "summary";
