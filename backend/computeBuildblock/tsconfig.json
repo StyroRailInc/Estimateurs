@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "strict": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "outDir": "dist"
+  },
+  "exclude": ["node_modules", "**/*.test.ts"],
+  "include": ["index.mts", "BBCalculator", "utils"]
+}
