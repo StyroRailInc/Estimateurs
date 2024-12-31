@@ -23,5 +23,15 @@
   "Type de Panneaux": "Panel Type",
   "Sommaire": "Summary",
   "Quantité": "Quantity",
-  "Mur": "Wall"
+  "Mur": "Wall",
+  "Se connecter": "Login",
+  "Courriel": "Email",
+  "Vous n'avez pas de compte?": "Don't have an account?",
+  "Mot de passe": "Password",
+  "S'inscrire": "Sign up",
+  "Vous possédez déjà un compte?": "Already have an account?",
+  "Nom": "Name",
+  "Confirmez le mot de passe": "Confirm password",
+  "Les mots de passe ne correspondent pas.": "Passwords don't match.",
+  "Échec de l'inscription. Réessayez.": "Sign up failed. Retry."
 }

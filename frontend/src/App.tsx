@@ -12,6 +12,8 @@ import AppBar from "./../src/components/AppBar";
 import Home from "./screens/Home";
 import Contact from "./screens/Contact";
 import ColorModeContext from "./context/ColorModeContext";
+import Login from "./screens/Login";
+import SignUp from "./screens/SignUp";
 
 function App() {
   const colorMode = useContext(ColorModeContext);
@@ -33,6 +35,8 @@ function App() {
                   <Route path="buildblock" element={<BuildBlock />} />
                   <Route path="srf" element={<SRF />} />
                   <Route path="contact" element={<Contact />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="sign-up" element={<SignUp />} />
                   <Route path="*" element={<NoPage />} />
                 </Route>
               </Routes>

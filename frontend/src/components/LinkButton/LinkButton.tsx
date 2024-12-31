@@ -15,13 +15,13 @@ interface LinkButtonProps extends ButtonProps {
 const LinkButton: React.FC<LinkButtonProps> = ({ to, children, props }) => {
   return (
     <Button
-      color="secondary"
-      fullWidth
-      component={RouterLink}
       to={to}
+      fullWidth
+      color="secondary"
+      component={RouterLink}
       className="button-no-caps"
+      sx={{ color: "var(--text-color-header)" }}
       {...props}
-      sx={{ color: "white" }}
     >
       {children}
     </Button>

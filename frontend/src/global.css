@@ -8,8 +8,16 @@
   --background-color-dark: #3c5466;
   --text-color-light: #3c5466;
   --text-color-dark: #3c5466;
-  --text-color-header-light: #ffffff;
-  --text-color-header-dark: #ffffff;
+  --text-color-header: #f2f2f2;
+  --transparent: #ffffff;
+  --text-input-dark: #515557;
+  --text-input-test: #5d6062;
+  --tablet: 700px;
+  --phone: 500px;
+}
+
+.error {
+  color: red;
 }
 
 .full-height {

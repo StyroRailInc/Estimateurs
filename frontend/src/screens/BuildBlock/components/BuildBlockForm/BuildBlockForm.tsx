@@ -6,14 +6,7 @@ import "./BuildBlockForm.css";
 import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
-import {
-  BuildBlockFormAction,
-  BuildBlockFormState,
-  InnerPage,
-  OpeningState,
-  WallAction,
-  WallState,
-} from "../../types/BBTypes";
+import { InnerPage, WallState } from "../../types/BBTypes";
 import {
   openingReducer,
   initialOpeningState,
@@ -21,9 +14,7 @@ import {
   initialbuildBlockFormState,
 } from "./../../reducer";
 import WallTab from "../WallTab";
-import { json } from "stream/consumers";
 import { wallReducer, initialWallState } from "../../reducer";
-import { OpeningAction } from "../../types/BBTypes";
 
 interface BuildBlockFormProps {
   setInnerPage: React.Dispatch<InnerPage>;

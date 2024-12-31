@@ -9,6 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Constants } from "src/constants";
 
 const Summary: React.FC = () => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ const Summary: React.FC = () => {
     if (!estimation) {
       return;
     }
-    fetch("https://iuu1fxt4p2.execute-api.us-east-2.amazonaws.com/prod/compute/buildblock", {
+    fetch(`${Constants.API}/compute/buildblock`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

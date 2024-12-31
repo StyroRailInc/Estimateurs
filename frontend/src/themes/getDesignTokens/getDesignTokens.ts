@@ -16,7 +16,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
         ? {
             default: "#f2f2f2",
           }
-        : { default: "#3C5466" }),
+        : { default: "#5d6062" }),
     },
     primary: {
       ...(mode === "light"

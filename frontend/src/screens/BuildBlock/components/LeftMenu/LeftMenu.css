@@ -1,3 +1,21 @@
 .padding-left {
   padding-left: 10px;
 }
+
+.left-menu {
+  width: 150px;
+}
+
+@media screen and (max-width: 700px) {
+  .left-menu {
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .left-menu {
+    width: 320px;
+  }
+}

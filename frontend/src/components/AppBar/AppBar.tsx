@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 import LightMode from "@mui/icons-material/LightMode";
 import DarkMode from "@mui/icons-material/DarkMode";
 import ColorModeContext from "src/context/ColorModeContext";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function ButtonAppBar() {
   const { t, i18n } = useTranslation();
@@ -42,14 +44,21 @@ export default function ButtonAppBar() {
               onClick={() => {
                 setMode(mode === "light" ? "dark" : "light");
               }}
-              sx={{ color: "white" }}
+              sx={{ color: "var(--text-color-header)" }}
             >
               {mode === "dark" && <LightMode />}
               {mode === "light" && <DarkMode />}
             </IconButton>
-            <Button color="secondary" onClick={updateLanguage}>
+            <Button
+              color="secondary"
+              onClick={updateLanguage}
+              sx={{ color: "var(--text-color-header)" }}
+            >
               {language}
             </Button>
+            <IconButton component={RouterLink} to={"/login"}>
+              <AccountCircleIcon></AccountCircleIcon>
+            </IconButton>
           </div>
         </Toolbar>
       </AppBar>

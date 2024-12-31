@@ -1,8 +1,9 @@
 import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
+import "./../../global.css";
 
 const FormTextField = styled(TextField)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "#ffffff",
+  backgroundColor: theme.palette.mode === "dark" ? "var(--text-input-dark)" : "var(--transparent)",
   borderRadius: "4px",
   "& .MuiOutlinedInput-root": {
     "& fieldset": {

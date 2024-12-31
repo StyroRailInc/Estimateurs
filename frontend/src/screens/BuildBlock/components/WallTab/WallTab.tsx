@@ -29,7 +29,6 @@ const StyledButton = styled(Button)<{ isSelected?: boolean }>(({ isSelected }) =
     backgroundColor: isSelected ? "#ffffff" : "#c0c0c0", // Slightly darker on hover
     boxShadow: isSelected ? "0 2px 8px rgba(0, 0, 0, 0.2)" : "none", // Subtle shadow on hover
   },
-  // padding: "10px 15px", // Consistent padding
   borderRadius: "4px",
   border: "1px solid",
   borderColor: isSelected ? "var(--secondary-color-light)" : "#bdbdbd",
@@ -59,6 +58,7 @@ const WallTab: React.FC<WallTabProps> = ({
       },
     });
     wallDispatch({ type: "setClickedWallIndex", payload: index });
+    // scrollTo(()=>{}); scroll to end
   };
 
   const handleAddWallTabClick = () => {
@@ -124,7 +124,7 @@ const WallTab: React.FC<WallTabProps> = ({
           display: "flex",
           justifyContent: "flex-start",
           width: "100%",
-          overflow: "auto",
+          overflow: "scroll",
         }}
       >
         {wallState.walls.map((_, index) => (

@@ -24,7 +24,7 @@ function InnerPage() {
 
   return (
     <div className="inner-page">
-      <div className="left-menu">
+      <div className="left-menu-container">
         <LeftMenu activeSection={activeSection} onChangeSection={setActiveSection} />
       </div>
       <div className="content">{renderContent()}</div>
