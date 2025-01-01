@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FormTextField from "src/components/FormTextField";
 import "./../../global.css";
 import "./Login.css";
@@ -7,11 +7,16 @@ import { Button } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link as RouterLink } from "react-router-dom";
+import { Constants } from "src/constants";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    fetch(Constants.API + "/auth/");
+  }, []);
   return (
     <main>
       <div className="flex-center page-container">

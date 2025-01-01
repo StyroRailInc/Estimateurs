@@ -1,14 +1,17 @@
 {
-  "name": "computebuildblock",
+  "name": "login",
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -f computeBuildBlock.zip && rm -rf dist && tsc && cp package.json dist && cp package-lock.json dist && (cd dist && zip -r ../computeBuildBlock.zip .)"
+    "build": "rm -f login.zip && rm -rf dist && tsc && cp package.json dist && cp package-lock.json dist && (cd dist && npm install --omit=dev && zip -r ../login.zip .)"
   },
   "type": "module",
   "devDependencies": {
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@types/aws-lambda": "^8.10.146"
+    "@aws-sdk/client-dynamodb": "^3.716.0",
+    "@aws-sdk/lib-dynamodb": "^3.716.0",
+    "@types/aws-lambda": "^8.10.146",
+    "uuid": "^9.0.0"
   }
 }

@@ -33,5 +33,7 @@
   "Nom": "Name",
   "Confirmez le mot de passe": "Confirm password",
   "Les mots de passe ne correspondent pas.": "Passwords don't match.",
-  "Échec de l'inscription. Réessayez.": "Sign up failed. Retry."
+  "Échec de l'inscription. Réessayez.": "Sign up failed. Retry.",
+  "Courriel déjà sélectionné. Changez le courriel.": "Email already selected. Change the email.",
+  "Bienvenu": "Welcome"
 }
