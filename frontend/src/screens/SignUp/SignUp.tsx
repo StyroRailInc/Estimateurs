@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import "./../../global.css";
 import { Constants } from "src/constants";
 import { HTTP_STATUS } from "./../../utils/http";
+import { useAuth } from "src/context/AuthContext";
 
 interface SignUpProps {}
 
@@ -18,6 +19,7 @@ const SignUp: React.FC<SignUpProps> = () => {
   });
   const [error, setError] = useState("");
   const [isAccountCreated, setIsAccountCreated] = useState(false);
+  const { login } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -53,8 +55,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 
         const token = response.headers.get("x-auth-token");
         if (token) {
-          sessionStorage.setItem("token", token);
-          sessionStorage.setItem("user", formData.email);
+          login({ email: formData.email, token });
         }
         return response.json();
       })

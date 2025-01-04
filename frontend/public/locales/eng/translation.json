@@ -35,5 +35,9 @@
   "Les mots de passe ne correspondent pas.": "Passwords don't match.",
   "Échec de l'inscription. Réessayez.": "Sign up failed. Retry.",
   "Courriel déjà sélectionné. Changez le courriel.": "Email already selected. Change the email.",
-  "Bienvenu": "Welcome"
+  "Bienvenu": "Welcome",
+  "Se déconnecter": "Logout",
+  "Jeton de session invalide": "Invalid user token",
+  "Échec de la déconnexion. Réessayez.": "Logout failed. Retry",
+  "Nom de la soumission": "Submission name"
 }

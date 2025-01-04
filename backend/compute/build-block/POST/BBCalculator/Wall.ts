@@ -1,4 +1,4 @@
-import { BlockType, Width } from "./types";
+import { BlockType, Width } from "./types.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
 import Dimensions from "./Dimensions.js";
 import Opening from "./Opening.js";

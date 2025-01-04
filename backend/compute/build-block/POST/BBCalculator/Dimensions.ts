@@ -1,4 +1,4 @@
-import { Width } from "./types";
+import { Width } from "./types.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
 
 class Dimensions {

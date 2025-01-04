@@ -1,12 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import Wall from "./BBCalculator/Wall.js";
-import Dimensions from "./BBCalculator/Dimensions.js";
-import Opening from "./BBCalculator/Opening.js";
-import House from "./BBCalculator/House.js";
+import Wall from "./POST/BBCalculator/Wall.js";
+import Dimensions from "./POST/BBCalculator/Dimensions.js";
+import Opening from "./POST/BBCalculator/Opening.js";
+import House from "./POST/BBCalculator/House.js";
 import { parseInput, parseIntegerInput } from "./utils/inputParser.js";
-import { Width } from "./BBCalculator/types.js";
-import SpecialBlocks from "./BBCalculator/SpecialBlocks.js";
-import Corners from "./BBCalculator/Corners.js";
+import { Width } from "./POST/BBCalculator/types.js";
+import SpecialBlocks from "./POST/BBCalculator/SpecialBlocks.js";
+import Corners from "./POST/BBCalculator/Corners.js";
 import { HTTP_STATUS } from "./utils/http.js";
 
 const EMPTY_STRING_VALID = true;

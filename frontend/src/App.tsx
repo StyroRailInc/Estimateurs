@@ -1,7 +1,4 @@
-import React, { useContext, useState } from "react";
 import "./App.css";
-import { ThemeProvider, Button, TextField, PaletteMode, createTheme } from "@mui/material";
-import getDesignTokens from "./themes/getDesignTokens";
 import { CssBaseline } from "@mui/material/";
 import BuildBlock from "./screens/BuildBlock";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -11,23 +8,19 @@ import NoPage from "./screens/NoPage/NoPage";
 import AppBar from "./../src/components/AppBar";
 import Home from "./screens/Home";
 import Contact from "./screens/Contact";
-import ColorModeContext from "./context/ColorModeContext";
+import ColorModeProvider from "./context/ColorModeContext";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
+import AuthProvider from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Account from "./screens/Account";
 
 function App() {
-  const colorMode = useContext(ColorModeContext);
-  const [mode, setMode] = useState<PaletteMode>(colorMode.mode);
-  const value = { mode, setMode };
-
-  // Update the theme only if the mode changes.
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
   return (
-    <ColorModeContext.Provider value={value}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline>
-          <StyledEngineProvider injectFirst>
+    <ColorModeProvider>
+      <CssBaseline>
+        <StyledEngineProvider injectFirst>
+          <AuthProvider>
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<AppBar />}>
@@ -37,14 +30,22 @@ function App() {
                   <Route path="contact" element={<Contact />} />
                   <Route path="login" element={<Login />} />
                   <Route path="sign-up" element={<SignUp />} />
+                  <Route
+                    path="/account"
+                    element={
+                      <ProtectedRoute>
+                        <Account />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route path="*" element={<NoPage />} />
                 </Route>
               </Routes>
             </BrowserRouter>
-          </StyledEngineProvider>
-        </CssBaseline>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+          </AuthProvider>
+        </StyledEngineProvider>
+      </CssBaseline>
+    </ColorModeProvider>
   );
 }
 

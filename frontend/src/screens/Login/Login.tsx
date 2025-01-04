@@ -1,33 +1,89 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import FormTextField from "src/components/FormTextField";
 import "./../../global.css";
 import "./Login.css";
 import { useTranslation } from "react-i18next";
 import { Button } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link as RouterLink } from "react-router-dom";
 import { Constants } from "src/constants";
+import { HTTP_STATUS } from "src/utils/http";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "src/context/AuthContext";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const { t } = useTranslation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
 
-  useEffect(() => {
-    fetch(Constants.API + "/auth/");
-  }, []);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    fetch(`${Constants.API}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email, password: password }),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          if (response.status === HTTP_STATUS.NOT_FOUND) {
+            throw new Error(t("Le courriel est invalide"));
+          } else if (response.status === HTTP_STATUS.UNAUTHORIZED) {
+            throw new Error(t("Mot de passe incorrecte. Réessayez."));
+          } else {
+            throw new Error(t("Échec de l'inscription. Réessayez."));
+          }
+        }
+        const token = response.headers.get("x-auth-token");
+
+        if (token) {
+          login({ email, token });
+        }
+        return response.json();
+      })
+      .then(() => {
+        const redirectPath = location.state?.from?.pathname || "/account";
+        navigate(redirectPath);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
+
   return (
     <main>
       <div className="flex-center page-container">
         <div className="login-container">
           <div className="flex-vertical">
             <h1>{t("Se connecter")}</h1>
-            <form>
+            <form name="Login" onSubmit={handleSubmit} acceptCharset="UTF-8">
+              {error && <p className="error">{t(error)}</p>}
               <label htmlFor="email">{t("Courriel")}</label>
-              <FormTextField type="email" id="email" fullWidth size="small"></FormTextField>
+              <FormTextField
+                type="email"
+                id="email"
+                fullWidth
+                size="small"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
               <label htmlFor="password">{t("Mot de passe")}</label>
-              <FormTextField type="password" id="password" fullWidth size="small"></FormTextField>
+              <FormTextField
+                type="password"
+                id="password"
+                fullWidth
+                size="small"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
               <Button
                 type="submit"
                 fullWidth

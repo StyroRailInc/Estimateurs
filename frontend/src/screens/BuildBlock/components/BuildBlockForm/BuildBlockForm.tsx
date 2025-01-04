@@ -178,7 +178,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
         <Drawer title={t("Ouverture")} isOpen={true}>
           {openingState.openings.map((_, index) => {
             return (
-              <div className="flex-horizontal">
+              <div key={index} className="flex-horizontal">
                 <div className="flex-vertical full-width">
                   <label htmlFor="opening-width">{t("Largeur")}</label>
                   <FormTextField

@@ -1,4 +1,4 @@
-import { BlockType, Width } from "./types";
+import { BlockType, Width } from "./types.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
 
 class CornerBase {

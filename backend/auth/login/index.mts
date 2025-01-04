@@ -25,7 +25,12 @@ async function findUser(email: string, table: string) {
     },
   };
   try {
-    return await dynamodb.send(new QueryCommand(params));
+    const user = await dynamodb.send(new QueryCommand(params));
+    if (user?.Items && user?.Items.length === 1) {
+      return user.Items[0];
+    } else {
+      return undefined;
+    }
   } catch (error) {
     console.error("Error querying the table:", error);
     throw new Error("Failed to fetch user");
@@ -45,9 +50,9 @@ export const handler = async (event: LoginEvent): Promise<LoginResponse> => {
   }
 
   try {
-    const isExistingUser = await findUser(email, tableName);
+    const user = await findUser(email, tableName);
 
-    if (!isExistingUser?.Count) {
+    if (!user) {
       return {
         statusCode: HTTP_STATUS.NOT_FOUND,
         headers: { "Access-Control-Allow-Origin": "*" },
@@ -55,7 +60,7 @@ export const handler = async (event: LoginEvent): Promise<LoginResponse> => {
       };
     }
 
-    if (!isExistingUser.Items[0].password === password) {
+    if (user.password.S !== password) {
       return {
         statusCode: HTTP_STATUS.UNAUTHORIZED,
         headers: { "Access-Control-Allow-Origin": "*" },
@@ -66,7 +71,7 @@ export const handler = async (event: LoginEvent): Promise<LoginResponse> => {
     const token = uuidv4();
     const params = {
       TableName: tableName,
-      Key: { Email: email },
+      Key: { Email: email, UserID: user.UserID.S },
       UpdateExpression: "set #token = :token",
       ExpressionAttributeNames: { "#token": "token" },
       ExpressionAttributeValues: { ":token": token },

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { Outlet } from "react-router-dom";
@@ -9,14 +9,14 @@ import { Button, IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import LightMode from "@mui/icons-material/LightMode";
 import DarkMode from "@mui/icons-material/DarkMode";
-import ColorModeContext from "src/context/ColorModeContext";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link as RouterLink } from "react-router-dom";
+import { useColorMode } from "src/context/ColorModeContext";
+import ProfileIcon from "../ProfileIcon";
 
 export default function ButtonAppBar() {
   const { t, i18n } = useTranslation();
+  const { mode, setMode } = useColorMode();
+
   const [language, setLanguage] = useState<string>(i18n.language === "eng" ? "fr" : "eng");
-  const { mode, setMode } = useContext(ColorModeContext);
   const updateLanguage = () => {
     setLanguage((prev) => {
       return prev === "fr" ? "eng" : "fr";
@@ -56,9 +56,7 @@ export default function ButtonAppBar() {
             >
               {language}
             </Button>
-            <IconButton component={RouterLink} to={"/login"}>
-              <AccountCircleIcon></AccountCircleIcon>
-            </IconButton>
+            <ProfileIcon />
           </div>
         </Toolbar>
       </AppBar>

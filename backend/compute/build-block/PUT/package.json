@@ -1,8 +1,8 @@
 {
-  "name": "logout",
+  "name": "save-builblock",
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -f logout.zip && rm -rf dist && tsc && cp package.json dist && cp package-lock.json dist && (cd dist && npm install --omit=dev && zip -r ../logout.zip .)"
+    "build": "rm -f save-builblock.zip && rm -rf dist && tsc && cp package.json dist && cp package-lock.json dist && (cd dist && npm install --omit=dev && zip -r ../save-builblock.zip .)"
   },
   "type": "module",
   "devDependencies": {
