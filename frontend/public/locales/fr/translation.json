@@ -39,5 +39,9 @@
   "Logout": "Se déconnecter",
   "Invalid user token": "Jeton de session invalide",
   "Logout failed. Retry": "Échec de la déconnexion. Réessayez.",
-  "Submission name": "Nom de la soumission"
+  "Submission name": "Nom de la soumission",
+  "My buildblock submissions": "Mes soumissions buildblock",
+  "Cancel": "Annuler",
+  "Save": "Enregistrer",
+  "Modifier le nom": "Edit Submission Name"
 }

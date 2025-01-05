@@ -36,8 +36,9 @@ async function findUser(email: string, table: string) {
   }
 }
 
-export const handler = async (event: SaveEvent): Promise<SaveResponse> => {
+export const handler = async (event: any): Promise<SaveResponse> => {
   const tableName = "Users";
+  const replace = event.queryStringParameters?.replace === "true" || false;
   const { email, token, payload } = JSON.parse(event.body);
 
   // Add payload verification later
@@ -72,18 +73,20 @@ export const handler = async (event: SaveEvent): Promise<SaveResponse> => {
 
     const existingIndex = buildBlock.findIndex((block: any) => block.name === payload.name);
 
-    if (existingIndex !== -1) {
+    if (existingIndex !== -1 && !replace) {
       return {
         statusCode: HTTP_STATUS.CONFLICT,
         headers: { "Access-Control-Allow-Origin": "*" },
         body: JSON.stringify({ message: `Resource with name ${payload.name} already exists` }),
       };
+    } else if (existingIndex !== -1 && replace) {
+      buildBlock[existingIndex].submission = payload.submission;
+    } else {
+      buildBlock.push({
+        name: payload.name,
+        submission: payload.submission,
+      });
     }
-
-    buildBlock.push({
-      name: payload.name,
-      submission: payload.submission,
-    });
 
     const params = {
       TableName: tableName,

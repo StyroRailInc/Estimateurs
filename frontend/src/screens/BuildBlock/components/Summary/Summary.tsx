@@ -15,13 +15,18 @@ import { useAuth } from "src/context/AuthContext";
 import { Modal } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Form } from "react-router-dom";
+import { HTTP_STATUS } from "src/utils/http";
+import "./../../../../global.css";
 
 const Summary: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [data, setData] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submissionName, setSubmissionName] = useState("");
+  const [submissionName, setSubmissionName] = useState(
+    sessionStorage.getItem("buildblock-estimation-name")
+  );
+  const [error, setError] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubmissionName(e.target.value);
@@ -39,23 +44,22 @@ const Summary: React.FC = () => {
       },
       body: JSON.stringify(JSON.parse(estimation).walls),
     })
-      .then((e) => e.json())
-      .then(function (e) {
-        console.log(e);
-        if (e.statusCode === 400) {
-          return;
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
         }
-        setData(JSON.parse(e.body));
       })
-      .catch(function (e) {
-        console.error(e);
+      .then((e) => {
+        setData(e);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    fetch(`${Constants.API}/compute/buildblock`, {
-      method: "PUT",
+  const submitData = (replace: boolean) => {
+    fetch(`${Constants.API}/compute/buildblock/submissions?replace=${replace}`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...user,
@@ -65,12 +69,22 @@ const Summary: React.FC = () => {
         },
       }),
     })
-      .then(async (response) => {
-        setIsModalOpen(false);
+      .then((response) => {
+        if (response.ok) {
+          sessionStorage.removeItem("buildblock-estimation-name");
+          setIsModalOpen(false);
+        } else if (response.status === HTTP_STATUS.CONFLICT) {
+          setError(t("Une soumission avec ce nom existe déjà. Voulez-vous l'écraser?"));
+        }
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitData(false);
   };
 
   const blockTypes = [
@@ -129,6 +143,21 @@ const Summary: React.FC = () => {
       </Button>
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <form name="save-submission" onSubmit={handleSubmit} acceptCharset="UTF-8">
+          {error && (
+            <>
+              <p className="error">{error}</p>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => {
+                  submitData(true);
+                  setError("");
+                }}
+              >
+                {t("Écraser")}
+              </Button>
+            </>
+          )}
           <label htmlFor="submission-name">{t("Nom de la soumission")}</label>
           <TextField
             id="submission-name"
@@ -139,7 +168,7 @@ const Summary: React.FC = () => {
             onChange={handleInputChange}
           />
           <Button type={"submit"} variant={"contained"} color="secondary">
-            Enregistrer
+            {t("Enregistrer")}
           </Button>
         </form>
       </Modal>

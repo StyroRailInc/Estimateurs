@@ -1,13 +1,19 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import Wall from "./POST/BBCalculator/Wall.js";
-import Dimensions from "./POST/BBCalculator/Dimensions.js";
-import Opening from "./POST/BBCalculator/Opening.js";
-import House from "./POST/BBCalculator/House.js";
+import Wall from "./BBCalculator/Wall.js";
+import Dimensions from "./BBCalculator/Dimensions.js";
+import Opening from "./BBCalculator/Opening.js";
+import House from "./BBCalculator/House.js";
 import { parseInput, parseIntegerInput } from "./utils/inputParser.js";
-import { Width } from "./POST/BBCalculator/types.js";
-import SpecialBlocks from "./POST/BBCalculator/SpecialBlocks.js";
-import Corners from "./POST/BBCalculator/Corners.js";
+import { Width } from "./BBCalculator/types.js";
+import SpecialBlocks from "./BBCalculator/SpecialBlocks.js";
+import Corners from "./BBCalculator/Corners.js";
 import { HTTP_STATUS } from "./utils/http.js";
+
+interface ComputeResponse {
+  statusCode: number;
+  headers: Record<string, string>;
+  body?: string;
+}
 
 const EMPTY_STRING_VALID = true;
 const IS_FEET = true;
@@ -47,13 +53,12 @@ const parseWall = (wallData: any): Wall => {
   return new Wall(dimensions, corners, specialBlocks, openings);
 };
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-    if (!Array.isArray(event)) {
-      throw new Error("Input should be an array of wall data");
-    }
+export const handler = async (event: any): Promise<ComputeResponse> => {
+  const payload = JSON.parse(event.body);
+  console.log(event.body);
 
-    const walls = event.map(parseWall);
+  try {
+    const walls = payload.map(parseWall);
     const house = new House(walls);
     house.computeHouse();
 
@@ -63,12 +68,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       body: JSON.stringify(house.getBlockQuantities()),
     };
   } catch (error) {
-    console.error("Error processing input:", error);
-
+    console.error("Error:", error);
     return {
-      statusCode: HTTP_STATUS.BAD_REQUEST,
+      statusCode: HTTP_STATUS.SERVER_ERROR,
       headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ message: error.message }),
+      body: JSON.stringify({ message: `Error processing request: ${error.message}` }),
     };
   }
 };
