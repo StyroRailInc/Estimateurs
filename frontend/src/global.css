@@ -5,19 +5,17 @@
   --primary-color-dark: #08aceb;
   --secondary-color-dark: #f2f2f2;
   --background-color-light: #f2f2f2;
-  --background-color-dark: #3c5466;
-  --text-color-light: #3c5466;
-  --text-color-dark: #3c5466;
-  --text-color-header: #f2f2f2;
+  --background-color-dark: #313338;
+  --text-color-header: #f2f2f2f2;
   --transparent: #ffffff;
-  --text-input-dark: #515557;
-  --text-input-test: #5d6062;
-  --tablet: 700px;
-  --phone: 500px;
+  --text-input-dark: #383a3f;
+  --large-screen: 992px;
+  --medium-screen: 768px;
+  --small-screen: 500px;
 }
 
 .error {
-  color: red;
+  color: #ff0000;
 }
 
 .full-height {

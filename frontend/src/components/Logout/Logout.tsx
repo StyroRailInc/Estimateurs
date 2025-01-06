@@ -31,6 +31,8 @@ const Logout: React.FC = () => {
         }
         logout();
         navigate("/login");
+        sessionStorage.clear();
+        localStorage.clear();
       })
       .catch((error) => {
         setError(error.message);

@@ -5,10 +5,10 @@ import getDesignTokens from "./../themes/getDesignTokens";
 
 const ColorModeContext = createContext<{
   mode: PaletteMode;
-  setMode: React.Dispatch<React.SetStateAction<PaletteMode>>;
+  toggleColorMode: () => void;
 }>({
   mode: "light",
-  setMode: () => {},
+  toggleColorMode: () => {},
 });
 
 interface ColorModeProviderProps {
@@ -18,7 +18,11 @@ interface ColorModeProviderProps {
 const ColorModeProvider: React.FC<ColorModeProviderProps> = ({ children }) => {
   const [mode, setMode] = useState<PaletteMode>("light");
 
-  const value = { mode, setMode };
+  const toggleColorMode = () => {
+    setMode(mode === "dark" ? "light" : "dark");
+  };
+
+  const value = { mode, toggleColorMode };
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 

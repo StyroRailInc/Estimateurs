@@ -9,6 +9,7 @@ import { Constants } from "src/constants";
 import { HTTP_STATUS } from "src/utils/http";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "src/context/AuthContext";
+import { TextField } from "@mui/material";
 
 interface LoginProps {}
 
@@ -65,7 +66,7 @@ const Login: React.FC<LoginProps> = () => {
             <form name="Login" onSubmit={handleSubmit} acceptCharset="UTF-8">
               {error && <p className="error">{t(error)}</p>}
               <label htmlFor="email">{t("Courriel")}</label>
-              <FormTextField
+              <TextField
                 type="email"
                 id="email"
                 fullWidth
@@ -75,7 +76,7 @@ const Login: React.FC<LoginProps> = () => {
                 required
               />
               <label htmlFor="password">{t("Mot de passe")}</label>
-              <FormTextField
+              <TextField
                 type="password"
                 id="password"
                 fullWidth

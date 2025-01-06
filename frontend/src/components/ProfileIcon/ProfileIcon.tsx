@@ -1,10 +1,12 @@
+import React, { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/context/AuthContext";
-import { IconButton } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useEffect } from "react";
 
-const ProfileIcon = () => {
+interface ProfileIconProps {
+  ButtonComponent: ReactNode;
+}
+
+const ProfileIcon: React.FC<ProfileIconProps> = ({ ButtonComponent }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -16,11 +18,9 @@ const ProfileIcon = () => {
     }
   };
 
-  return (
-    <IconButton onClick={handleProfileClick}>
-      <AccountCircleIcon />
-    </IconButton>
-  );
+  return React.cloneElement(ButtonComponent as React.ReactElement, {
+    onClick: handleProfileClick,
+  });
 };
 
 export default ProfileIcon;

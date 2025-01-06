@@ -14,35 +14,38 @@ import SignUp from "./screens/SignUp";
 import AuthProvider from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Account from "./screens/Account";
+import LanguageProvider from "./context/LanguageContext";
 
 function App() {
   return (
     <ColorModeProvider>
       <CssBaseline>
         <StyledEngineProvider injectFirst>
-          <AuthProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<AppBar />}>
-                  <Route index element={<Home />} />
-                  <Route path="buildblock" element={<BuildBlock />} />
-                  <Route path="srf" element={<SRF />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="sign-up" element={<SignUp />} />
-                  <Route
-                    path="/account"
-                    element={
-                      <ProtectedRoute>
-                        <Account />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="*" element={<NoPage />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<AppBar />}>
+                    <Route index element={<Home />} />
+                    <Route path="buildblock" element={<BuildBlock />} />
+                    <Route path="srf" element={<SRF />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="sign-up" element={<SignUp />} />
+                    <Route
+                      path="/account"
+                      element={
+                        <ProtectedRoute>
+                          <Account />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="*" element={<NoPage />} />
+                  </Route>
+                </Routes>
+              </BrowserRouter>
+            </AuthProvider>
+          </LanguageProvider>
         </StyledEngineProvider>
       </CssBaseline>
     </ColorModeProvider>

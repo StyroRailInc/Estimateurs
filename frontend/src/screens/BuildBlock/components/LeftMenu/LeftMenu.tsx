@@ -11,12 +11,16 @@ interface LeftMenuProps {
   onChangeSection: Dispatch<React.SetStateAction<string>>;
 }
 
-// Styled button for conditional styling lowercase to supress warning
-const StyledButton = styled(Button)<{ isSelected: boolean }>(({ isSelected }) => ({
-  backgroundColor: isSelected ? "white" : "transparent",
+const StyledButton = styled(Button)<{ isSelected: boolean }>(({ theme, isSelected }) => ({
+  backgroundColor: isSelected
+    ? theme.palette.mode === "light"
+      ? "white"
+      : "#404249"
+    : "transparent",
   "&:hover": {
-    backgroundColor: "#e6e6e6",
+    backgroundColor: theme.palette.mode === "light" ? "#e6e6e6" : "#36373c",
   },
+  color: theme.palette.text.primary,
 }));
 
 const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) => {
@@ -26,7 +30,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
     <div className="left-menu flex-vertical">
       <StyledButton
         fullWidth
-        className="button-left-aligned padding-left"
+        className="button-left-aligned padding-left button-centered"
         isSelected={activeSection === "buildBlockForm"}
         onClick={() => {
           onChangeSection("buildBlockForm");
@@ -36,7 +40,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       </StyledButton>
       <StyledButton
         fullWidth
-        className="button-left-aligned padding-left"
+        className="button-left-aligned padding-left button-centered"
         isSelected={activeSection === "buildDeckForm"}
         onClick={() => {
           onChangeSection("buildDeckForm");
@@ -46,7 +50,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       </StyledButton>
       <StyledButton
         fullWidth
-        className="button-left-aligned padding-left"
+        className="button-left-aligned padding-left button-centered"
         isSelected={activeSection === "summary"}
         onClick={() => {
           onChangeSection("summary");

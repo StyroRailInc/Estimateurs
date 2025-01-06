@@ -17,7 +17,7 @@
   position: sticky;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 992px) {
   .inner-page {
     display: flex;
     flex-direction: column;
@@ -25,11 +25,17 @@
   }
 
   .content {
-    width: 500px;
+    width: 700px;
   }
 
   .left-menu-container {
     margin-top: 32px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    width: 500px;
   }
 }
 

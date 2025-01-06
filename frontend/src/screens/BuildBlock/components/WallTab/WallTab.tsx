@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,6 +12,9 @@ import {
   WallAction,
 } from "../../types/BBTypes";
 import { initialWallState } from "../../reducer";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
 
 interface WallTabProps {
   buildBlockFormState: BuildBlockFormState;
@@ -21,22 +24,6 @@ interface WallTabProps {
   openingDispatch: React.Dispatch<OpeningAction>;
   wallDispatch: React.Dispatch<WallAction>;
 }
-
-const StyledButton = styled(Button)<{ isSelected?: boolean }>(({ isSelected }) => ({
-  backgroundColor: isSelected ? "#ffffff" : "#e0e0e0", // Lighter background
-  color: isSelected ? "var(--secondary-color-light)" : "#333", // Blue for selected state
-  "&:hover": {
-    backgroundColor: isSelected ? "#ffffff" : "#c0c0c0", // Slightly darker on hover
-    boxShadow: isSelected ? "0 2px 8px rgba(0, 0, 0, 0.2)" : "none", // Subtle shadow on hover
-  },
-  borderRadius: "4px",
-  border: "1px solid",
-  borderColor: isSelected ? "var(--secondary-color-light)" : "#bdbdbd",
-  fontSize: "1rem",
-  textTransform: "none",
-  marginRight: "10px",
-  height: "40px",
-}));
 
 const WallTab: React.FC<WallTabProps> = ({
   buildBlockFormState,
@@ -48,7 +35,7 @@ const WallTab: React.FC<WallTabProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const handleWallTabClick = (index: number) => {
+  const handleChange = (event: React.SyntheticEvent, index: number) => {
     wallDispatch({
       type: "modifyWall",
       payload: {
@@ -58,7 +45,6 @@ const WallTab: React.FC<WallTabProps> = ({
       },
     });
     wallDispatch({ type: "setClickedWallIndex", payload: index });
-    // scrollTo(()=>{}); scroll to end
   };
 
   const handleAddWallTabClick = () => {
@@ -109,14 +95,9 @@ const WallTab: React.FC<WallTabProps> = ({
 
   return (
     <div
-      className="flex-horizontal"
+      className="flex-horizontal flex-start"
       style={{
-        display: "flex",
-        justifyContent: "flex-start",
-        width: "100%",
         padding: "10px 0",
-        borderBottom: "2px solid #ddd",
-        overflow: "auto",
       }}
     >
       <div
@@ -127,30 +108,28 @@ const WallTab: React.FC<WallTabProps> = ({
           overflow: "scroll",
         }}
       >
-        {wallState.walls.map((_, index) => (
-          <StyledButton
-            key={index}
-            isSelected={wallState.clickedWallIndex === index}
-            onClick={() => handleWallTabClick(index)}
-          >
-            {t("Mur") + " " + (index + 1)}
-          </StyledButton>
-        ))}
+        <Tabs
+          value={wallState.clickedWallIndex}
+          onChange={handleChange}
+          textColor="secondary"
+          indicatorColor="secondary"
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          {wallState.walls.map((_, index) => (
+            <Tab key={index} value={index} label={`Wall ${index + 1}`} />
+          ))}
+        </Tabs>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
+      <div className="flex-end">
         <Button
           onClick={handleAddWallTabClick}
           disableRipple
           color={"success"}
           variant="contained"
           disableElevation
-          style={{ marginRight: "10px" }}
+          sx={{ marginRight: "10px" }}
         >
           +
         </Button>

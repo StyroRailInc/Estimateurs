@@ -20,6 +20,9 @@ const Drawer: React.FC<DrawerProps> = ({ title, isOpen = true, children }) => {
         onClick={() => {
           setIsDrawerOpen((prev) => !prev);
         }}
+        sx={{
+          color: (theme) => theme.palette.text.primary,
+        }}
       >
         {title}
       </Button>

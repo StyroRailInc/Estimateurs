@@ -22,6 +22,7 @@
 }
 
 .left-container {
+  justify-content: flex-start;
   flex-direction: row;
   width: 200px;
 }

@@ -3,64 +3,85 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { Outlet } from "react-router-dom";
 import "./AppBar.css";
-import LinkButton from "../LinkButton";
 import "./../../global.css";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import LightMode from "@mui/icons-material/LightMode";
 import DarkMode from "@mui/icons-material/DarkMode";
 import { useColorMode } from "src/context/ColorModeContext";
 import ProfileIcon from "../ProfileIcon";
+import AppBarDrawer from "./AppBarDrawer";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useLanguage } from "src/context/LanguageContext";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function ButtonAppBar() {
-  const { t, i18n } = useTranslation();
-  const { mode, setMode } = useColorMode();
+  const { t } = useTranslation();
+  const { mode, toggleColorMode } = useColorMode();
+  const { language, toggleLanguage } = useLanguage();
+  const isLargeScreen = useMediaQuery("(min-width:992px)");
 
-  const [language, setLanguage] = useState<string>(i18n.language === "eng" ? "fr" : "eng");
-  const updateLanguage = () => {
-    setLanguage((prev) => {
-      return prev === "fr" ? "eng" : "fr";
-    });
-    i18n.changeLanguage(language === "fr" ? "fr" : "eng");
-  };
+  const screens = ["Accueil", "Build Block", "SR-F", "Contact"];
+  const paths = ["/", "/buildblock", "/srf", "/contact"];
 
   return (
     <>
-      <AppBar position="sticky" elevation={0} className="app-bar" color="primary">
+      <AppBar
+        position="sticky"
+        elevation={0}
+        className="app-bar"
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+        }}
+      >
         <Toolbar className="toolbar">
-          <div className="left-container flex-start">
+          <div className="flex-start left-container">
             <img src="/styro.png" alt="Company-logo" className="image"></img>
             <p className="styrorail">STYRORAIL</p>
           </div>
-          <div className="center-container flex-center">
-            <LinkButton to={"/"}>{t("Accueil")} </LinkButton>
-            <LinkButton to={"/buildblock"}>Build Block</LinkButton>
-            <LinkButton to={"/srf"}>SR-F</LinkButton>
-            <LinkButton to={"/contact"}>Contact</LinkButton>
-          </div>
-          <div className="right-container flex-end">
-            <IconButton
-              color="secondary"
-              onClick={() => {
-                setMode(mode === "light" ? "dark" : "light");
-              }}
-              sx={{ color: "var(--text-color-header)" }}
-            >
-              {mode === "dark" && <LightMode />}
-              {mode === "light" && <DarkMode />}
-            </IconButton>
-            <Button
-              color="secondary"
-              onClick={updateLanguage}
-              sx={{ color: "var(--text-color-header)" }}
-            >
-              {language}
-            </Button>
-            <ProfileIcon />
-          </div>
+          {isLargeScreen ? (
+            <>
+              <div className="center-container flex-center">
+                {screens.map((screen, index) => (
+                  <Button
+                    to={paths[index]}
+                    fullWidth
+                    color="secondary"
+                    component={RouterLink}
+                    className="button-no-caps"
+                    sx={{ color: "var(--text-color-header)" }}
+                  >
+                    {t(screen)}
+                  </Button>
+                ))}
+              </div>
+              <div className="right-container flex-end">
+                <IconButton onClick={toggleColorMode} sx={{ color: "var(--text-color-header)" }}>
+                  {mode === "dark" && <LightMode />}
+                  {mode === "light" && <DarkMode />}
+                </IconButton>
+                <Button
+                  color="secondary"
+                  onClick={toggleLanguage}
+                  sx={{ color: "var(--text-color-header)" }}
+                >
+                  {language}
+                </Button>
+                <ProfileIcon
+                  ButtonComponent={
+                    <IconButton sx={{ color: "var(--text-color-header)" }}>
+                      <AccountCircleIcon />
+                    </IconButton>
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            <AppBarDrawer />
+          )}
         </Toolbar>
       </AppBar>
-      <Outlet /> {/* Renders child routes */}
+      <Outlet />
     </>
   );
 }
