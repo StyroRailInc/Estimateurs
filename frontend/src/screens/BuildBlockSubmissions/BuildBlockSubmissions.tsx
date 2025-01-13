@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import "./BuildBlockSubmissions.css";
 import { useNavigate } from "react-router-dom";
+import "./../../global.css";
 
 const BuildBlockSubmissions: React.FC = () => {
   const { t } = useTranslation();
@@ -59,7 +60,8 @@ const BuildBlockSubmissions: React.FC = () => {
     navigate("/buildblock");
   };
 
-  const handleSave = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (editingIndex === null || !submissions) return;
     const updatedSubmissions = [...submissions];
     updatedSubmissions[editingIndex].name = newName;
@@ -103,50 +105,80 @@ const BuildBlockSubmissions: React.FC = () => {
   };
 
   return (
-    <>
-      <p>{t("Mes soumissions buildblock")}</p>
-
-      <List className="buildblock-submission-list">
-        {submissions?.map((submission, index) => (
-          <ListItem
-            key={index}
-            secondaryAction={
-              <>
-                <IconButton edge="end" onClick={() => handleEdit(index)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" onClick={() => handleDelete(index)}>
-                  <DeleteIcon />
-                </IconButton>
-              </>
-            }
-            disablePadding
-          >
-            <ListItemButton onClick={() => handleSubmissionClick(index)}>
-              <ListItemText primary={submission.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+        {t("Mes soumissions Build Block")}
+      </h1>
+      <List
+        className="buildblock-submission-list"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? "var(--transparent)"
+              : "var(--background-color-very-dark)",
+          borderRadius: "8px",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        {submissions?.length ? (
+          submissions.map((submission, index) => (
+            <ListItem
+              key={index}
+              secondaryAction={
+                <div>
+                  <IconButton
+                    edge="end"
+                    onClick={() => handleEdit(index)}
+                    aria-label={t("Modifier")}
+                  >
+                    <EditIcon sx={{ color: "#1976d2" }} />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    onClick={() => handleDelete(index)}
+                    aria-label={t("Supprimer")}
+                  >
+                    <DeleteIcon sx={{ color: "#d32f2f" }} />
+                  </IconButton>
+                </div>
+              }
+              disablePadding
+            >
+              <ListItemButton onClick={() => handleSubmissionClick(index)}>
+                <ListItemText primary={submission.name} />
+              </ListItemButton>
+            </ListItem>
+          ))
+        ) : (
+          <p style={{ marginLeft: "20px" }}>{t("Vous n'avez aucune soumission")}</p>
+        )}
       </List>
 
-      <Dialog open={editingIndex !== null} onClose={() => setEditingIndex(null)}>
+      <Dialog open={editingIndex !== null} onClose={() => setEditingIndex(null)} fullWidth>
         <DialogTitle>{t("Modifier le nom")}</DialogTitle>
-        <DialogContent>
-          <TextField
-            id="name"
-            fullWidth
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditingIndex(null)}>{t("Annuler")}</Button>
-          <Button onClick={handleSave} color="primary">
-            {t("Enregistrer")}
-          </Button>
-        </DialogActions>
+        <form name="save-submission-modification" onSubmit={handleSubmit} acceptCharset="UTF-8">
+          <DialogContent>
+            <TextField
+              id="name"
+              fullWidth
+              placeholder={t("Entrez un nouveau nom")}
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              size="small"
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditingIndex(null)} color="error" variant="outlined">
+              {t("Annuler")}
+            </Button>
+            <Button type="submit" color="secondary" variant="outlined">
+              {t("Enregistrer")}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
-    </>
+    </div>
   );
 };
 

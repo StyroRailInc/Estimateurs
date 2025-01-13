@@ -1,12 +1,12 @@
 .toolbar {
-  height: 48px;
+  height: var(--app-bar-height);
   padding: 0px, 16px;
-  min-height: 48px;
+  min-height: var(--app-bar-height);
   justify-content: space-between;
 }
 
 .app-bar {
-  height: 48px;
+  height: var(--app-bar-height);
 }
 
 .center-container {

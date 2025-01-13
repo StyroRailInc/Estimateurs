@@ -15,6 +15,8 @@ import AuthProvider from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Account from "./screens/Account";
 import LanguageProvider from "./context/LanguageContext";
+import PersonalInfo from "./screens/PersonalInfo";
+import BuildBlockSubmissions from "./screens/BuildBlockSubmissions";
 
 function App() {
   return (
@@ -39,7 +41,13 @@ function App() {
                           <Account />
                         </ProtectedRoute>
                       }
-                    />
+                    >
+                      <Route index element={<PersonalInfo />} />
+                      <Route path="preferences" element={<PersonalInfo />} />
+                      <Route path="build-block" element={<BuildBlockSubmissions />} />
+                      <Route path="srf" element={<PersonalInfo />} />
+                    </Route>
+
                     <Route path="*" element={<NoPage />} />
                   </Route>
                 </Routes>

@@ -15,7 +15,6 @@ const Drawer: React.FC<DrawerProps> = ({ title, isOpen = true, children }) => {
     <div style={{ marginTop: 20 }}>
       <Button
         fullWidth
-        disableElevation
         className="button-left-aligned medium-font-size"
         onClick={() => {
           setIsDrawerOpen((prev) => !prev);

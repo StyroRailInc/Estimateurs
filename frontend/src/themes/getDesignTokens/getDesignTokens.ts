@@ -2,13 +2,18 @@ import { grey } from "@mui/material/colors";
 import { PaletteMode } from "@mui/material";
 
 const getDesignTokens = (mode: PaletteMode) => ({
-  // components: {
-  //   MuiButtonBase: {
-  //     defaultProps: {
-  //       disableRipple: true, // Disables ripple effect for all buttons
-  //     },
-  //   },
-  // },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        // disableRipple: true, // Disables ripple effect for all buttons
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
+  },
   palette: {
     contrastThreshold: 4.5,
     mode,
@@ -31,7 +36,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
         ? {
             main: "#08ACEB",
           }
-        : { main: "#3C5466" }),
+        : { main: "#08ACEB" }),
     },
     text: {
       ...(mode === "light"

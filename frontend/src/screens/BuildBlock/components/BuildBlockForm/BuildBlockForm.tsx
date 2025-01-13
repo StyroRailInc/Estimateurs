@@ -283,13 +283,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
           <p>To be determined</p>
         </Drawer>
         <div className="flex-end" style={{ marginBottom: 100, marginTop: 20 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            onClick={handleComputeClick}
-            sx={{ color: "white" }}
-          >
+          <Button type="submit" variant="contained" color="secondary" onClick={handleComputeClick}>
             {t("Calculer")}
           </Button>
         </div>

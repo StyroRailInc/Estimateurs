@@ -7,16 +7,19 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Constants } from "src/constants";
 import { Button } from "@mui/material";
 import { useAuth } from "src/context/AuthContext";
-import { Modal } from "@mui/material";
 import { TextField } from "@mui/material";
-import { Form } from "react-router-dom";
 import { HTTP_STATUS } from "src/utils/http";
 import "./../../../../global.css";
+import { useNavigate } from "react-router-dom";
 
 const Summary: React.FC = () => {
   const { t } = useTranslation();
@@ -27,9 +30,18 @@ const Summary: React.FC = () => {
     sessionStorage.getItem("buildblock-estimation-name")
   );
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubmissionName(e.target.value);
+  };
+
+  const handleSave = () => {
+    if (user) {
+      setIsModalOpen(true);
+    } else {
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -99,17 +111,17 @@ const Summary: React.FC = () => {
   const usedBlockTypes: string[] = [];
   return (
     <>
-      <TableContainer component={Paper} style={{ marginTop: "20px" }}>
-        {data && (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>{t("Type de bloc")}</TableCell>
-                <TableCell>{t("Largeur")}</TableCell>
-                <TableCell>{t("Quantité")}</TableCell>
-                <TableCell>{t("Paquets")}</TableCell>
-              </TableRow>
-            </TableHead>
+      <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t("Type de bloc")}</TableCell>
+              <TableCell>{t("Largeur")}</TableCell>
+              <TableCell>{t("Quantité")}</TableCell>
+              <TableCell>{t("Paquets")}</TableCell>
+            </TableRow>
+          </TableHead>
+          {data && (
             <TableBody>
               {blockTypes.map((type) => {
                 return Object.keys(data).map((width, index) => {
@@ -135,43 +147,71 @@ const Summary: React.FC = () => {
                 });
               })}
             </TableBody>
-          </Table>
-        )}
+          )}
+        </Table>
       </TableContainer>
-      <Button variant={"contained"} color="secondary" onClick={() => setIsModalOpen(true)}>
-        Enregistrer
-      </Button>
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <form name="save-submission" onSubmit={handleSubmit} acceptCharset="UTF-8">
-          {error && (
-            <>
-              <p className="error">{error}</p>
+      <div className="flex-end">
+        <Button variant={"contained"} color="secondary" onClick={handleSave}>
+          {t("Enregistrer")}
+        </Button>
+      </div>
+
+      <Dialog
+        fullWidth
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setError("");
+        }}
+      >
+        <DialogTitle>{t("Nom de la soumission")}</DialogTitle>
+        {!error ? (
+          <form name="save-submission" onSubmit={handleSubmit} acceptCharset="UTF-8">
+            <DialogContent>
+              <TextField
+                id="name"
+                fullWidth
+                value={submissionName}
+                onChange={handleInputChange}
+                size="small"
+                required
+              />
+            </DialogContent>
+            <DialogActions>
               <Button
-                variant="outlined"
-                color="primary"
                 onClick={() => {
-                  submitData(true);
+                  setIsModalOpen(false);
+                }}
+                color="error"
+              >
+                {t("Annuler")}
+              </Button>
+              <Button type={"submit"} variant={"outlined"} color="secondary">
+                {t("Enregistrer")}
+              </Button>
+            </DialogActions>
+          </form>
+        ) : (
+          <>
+            <DialogContent>
+              <p className="error">{t(error)}</p>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
                   setError("");
                 }}
+                color="error"
               >
+                {t("Annuler")}
+              </Button>
+              <Button onClick={() => submitData(true)} variant={"outlined"} color="secondary">
                 {t("Écraser")}
               </Button>
-            </>
-          )}
-          <label htmlFor="submission-name">{t("Nom de la soumission")}</label>
-          <TextField
-            id="submission-name"
-            fullWidth
-            size="small"
-            required
-            value={submissionName}
-            onChange={handleInputChange}
-          />
-          <Button type={"submit"} variant={"contained"} color="secondary">
-            {t("Enregistrer")}
-          </Button>
-        </form>
-      </Modal>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
     </>
   );
 };

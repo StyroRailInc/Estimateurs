@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./../../global.css";
@@ -70,7 +70,15 @@ const SignUp: React.FC<SignUpProps> = () => {
   return (
     <main>
       <div className="flex-center page-container">
-        <div className="login-container">
+        <Box
+          className="login-container"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "var(--background-color-very-dark)"
+                : "var(--transparent)",
+          }}
+        >
           {!isAccountCreated ? (
             <div className="flex-vertical">
               <h1>{t("S'inscrire")}</h1>
@@ -121,7 +129,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                   fullWidth
                   color="secondary"
                   variant="contained"
-                  className="login-button"
+                  className="login-button button-no-caps"
                 >
                   {t("S'inscrire")}
                 </Button>
@@ -144,7 +152,7 @@ const SignUp: React.FC<SignUpProps> = () => {
               <h1>{t("Bienvenu") + " " + formData.name + "!"}</h1>
             </>
           )}
-        </div>
+        </Box>
       </div>
     </main>
   );

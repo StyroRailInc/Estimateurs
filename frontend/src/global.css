@@ -6,12 +6,14 @@
   --secondary-color-dark: #f2f2f2;
   --background-color-light: #f2f2f2;
   --background-color-dark: #313338;
+  --background-color-very-dark: #232428;
   --text-color-header: #f2f2f2f2;
   --transparent: #ffffff;
   --text-input-dark: #383a3f;
   --large-screen: 992px;
   --medium-screen: 768px;
   --small-screen: 500px;
+  --app-bar-height: 48px;
 }
 
 .error {

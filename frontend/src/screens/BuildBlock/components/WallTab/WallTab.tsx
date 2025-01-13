@@ -128,7 +128,6 @@ const WallTab: React.FC<WallTabProps> = ({
           disableRipple
           color={"success"}
           variant="contained"
-          disableElevation
           sx={{ marginRight: "10px" }}
         >
           +
@@ -138,7 +137,6 @@ const WallTab: React.FC<WallTabProps> = ({
           disableRipple
           color={"error"}
           variant="contained"
-          disableElevation
         >
           -
         </Button>

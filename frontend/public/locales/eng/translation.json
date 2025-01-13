@@ -43,6 +43,13 @@
   "Mes soumissions buildblock": "My buildblock submissions",
   "Annuler": "Cancel",
   "Enregistrer": "Save",
-  "Edit Submission Name": "Modifier le nom",
-  "Compte": "Account"
+  "Modifier le nom": "Edit Submission Name",
+  "Compte": "Account",
+  "Enregistrer la soumission": "Save submission",
+  "Écraser": "Replace",
+  "Une soumission avec ce nom existe déjà. Voulez-vous l'écraser?": "A submission with this name already exists. Do you want to replace it?",
+  "Le courriel est invalide": "Invalid email",
+  "Mot de passe incorrecte. Réessayez": "Incorrect password. Retry",
+  "Vous n'avez aucune soumission": "No submissions",
+  "Mes soumissions Build Block": "My Build Block Submissions"
 }

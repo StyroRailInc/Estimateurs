@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import FormTextField from "src/components/FormTextField";
 import "./../../global.css";
 import "./Login.css";
 import { useTranslation } from "react-i18next";
@@ -10,6 +9,7 @@ import { HTTP_STATUS } from "src/utils/http";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "src/context/AuthContext";
 import { TextField } from "@mui/material";
+import { Box } from "@mui/material";
 
 interface LoginProps {}
 
@@ -60,7 +60,15 @@ const Login: React.FC<LoginProps> = () => {
   return (
     <main>
       <div className="flex-center page-container">
-        <div className="login-container">
+        <Box
+          className="login-container"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "var(--background-color-very-dark)"
+                : "var(--transparent)",
+          }}
+        >
           <div className="flex-vertical">
             <h1>{t("Se connecter")}</h1>
             <form name="Login" onSubmit={handleSubmit} acceptCharset="UTF-8">
@@ -90,7 +98,7 @@ const Login: React.FC<LoginProps> = () => {
                 fullWidth
                 color="secondary"
                 variant="contained"
-                className="login-button"
+                className="login-button button-no-caps"
               >
                 {t("Login")}
               </Button>
@@ -108,7 +116,7 @@ const Login: React.FC<LoginProps> = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </Box>
       </div>
     </main>
   );
