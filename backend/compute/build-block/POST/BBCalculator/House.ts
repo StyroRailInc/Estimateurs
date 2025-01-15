@@ -1,52 +1,76 @@
 import Wall from "./Wall.js";
-import { BlockType, Width } from "./types.js";
+import { BlockType, BlockQuantities, WallSpecifications, HouseSpecifications } from "./types.js";
+import getBlockSpecifications from "./BlockSpecifications.js";
 
 class House {
   private walls: Wall[];
-
-  private blockQuantities: Record<string, Record<BlockType, number>> = {};
-
+  private blockQuantities: BlockQuantities = {};
   private concreteVolume = 0;
-
-  private adjustBlockQuantities(blockQuantities: {
-    width: Width;
-    blockQuantities: Record<BlockType, number>;
-    concreteVolume: number;
-  }) {
-    const { width, blockQuantities: sourceQuantities, concreteVolume } = blockQuantities;
-
-    // Initialize width entry if it doesn't exist yet
-    if (!this.blockQuantities[width]) {
-      this.blockQuantities[width] = {
-        straight: 0,
-        ninetyCorner: 0,
-        fortyFiveCorner: 0,
-        doubleTaperTop: 0,
-        brickLedge: 0,
-        buck: 0,
-      };
-    }
-    for (const blockType in sourceQuantities) {
-      const quantity = sourceQuantities[blockType as BlockType];
-
-      this.blockQuantities[width][blockType as BlockType] += quantity;
-    }
-    this.concreteVolume += concreteVolume * 0.7645; // Conversion factor
-  }
+  private nBridges = 0;
+  private nBlocks = 0;
+  private CONCRETE_VOLUME_CONVERSION_FACTOR = 0.7645;
 
   constructor(walls: Wall[]) {
     this.walls = walls;
   }
 
-  computeHouse() {
+  private adjustBlockQuantities(wallSpecifications: WallSpecifications) {
+    const {
+      width,
+      blockQuantities: sourceQuantities,
+      concreteVolume,
+      bridges,
+      nBlocks,
+    } = wallSpecifications;
+
+    // Initialize width entry if it doesn't exist yet
+    if (!this.blockQuantities[width]) {
+      this.blockQuantities[width] = {
+        straight: { quantity: 0, nBundles: 0 },
+        ninetyCorner: { quantity: 0, nBundles: 0 },
+        fortyFiveCorner: { quantity: 0, nBundles: 0 },
+        doubleTaperTop: { quantity: 0, nBundles: 0 },
+        brickLedge: { quantity: 0, nBundles: 0 },
+        buck: { quantity: 0, nBundles: 0 },
+        thermalsert: { quantity: 0, nBundles: 0 },
+      };
+    }
+
+    for (const blockType in sourceQuantities) {
+      const block = blockType as BlockType;
+      const quantity = sourceQuantities[block];
+      this.blockQuantities[width][block].quantity += quantity;
+    }
+
+    this.concreteVolume += concreteVolume;
+    this.nBridges += bridges;
+    this.nBlocks += nBlocks;
+  }
+
+  private computeBundleQuantity() {
+    for (const width in this.blockQuantities) {
+      for (const blockType in this.blockQuantities[width]) {
+        const block = this.blockQuantities[width][blockType as BlockType];
+        block.nBundles += Math.ceil(
+          block.quantity / getBlockSpecifications(blockType as BlockType, width).qtyPerBundle
+        );
+      }
+    }
+  }
+
+  computeHouse(): HouseSpecifications {
     for (let wall of this.walls) {
       const wallBlockQuantities = wall.computeWall();
       this.adjustBlockQuantities(wallBlockQuantities);
     }
-  }
+    this.computeBundleQuantity();
 
-  getBlockQuantities() {
-    return this.blockQuantities;
+    return {
+      blockQuantities: this.blockQuantities,
+      bridges: { quantity: this.nBridges, nBundles: this.nBridges / 256 },
+      clips: { quantity: this.nBlocks, nBundles: Math.ceil(this.nBlocks / 200) },
+      concreteVolume: Math.ceil(this.concreteVolume / 1.308), // To cubic meters instead of cubic yards
+    };
   }
 }
 

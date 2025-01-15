@@ -1,4 +1,3 @@
-import { height } from "@mui/system";
 import {
   BuildBlockFormState,
   BuildBlockFormAction,
@@ -32,21 +31,32 @@ function buildBlockFormReducer(
     case "setBrickLedgeLength":
       return { ...state, brickLedgeLength: action.payload };
     case "resetInputs":
-      return { ...initialbuildBlockFormState };
+      return { ...initialBuildBlockFormState };
     case "setInputs":
       return { ...action.payload };
-    case "setIsValidLength":
-      return { ...state, isValidLength: action.payload };
-    case "setIsValidHeight":
-      return { ...state, isValidHeight: action.payload };
-    case "setIsValidWidth":
-      return { ...state, isValidWidth: action.payload };
+    case "setNThermalsertLayers":
+      return {
+        ...state,
+        thermalsert: {
+          ...state.thermalsert,
+          nLayers: action.payload,
+        },
+      };
+    case "setThermalsertWidth":
+      return {
+        ...state,
+        thermalsert: {
+          ...state.thermalsert,
+          width: action.payload,
+        },
+      };
+
     default:
       return state;
   }
 }
 
-const initialbuildBlockFormState: BuildBlockFormState = {
+const initialBuildBlockFormState: BuildBlockFormState = {
   length: "",
   height: "",
   width: '8"',
@@ -56,9 +66,7 @@ const initialbuildBlockFormState: BuildBlockFormState = {
   n45OutsideCorners: "",
   doubleTaperTopLength: "",
   brickLedgeLength: "",
-  isValidLength: true,
-  isValidHeight: true,
-  isValidWidth: true,
+  thermalsert: { nLayers: "", width: "" },
 };
 
 function openingReducer(state: OpeningState, action: OpeningAction) {
@@ -86,7 +94,6 @@ function openingReducer(state: OpeningState, action: OpeningAction) {
               height: opening.height,
               quantity: opening.quantity,
             };
-
             switch (action.payload.attribute) {
               case "width":
                 updatedOpening.width = action.payload.value;
@@ -100,29 +107,23 @@ function openingReducer(state: OpeningState, action: OpeningAction) {
               default:
                 break;
             }
-
             return updatedOpening;
           }
-
           return opening;
         }),
       };
-
     case "setOpenings": {
       const updatedOpenings = action.payload.openings;
-
       return {
         ...state,
         openings: updatedOpenings,
       };
     }
-
     case "resetOpening": {
       return {
         ...initialOpeningState,
       };
     }
-
     default:
       return state;
   }
@@ -137,6 +138,7 @@ function wallReducer(state: WallState, action: WallAction) {
     case "modifyWall": {
       const updatedWalls = [...state.walls];
       updatedWalls[action.payload.index] = {
+        name: action.payload.name,
         buildBlockFormState: action.payload.buildBlockFormState,
         openingState: action.payload.openingState,
       };
@@ -150,7 +152,8 @@ function wallReducer(state: WallState, action: WallAction) {
       // Remove payload from type
       const updatedWalls = [...state.walls];
       updatedWalls.push({
-        buildBlockFormState: initialbuildBlockFormState,
+        name: `Wall ${updatedWalls.length + 1}`,
+        buildBlockFormState: initialBuildBlockFormState,
         openingState: initialOpeningState,
       });
 
@@ -179,13 +182,19 @@ function wallReducer(state: WallState, action: WallAction) {
 }
 
 const initialWallState: WallState = {
-  walls: [{ buildBlockFormState: initialbuildBlockFormState, openingState: initialOpeningState }],
+  walls: [
+    {
+      name: `Wall 1`,
+      buildBlockFormState: initialBuildBlockFormState,
+      openingState: initialOpeningState,
+    },
+  ],
   clickedWallIndex: 0,
 };
 
 export {
   buildBlockFormReducer,
-  initialbuildBlockFormState,
+  initialBuildBlockFormState,
   openingReducer,
   initialOpeningState,
   wallReducer,

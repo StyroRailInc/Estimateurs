@@ -1,25 +1,14 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Constants } from "src/constants";
-import {
-  List,
-  ListItemButton,
-  ListItemText,
-  IconButton,
-  TextField,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  ListItem,
-} from "@mui/material";
+import { List, ListItemButton, ListItemText, IconButton, TextField, ListItem } from "@mui/material";
 import { useAuth } from "src/context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import "./BuildBlockSubmissions.css";
 import { useNavigate } from "react-router-dom";
 import "./../../global.css";
+import SingleInputDialog from "src/components/SingleInputDialog";
 
 const BuildBlockSubmissions: React.FC = () => {
   const { t } = useTranslation();
@@ -105,7 +94,7 @@ const BuildBlockSubmissions: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ padding: "20px" }}>
       <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
         {t("Mes soumissions Build Block")}
       </h1>
@@ -154,30 +143,23 @@ const BuildBlockSubmissions: React.FC = () => {
         )}
       </List>
 
-      <Dialog open={editingIndex !== null} onClose={() => setEditingIndex(null)} fullWidth>
-        <DialogTitle>{t("Modifier le nom")}</DialogTitle>
-        <form name="save-submission-modification" onSubmit={handleSubmit} acceptCharset="UTF-8">
-          <DialogContent>
-            <TextField
-              id="name"
-              fullWidth
-              placeholder={t("Entrez un nouveau nom")}
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              size="small"
-              required
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setEditingIndex(null)} color="error" variant="outlined">
-              {t("Annuler")}
-            </Button>
-            <Button type="submit" color="secondary" variant="outlined">
-              {t("Enregistrer")}
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
+      <SingleInputDialog
+        title={"Modifier le nom"}
+        open={editingIndex !== null}
+        onClose={() => setEditingIndex(null)}
+        onCancel={() => setEditingIndex(null)}
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          id="name"
+          fullWidth
+          placeholder={t("Entrez un nouveau nom")}
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          size="small"
+          required
+        />
+      </SingleInputDialog>
     </div>
   );
 };

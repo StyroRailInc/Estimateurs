@@ -50,22 +50,26 @@ const parseWall = (wallData: any): Wall => {
       )
   );
 
-  return new Wall(dimensions, corners, specialBlocks, openings);
+  const thermalserts = {
+    nLayers: parseIntegerInput(wallData.buildBlockFormState.thermalsert.nLayers),
+    width: wallData.buildBlockFormState.thermalsert.width,
+  };
+
+  return new Wall(dimensions, corners, specialBlocks, openings, thermalserts);
 };
 
 export const handler = async (event: any): Promise<ComputeResponse> => {
   const payload = JSON.parse(event.body);
-  console.log(event.body);
 
   try {
     const walls = payload.map(parseWall);
     const house = new House(walls);
-    house.computeHouse();
+    const computedHouse = house.computeHouse();
 
     return {
       statusCode: HTTP_STATUS.SUCCESS,
       headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify(house.getBlockQuantities()),
+      body: JSON.stringify(computedHouse),
     };
   } catch (error) {
     console.error("Error:", error);

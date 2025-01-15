@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
   margin: 0 auto;
+  align-items: start;
 }
 
 .content,
@@ -14,6 +15,7 @@
   justify-content: space-around;
   align-items: flex-start;
   margin-top: 80px;
+  top: calc(6vh + 80px);
   position: sticky;
 }
 
@@ -30,6 +32,7 @@
 
   .left-menu-container {
     margin-top: 32px;
+    position: static;
   }
 }
 

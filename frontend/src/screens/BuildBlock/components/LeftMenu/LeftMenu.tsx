@@ -27,7 +27,7 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
   const { t } = useTranslation();
 
   return (
-    <div className="left-menu flex-vertical">
+    <div className="left-menu">
       <StyledButton
         fullWidth
         className="button-left-aligned padding-left button-centered"

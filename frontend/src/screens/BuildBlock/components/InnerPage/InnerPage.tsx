@@ -28,7 +28,7 @@ function InnerPage() {
         <LeftMenu activeSection={activeSection} onChangeSection={setActiveSection} />
       </div>
       <div className="content">{renderContent()}</div>
-      <div className="right-menu"></div>
+      <div className="right-menu" />
     </div>
   );
 }

@@ -20,9 +20,7 @@ export type BuildBlockFormState = {
   n45OutsideCorners: string;
   doubleTaperTopLength: string;
   brickLedgeLength: string;
-  isValidLength: boolean;
-  isValidHeight: boolean;
-  isValidWidth: boolean;
+  thermalsert: { nLayers: string; width: string };
 };
 
 export type BuildBlockFormAction =
@@ -48,14 +46,11 @@ export type BuildBlockFormAction =
         n45OutsideCorners: string;
         brickLedgeLength: string;
         doubleTaperTopLength: string;
-        isValidLength: boolean;
-        isValidHeight: boolean;
-        isValidWidth: boolean;
+        thermalsert: { nLayers: string; width: string };
       };
     }
-  | { type: "setIsValidLength"; payload: boolean }
-  | { type: "setIsValidHeight"; payload: boolean }
-  | { type: "setIsValidWidth"; payload: boolean };
+  | { type: "setNThermalsertLayers"; payload: string }
+  | { type: "setThermalsertWidth"; payload: string };
 
 export type OpeningState = {
   openings: { width: string; height: string; quantity: string }[];
@@ -75,7 +70,11 @@ export type OpeningAction =
   | { type: "resetOpening" };
 
 export type WallState = {
-  walls: { buildBlockFormState: BuildBlockFormState; openingState: OpeningState }[];
+  walls: {
+    name: string;
+    buildBlockFormState: BuildBlockFormState;
+    openingState: OpeningState;
+  }[];
   clickedWallIndex: number;
 };
 
@@ -83,6 +82,7 @@ export type WallAction =
   | {
       type: "modifyWall";
       payload: {
+        name: string;
         buildBlockFormState: BuildBlockFormState;
         openingState: OpeningState;
         index: number;

@@ -7,10 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Constants } from "src/constants";
@@ -20,6 +16,7 @@ import { TextField } from "@mui/material";
 import { HTTP_STATUS } from "src/utils/http";
 import "./../../../../global.css";
 import { useNavigate } from "react-router-dom";
+import SingleInputDialog from "src/components/SingleInputDialog";
 
 const Summary: React.FC = () => {
   const { t } = useTranslation();
@@ -63,6 +60,7 @@ const Summary: React.FC = () => {
       })
       .then((e) => {
         setData(e);
+        console.log(e);
       })
       .catch((error) => {
         console.error(error);
@@ -96,7 +94,20 @@ const Summary: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submitData(false);
+    !error ? submitData(false) : submitData(true);
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setError("");
+  };
+
+  const handleCancel = () => {
+    if (!error) {
+      setIsModalOpen(false);
+    } else {
+      setError("");
+    }
   };
 
   const blockTypes = [
@@ -106,11 +117,12 @@ const Summary: React.FC = () => {
     { key: "brickLedge", label: t("Support à Maçon") },
     { key: "doubleTaperTop", label: t("Double Biseaux") },
     { key: "buck", label: t("Bucks") },
+    { key: "thermalsert", label: t("Insertion Isométriques") },
   ];
 
-  const usedBlockTypes: string[] = [];
   return (
     <>
+      <h2>{t("Blocks")}</h2>
       <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Table>
           <TableHead>
@@ -121,31 +133,70 @@ const Summary: React.FC = () => {
               <TableCell>{t("Paquets")}</TableCell>
             </TableRow>
           </TableHead>
-          {data && (
+          {data ? (
             <TableBody>
               {blockTypes.map((type) => {
-                return Object.keys(data).map((width, index) => {
-                  if (data[width][type.key]) {
-                    return (
-                      <TableRow key={`${type.key}-${width}`}>
-                        {!usedBlockTypes.includes(type.key)
-                          ? usedBlockTypes.push(type.key) && (
-                              <TableCell
-                                rowSpan={Object.keys(data).filter((h) => data[h][type.key]).length}
-                              >
-                                {type.label}
-                              </TableCell>
-                            )
-                          : null}
-                        <TableCell>{width}</TableCell>
-                        <TableCell>{data[width][type.key] || 0}</TableCell>
-                        <TableCell>{"TBD"}</TableCell>
-                      </TableRow>
-                    );
-                  }
-                  return null;
+                // Filter widths with non-zero quantities for this block type
+                const filteredWidths = Object.keys(data["blockQuantities"]).filter(
+                  (width) =>
+                    data["blockQuantities"][width][type.key] &&
+                    data["blockQuantities"][width][type.key]["quantity"]
+                );
+
+                // Skip rendering this type if no widths have non-zero quantities
+                if (filteredWidths.length === 0) return null;
+
+                return filteredWidths.map((width, index) => {
+                  const isFirstRow = index === 0;
+                  return (
+                    <TableRow key={`${type.key}-${width}`}>
+                      {isFirstRow && (
+                        <TableCell rowSpan={filteredWidths.length}>{type.label}</TableCell>
+                      )}
+                      <TableCell>{width}</TableCell>
+                      <TableCell>
+                        {data["blockQuantities"][width][type.key]["quantity"] || 0}
+                      </TableCell>
+                      <TableCell>{data["blockQuantities"][width][type.key]["nBundles"]}</TableCell>
+                    </TableRow>
+                  );
                 });
               })}
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell>{t("Veuillez remplir le formulaire Build Block")}</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
+
+      <h2>{t("Barres d'armature d'acier")}</h2>
+      <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t("Béton")}</TableCell>
+              <TableCell>{t("ReBar #1")}</TableCell>
+              <TableCell>{t("ReBar #2")}</TableCell>
+              <TableCell>{t("ReBar #3")}</TableCell>
+              <TableCell>{t("ReBar #4")}</TableCell>
+              <TableCell>{t("ReBar #5")}</TableCell>
+            </TableRow>
+          </TableHead>
+          {data ? (
+            <TableBody>
+              <TableRow>
+                <TableCell>{data["concreteVolume"] + " m3"}</TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell>{t("Veuillez remplir le formulaire Build Block")}</TableCell>
+              </TableRow>
             </TableBody>
           )}
         </Table>
@@ -156,62 +207,26 @@ const Summary: React.FC = () => {
         </Button>
       </div>
 
-      <Dialog
-        fullWidth
+      <SingleInputDialog
+        title="Nom de la soumission"
         open={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setError("");
-        }}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
       >
-        <DialogTitle>{t("Nom de la soumission")}</DialogTitle>
         {!error ? (
-          <form name="save-submission" onSubmit={handleSubmit} acceptCharset="UTF-8">
-            <DialogContent>
-              <TextField
-                id="name"
-                fullWidth
-                value={submissionName}
-                onChange={handleInputChange}
-                size="small"
-                required
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-                color="error"
-              >
-                {t("Annuler")}
-              </Button>
-              <Button type={"submit"} variant={"outlined"} color="secondary">
-                {t("Enregistrer")}
-              </Button>
-            </DialogActions>
-          </form>
+          <TextField
+            id="name"
+            fullWidth
+            value={submissionName}
+            onChange={handleInputChange}
+            size="small"
+            required
+          />
         ) : (
-          <>
-            <DialogContent>
-              <p className="error">{t(error)}</p>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  setError("");
-                }}
-                color="error"
-              >
-                {t("Annuler")}
-              </Button>
-              <Button onClick={() => submitData(true)} variant={"outlined"} color="secondary">
-                {t("Écraser")}
-              </Button>
-            </DialogActions>
-          </>
+          <p className="error">{t(error)}</p>
         )}
-      </Dialog>
+      </SingleInputDialog>
     </>
   );
 };

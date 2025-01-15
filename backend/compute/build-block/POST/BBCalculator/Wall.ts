@@ -1,4 +1,4 @@
-import { BlockType, Width } from "./types.js";
+import { BlockType, WallSpecifications } from "./types.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
 import Dimensions from "./Dimensions.js";
 import Opening from "./Opening.js";
@@ -10,25 +10,24 @@ class Wall {
   private corners: Corners;
   private specialBlocks: SpecialBlocks;
   private openings: Opening[];
+  private thermalserts: { nLayers: number; width: string };
   private nCourses: number = 0;
 
   constructor(
     dimensions: Dimensions,
     corners: Corners,
     specialBlocks: SpecialBlocks,
-    openings: Opening[]
+    openings: Opening[],
+    thermalserts: { nLayers: number; width: string }
   ) {
     this.dimensions = dimensions;
     this.corners = corners;
     this.specialBlocks = specialBlocks;
     this.openings = openings;
+    this.thermalserts = thermalserts;
   }
 
-  computeWall(): {
-    width: Width;
-    blockQuantities: Record<BlockType, number>;
-    concreteVolume: number;
-  } {
+  computeWall(): WallSpecifications {
     this.nCourses = this.dimensions.getNCourses();
     let remainingSurfaceArea = this.dimensions.getSurfaceArea();
     let openingPerimeter = 0;
@@ -46,6 +45,11 @@ class Wall {
 
     const straight = getBlockSpecifications("straight", this.dimensions.getWidth());
 
+    const calculateTotalBlocksExcludingBuckAndThermalsert = (): number => {
+      const { buck, thermalsert, ...otherBlocks } = blockQuantities;
+      return Object.values(otherBlocks).reduce((total, quantity) => total + quantity, 0);
+    };
+
     const blockQuantities: Record<BlockType, number> = {
       straight: Math.ceil(remainingSurfaceArea / straight.surfaceArea.ext),
       ninetyCorner: this.corners.getTotal90() * this.nCourses,
@@ -53,7 +57,12 @@ class Wall {
       doubleTaperTop: this.specialBlocks.getTotalDoubleTaperTop(),
       brickLedge: this.specialBlocks.getTotalBrickLedge(),
       buck: this.specialBlocks.getTotalBuck(),
+      thermalsert: 0,
     };
+
+    const nBlocks = calculateTotalBlocksExcludingBuckAndThermalsert();
+
+    blockQuantities.thermalsert = this.thermalserts.nLayers * nBlocks;
 
     const concreteVolume =
       this.corners.getTotalConcreteVolume() +
@@ -61,10 +70,14 @@ class Wall {
       (blockQuantities.straight - openingSurfaceArea / straight.surfaceArea.ext) *
         straight.concreteVolume;
 
+    const bridgeQuantity = nBlocks * 16;
+
     return {
       width: this.dimensions.getWidth(),
       blockQuantities: blockQuantities,
       concreteVolume: concreteVolume,
+      bridges: bridgeQuantity,
+      nBlocks: nBlocks,
     };
   }
 }

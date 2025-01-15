@@ -47,7 +47,6 @@ function App() {
                       <Route path="build-block" element={<BuildBlockSubmissions />} />
                       <Route path="srf" element={<PersonalInfo />} />
                     </Route>
-
                     <Route path="*" element={<NoPage />} />
                   </Route>
                 </Routes>

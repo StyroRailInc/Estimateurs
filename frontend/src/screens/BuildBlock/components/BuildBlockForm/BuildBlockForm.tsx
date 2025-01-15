@@ -1,6 +1,6 @@
 import React, { ReactEventHandler, useEffect, useReducer } from "react";
 import Drawer from "../Drawer";
-import { Button } from "@mui/material";
+import { Button, Select, MenuItem } from "@mui/material";
 import FormTextField from "src/components/FormTextField";
 import "./BuildBlockForm.css";
 import "./../../BuildBlock.css";
@@ -11,7 +11,7 @@ import {
   openingReducer,
   initialOpeningState,
   buildBlockFormReducer,
-  initialbuildBlockFormState,
+  initialBuildBlockFormState,
 } from "./../../reducer";
 import WallTab from "../WallTab";
 import { wallReducer, initialWallState } from "../../reducer";
@@ -37,7 +37,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
   );
   const [buildBlockFormState, buildBlockFormDispatch] = useReducer(
     buildBlockFormReducer,
-    initialbuildBlockFormState,
+    initialBuildBlockFormState,
     () => wallState.walls[wallState.clickedWallIndex].buildBlockFormState
   );
 
@@ -239,7 +239,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             </Button>
           </div>
         </Drawer>
-        <Drawer title={t("Support à Maçon")} isOpen={false}>
+        <Drawer title={t("Support à Maçon")} isOpen>
           <label htmlFor="brick-ledge-length">{t("Longueur")}</label>
           <FormTextField
             id="brick-ledge-length"
@@ -256,10 +256,10 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
           />
           <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
           <FormTextField id="brick-ledge-90" fullWidth size="small" className="input-spacing" />
-          <label htmlFor="brick-ledge-45">{t("Coins") + "45"}</label>
+          <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
           <FormTextField id="brick-ledge-45" fullWidth size="small" className="input-spacing" />
         </Drawer>
-        <Drawer title={t("Double Biseaux")} isOpen={false}>
+        <Drawer title={t("Double Biseaux")} isOpen>
           <label htmlFor="double-taper-length">{t("Longueur")}</label>
           <FormTextField
             id="double-taper-length"
@@ -274,12 +274,49 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
               });
             }}
           />
-          <label htmlFor="double-taper-90">{t("Coins") + "90"}</label>
+          <label htmlFor="double-taper-90">{t("Coins") + " 90"}</label>
           <FormTextField id="double-taper-90" fullWidth size="small" className="input-spacing" />
-          <label htmlFor="double-taper-45">{t("Coins") + "45"}</label>
+          <label htmlFor="double-taper-45">{t("Coins") + " 45"}</label>
           <FormTextField id="double-taper-45" fullWidth size="small" className="input-spacing" />
         </Drawer>
-        <Drawer title={t("Armatures")} isOpen={false}>
+        <Drawer title={t("Insertions Isométriques")} isOpen>
+          <label htmlFor="thermalsert-layer-quantity">{t("Nombre de couches")}</label>
+          <FormTextField
+            id="thermalsert-layer-quantity"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.thermalsert.nLayers}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setNThermalsertLayers",
+                payload: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="thermalsert-layer-width">{t("Largeur")}</label>
+          <Select
+            id="thermalsert-layer-width"
+            value={buildBlockFormState.thermalsert.width}
+            fullWidth
+            size="small"
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setThermalsertWidth",
+                payload: e.target.value,
+              });
+            }}
+            color="primary"
+          >
+            <MenuItem value={""}>ㅤ</MenuItem>
+            <MenuItem value={'1"'}>1"</MenuItem>
+            <MenuItem value={'2"'}>2"</MenuItem>
+            <MenuItem value={'4"'}>4"</MenuItem>
+            <MenuItem value={'6"'}>6"</MenuItem>
+            <MenuItem value={'8"'}>8"</MenuItem>
+          </Select>
+        </Drawer>
+        <Drawer title={t("Armatures")} isOpen>
           <p>To be determined</p>
         </Drawer>
         <div className="flex-end" style={{ marginBottom: 100, marginTop: 20 }}>

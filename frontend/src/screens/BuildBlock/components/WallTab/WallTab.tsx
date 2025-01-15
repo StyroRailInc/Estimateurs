@@ -12,9 +12,10 @@ import {
   WallAction,
 } from "../../types/BBTypes";
 import { initialWallState } from "../../reducer";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
+import { Tab, Tabs, IconButton, TextField } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import { Transform } from "@mui/icons-material";
+import SingleInputDialog from "src/components/SingleInputDialog";
 
 interface WallTabProps {
   buildBlockFormState: BuildBlockFormState;
@@ -34,11 +35,14 @@ const WallTab: React.FC<WallTabProps> = ({
   wallDispatch,
 }) => {
   const { t } = useTranslation();
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [newName, setNewName] = useState<string>("");
 
   const handleChange = (event: React.SyntheticEvent, index: number) => {
     wallDispatch({
       type: "modifyWall",
       payload: {
+        name: wallState.walls[wallState.clickedWallIndex].name,
         buildBlockFormState: buildBlockFormState,
         openingState: openingState,
         index: wallState.clickedWallIndex,
@@ -51,6 +55,7 @@ const WallTab: React.FC<WallTabProps> = ({
     wallDispatch({
       type: "modifyWall",
       payload: {
+        name: wallState.walls[wallState.clickedWallIndex].name,
         buildBlockFormState: buildBlockFormState,
         openingState: openingState,
         index: wallState.clickedWallIndex,
@@ -71,6 +76,10 @@ const WallTab: React.FC<WallTabProps> = ({
     wallDispatch({ type: "setClickedWallIndex", payload: newClickedIndex });
   };
 
+  const handleEdit = (index: number) => {
+    setEditingIndex(index);
+  };
+
   useEffect(() => {
     buildBlockFormDispatch({
       type: "setInputs",
@@ -86,12 +95,27 @@ const WallTab: React.FC<WallTabProps> = ({
     wallDispatch({
       type: "modifyWall",
       payload: {
+        name: wallState.walls[wallState.clickedWallIndex].name,
         buildBlockFormState: buildBlockFormState,
         openingState: openingState,
         index: wallState.clickedWallIndex,
       },
     });
   }, [buildBlockFormState, openingState]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    wallDispatch({
+      type: "modifyWall",
+      payload: {
+        name: newName,
+        buildBlockFormState: buildBlockFormState,
+        openingState: openingState,
+        index: wallState.clickedWallIndex,
+      },
+    });
+    setEditingIndex(null);
+  };
 
   return (
     <div
@@ -116,8 +140,24 @@ const WallTab: React.FC<WallTabProps> = ({
           variant="scrollable"
           scrollButtons="auto"
         >
-          {wallState.walls.map((_, index) => (
-            <Tab key={index} value={index} label={`Wall ${index + 1}`} />
+          {wallState.walls.map((wall, index) => (
+            <Tab
+              key={index}
+              value={index}
+              label={
+                <div className="flex-horizontal">
+                  <p>{wall.name}</p>
+                  <IconButton
+                    edge="end"
+                    onClick={() => handleEdit(index)}
+                    aria-label={t("Modifier")}
+                  >
+                    <EditIcon sx={{ width: "15px", height: "15px" }} />
+                  </IconButton>
+                </div>
+              }
+              className="button-no-caps"
+            />
           ))}
         </Tabs>
       </div>
@@ -141,6 +181,27 @@ const WallTab: React.FC<WallTabProps> = ({
           -
         </Button>
       </div>
+
+      <SingleInputDialog
+        title="Nom du mur"
+        open={editingIndex !== null}
+        onClose={() => {
+          setEditingIndex(null);
+        }}
+        onSubmit={handleSubmit}
+        onCancel={() => {
+          setEditingIndex(null);
+        }}
+      >
+        <TextField
+          id="name"
+          fullWidth
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          size="small"
+          required
+        />
+      </SingleInputDialog>
     </div>
   );
 };
