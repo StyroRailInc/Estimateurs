@@ -50,6 +50,22 @@ function buildBlockFormReducer(
           width: action.payload,
         },
       };
+    case "setHorizontalRebarQuantity":
+      return {
+        ...state,
+        horizontalRebar: {
+          ...state.horizontalRebar,
+          quantity: action.payload,
+        },
+      };
+    case "setHorizontalRebarDiameter":
+      return {
+        ...state,
+        horizontalRebar: {
+          ...state.horizontalRebar,
+          diameter: action.payload,
+        },
+      };
 
     default:
       return state;
@@ -67,6 +83,8 @@ const initialBuildBlockFormState: BuildBlockFormState = {
   doubleTaperTopLength: "",
   brickLedgeLength: "",
   thermalsert: { nLayers: "", width: "" },
+  horizontalRebar: { quantity: "5", diameter: "0.625" },
+  verticalRebar: { spacing: '12"', diameter: "0.625" },
 };
 
 function openingReducer(state: OpeningState, action: OpeningAction) {

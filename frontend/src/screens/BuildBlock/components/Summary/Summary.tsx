@@ -173,17 +173,42 @@ const Summary: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <h2>{t("Barres d'armature d'acier")}</h2>
+      <h2>{t("Barres d'armature d'acier (20')")}</h2>
       <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t("Béton")}</TableCell>
-              <TableCell>{t("ReBar #1")}</TableCell>
-              <TableCell>{t("ReBar #2")}</TableCell>
-              <TableCell>{t("ReBar #3")}</TableCell>
-              <TableCell>{t("ReBar #4")}</TableCell>
-              <TableCell>{t("ReBar #5")}</TableCell>
+              <TableCell>{t("Armature spécifié")}</TableCell>
+              <TableCell>{t("Quantité")}</TableCell>
+            </TableRow>
+          </TableHead>
+          {data ? (
+            <TableBody>
+              {Object.keys(data["rebars"]).map(
+                (width) =>
+                  data["rebars"][width] !== 0 && (
+                    <TableRow>
+                      <TableCell key={width}>{width}</TableCell>
+                      <TableCell key={width}>{data["rebars"][width]}</TableCell>
+                    </TableRow>
+                  )
+              )}
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell>{t("Veuillez remplir le formulaire Build Block")}</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
+      <h2>{t("Informations supplémentaires")}</h2>
+      <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t("Volume de béton")}</TableCell>
             </TableRow>
           </TableHead>
           {data ? (

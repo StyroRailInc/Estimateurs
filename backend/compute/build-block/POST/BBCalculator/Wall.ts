@@ -4,12 +4,15 @@ import Dimensions from "./Dimensions.js";
 import Opening from "./Opening.js";
 import Corners from "./Corners.js";
 import SpecialBlocks from "./SpecialBlocks.js";
+import { VerticalRebar, HorizontalRebar } from "./Rebars.js";
 
 class Wall {
   private dimensions: Dimensions;
   private corners: Corners;
   private specialBlocks: SpecialBlocks;
   private openings: Opening[];
+  private horizontalRebar: HorizontalRebar;
+  private verticalRebar: VerticalRebar;
   private thermalserts: { nLayers: number; width: string };
   private nCourses: number = 0;
 
@@ -18,11 +21,15 @@ class Wall {
     corners: Corners,
     specialBlocks: SpecialBlocks,
     openings: Opening[],
+    horizontalRebar: HorizontalRebar,
+    verticalRebar: VerticalRebar,
     thermalserts: { nLayers: number; width: string }
   ) {
     this.dimensions = dimensions;
     this.corners = corners;
     this.specialBlocks = specialBlocks;
+    this.verticalRebar = verticalRebar;
+    this.horizontalRebar = horizontalRebar;
     this.openings = openings;
     this.thermalserts = thermalserts;
   }
@@ -64,6 +71,9 @@ class Wall {
 
     blockQuantities.thermalsert = this.thermalserts.nLayers * nBlocks;
 
+    const verticalRebars = this.verticalRebar.computeVerticalRebars();
+    const horizontalRebars = this.horizontalRebar.computeHorizontalRebars();
+
     const concreteVolume =
       this.corners.getTotalConcreteVolume() +
       this.specialBlocks.getTotalConcreteVolume() +
@@ -75,6 +85,8 @@ class Wall {
     return {
       width: this.dimensions.getWidth(),
       blockQuantities: blockQuantities,
+      horizontalRebars: horizontalRebars,
+      verticalRebars: verticalRebars,
       concreteVolume: concreteVolume,
       bridges: bridgeQuantity,
       nBlocks: nBlocks,

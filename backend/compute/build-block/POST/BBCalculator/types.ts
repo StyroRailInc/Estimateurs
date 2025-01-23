@@ -1,3 +1,5 @@
+import { HorizontalRebar } from "./Rebars";
+
 export type Width = '4"' | '6"' | '8"';
 
 export type BlockType =
@@ -17,6 +19,8 @@ export type BlockQuantities = Record<
 export type WallSpecifications = {
   width: Width;
   blockQuantities: Record<BlockType, number>;
+  horizontalRebars: { type: string; quantity: number };
+  verticalRebars: { type: string; quantity: number };
   concreteVolume: number;
   bridges: number;
   nBlocks: number;
@@ -27,4 +31,5 @@ export type HouseSpecifications = {
   bridges: { quantity: number; nBundles: number };
   clips: { quantity: number; nBundles: number };
   concreteVolume: number;
+  rebars: Record<string, number>;
 };

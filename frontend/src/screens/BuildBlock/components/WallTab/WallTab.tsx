@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { useEffect, useReducer, useState } from "react";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
@@ -14,7 +13,6 @@ import {
 import { initialWallState } from "../../reducer";
 import { Tab, Tabs, IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { Transform } from "@mui/icons-material";
 import SingleInputDialog from "src/components/SingleInputDialog";
 
 interface WallTabProps {
@@ -129,7 +127,7 @@ const WallTab: React.FC<WallTabProps> = ({
           display: "flex",
           justifyContent: "flex-start",
           width: "100%",
-          overflow: "scroll",
+          overflow: "auto",
         }}
       >
         <Tabs

@@ -21,6 +21,8 @@ export type BuildBlockFormState = {
   doubleTaperTopLength: string;
   brickLedgeLength: string;
   thermalsert: { nLayers: string; width: string };
+  horizontalRebar: { quantity: string; diameter: string };
+  verticalRebar: { spacing: string; diameter: string };
 };
 
 export type BuildBlockFormAction =
@@ -47,10 +49,16 @@ export type BuildBlockFormAction =
         brickLedgeLength: string;
         doubleTaperTopLength: string;
         thermalsert: { nLayers: string; width: string };
+        horizontalRebar: { quantity: string; diameter: string };
+        verticalRebar: { spacing: string; diameter: string };
       };
     }
   | { type: "setNThermalsertLayers"; payload: string }
-  | { type: "setThermalsertWidth"; payload: string };
+  | { type: "setThermalsertWidth"; payload: string }
+  | { type: "setHorizontalRebarQuantity"; payload: string }
+  | { type: "setHorizontalRebarDiameter"; payload: string }
+  | { type: "setVerticalRebarSpacing"; payload: string }
+  | { type: "setVerticalRebarDiameter"; payload: string };
 
 export type OpeningState = {
   openings: { width: string; height: string; quantity: string }[];

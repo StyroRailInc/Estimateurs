@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import Drawer from "../Drawer";
 import { Button, Select, MenuItem } from "@mui/material";
 import FormTextField from "src/components/FormTextField";
@@ -316,8 +316,81 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             <MenuItem value={'8"'}>8"</MenuItem>
           </Select>
         </Drawer>
-        <Drawer title={t("Armatures")} isOpen>
-          <p>To be determined</p>
+        <Drawer title={t("Armatures Horizontales")} isOpen>
+          <label htmlFor="horizontal-rebar-quantity">{t("Nombre de rangées")}</label>
+          <FormTextField
+            id="horizontal-rebar-quantity"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.horizontalRebar.quantity}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setHorizontalRebarQuantity",
+                payload: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="horizontal-rebar-diameter">{t("Armature spécifiée")}</label>
+          <Select
+            id="horizontal-rebar-diameter"
+            value={buildBlockFormState.horizontalRebar.diameter}
+            fullWidth
+            size="small"
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setHorizontalRebarDiameter",
+                payload: e.target.value,
+              });
+            }}
+            color="primary"
+          >
+            <MenuItem value={""}>ㅤ</MenuItem>
+            <MenuItem value={"0.375"}>#3</MenuItem>
+            <MenuItem value={"0.5"}>#4</MenuItem>
+            <MenuItem value={"0.625"}>#5</MenuItem>
+            <MenuItem value={"0.75"}>#6</MenuItem>
+            <MenuItem value={"0.875"}>#7</MenuItem>
+            <MenuItem value={"1.0"}>#8</MenuItem>
+          </Select>
+        </Drawer>
+        <Drawer title={t("Armatures Verticales")} isOpen>
+          <label htmlFor="vertical-rebar-spacing">{t("Espacement")}</label>
+          <FormTextField
+            id="vertical-rebar-spacing"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.verticalRebar.spacing}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setVerticalRebarSpacing",
+                payload: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="vertical-rebar-diameter">{t("Armature spécifiée")}</label>
+          <Select
+            id="vertical-rebar-diameter"
+            value={buildBlockFormState.verticalRebar.diameter}
+            fullWidth
+            size="small"
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setVerticalRebarDiameter",
+                payload: e.target.value,
+              });
+            }}
+            color="primary"
+          >
+            <MenuItem value={""}>ㅤ</MenuItem>
+            <MenuItem value={"0.375"}>#3</MenuItem>
+            <MenuItem value={"0.5"}>#4</MenuItem>
+            <MenuItem value={"0.625"}>#5</MenuItem>
+            <MenuItem value={"0.75"}>#6</MenuItem>
+            <MenuItem value={"0.875"}>#7</MenuItem>
+            <MenuItem value={"1.0"}>#8</MenuItem>
+          </Select>
         </Drawer>
         <div className="flex-end" style={{ marginBottom: 100, marginTop: 20 }}>
           <Button type="submit" variant="contained" color="secondary" onClick={handleComputeClick}>

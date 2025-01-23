@@ -8,6 +8,7 @@ import { Width } from "./BBCalculator/types.js";
 import SpecialBlocks from "./BBCalculator/SpecialBlocks.js";
 import Corners from "./BBCalculator/Corners.js";
 import { HTTP_STATUS } from "./utils/http.js";
+import { HorizontalRebar, VerticalRebar } from "./BBCalculator/Rebars.js";
 
 interface ComputeResponse {
   statusCode: number;
@@ -50,12 +51,34 @@ const parseWall = (wallData: any): Wall => {
       )
   );
 
+  const horizontalRebar = new HorizontalRebar(
+    parseIntegerInput(wallData.buildBlockFormState.horizontalRebar.diameter),
+    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseIntegerInput(wallData.buildBlockFormState.horizontalRebar.quantity)
+  );
+
+  const verticalRebar = new VerticalRebar(
+    parseIntegerInput(wallData.buildBlockFormState.verticalRebar.diameter),
+    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(wallData.buildBlockFormState.verticalRebar.spacing, IS_FEET, !EMPTY_STRING_VALID)
+  );
+
   const thermalserts = {
     nLayers: parseIntegerInput(wallData.buildBlockFormState.thermalsert.nLayers),
     width: wallData.buildBlockFormState.thermalsert.width,
   };
 
-  return new Wall(dimensions, corners, specialBlocks, openings, thermalserts);
+  return new Wall(
+    dimensions,
+    corners,
+    specialBlocks,
+    openings,
+    horizontalRebar,
+    verticalRebar,
+    thermalserts
+  );
 };
 
 export const handler = async (event: any): Promise<ComputeResponse> => {

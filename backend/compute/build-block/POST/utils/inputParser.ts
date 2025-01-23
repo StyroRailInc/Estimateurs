@@ -74,7 +74,7 @@ const parseIntegerInput = (input: string): number => {
     return 0;
   }
 
-  const parsed = parseInt(trimmedInput);
+  const parsed = parseFloat(trimmedInput);
 
   // Check if parsing resulted in NaN or if input had non-integer values
   if (parsed.toString() !== trimmedInput) {
