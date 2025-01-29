@@ -8,7 +8,7 @@ import { Width } from "./BBCalculator/types.js";
 import SpecialBlocks from "./BBCalculator/SpecialBlocks.js";
 import Corners from "./BBCalculator/Corners.js";
 import { HTTP_STATUS } from "./utils/http.js";
-import { HorizontalRebar, VerticalRebar } from "./BBCalculator/Rebars.js";
+import { ColdJointPin, HorizontalRebar, VerticalRebar } from "./BBCalculator/Rebars.js";
 
 interface ComputeResponse {
   statusCode: number;
@@ -65,6 +65,40 @@ const parseWall = (wallData: any): Wall => {
     parseInput(wallData.buildBlockFormState.verticalRebar.spacing, IS_FEET, !EMPTY_STRING_VALID)
   );
 
+  console.log(
+    parseIntegerInput(wallData.buildBlockFormState.coldJointPin.diameter),
+    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(
+      wallData.buildBlockFormState.coldJointPin.centerSpacing,
+      !IS_FEET,
+      !EMPTY_STRING_VALID
+    ),
+    parseInput(wallData.buildBlockFormState.coldJointPin.lLength, !IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(
+      wallData.buildBlockFormState.coldJointPin.depthInFooting,
+      !IS_FEET,
+      !EMPTY_STRING_VALID
+    )
+  );
+
+  const coldJointPin = new ColdJointPin(
+    parseIntegerInput(wallData.buildBlockFormState.coldJointPin.diameter),
+    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(
+      wallData.buildBlockFormState.coldJointPin.centerSpacing,
+      !IS_FEET,
+      !EMPTY_STRING_VALID
+    ),
+    parseInput(wallData.buildBlockFormState.coldJointPin.lLength, !IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(
+      wallData.buildBlockFormState.coldJointPin.depthInFooting,
+      !IS_FEET,
+      !EMPTY_STRING_VALID
+    )
+  );
+
   const thermalserts = {
     nLayers: parseIntegerInput(wallData.buildBlockFormState.thermalsert.nLayers),
     width: wallData.buildBlockFormState.thermalsert.width,
@@ -77,6 +111,7 @@ const parseWall = (wallData: any): Wall => {
     openings,
     horizontalRebar,
     verticalRebar,
+    coldJointPin,
     thermalserts
   );
 };

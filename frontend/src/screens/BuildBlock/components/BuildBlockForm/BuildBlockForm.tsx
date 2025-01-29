@@ -392,6 +392,72 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             <MenuItem value={"1.0"}>#8</MenuItem>
           </Select>
         </Drawer>
+        <Drawer title={t("Goujons")} isOpen>
+          <label htmlFor="cjp-center-spacing">{t("Espacement")}</label>
+          <FormTextField
+            id="cjp-center-spacing"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.coldJointPin.centerSpacing}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setCJPCenterSpacing",
+                payload: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="cjp-l-length">{t("Longueur L")}</label>
+          <FormTextField
+            id="cjp-l-length"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.coldJointPin.lLength}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setCJPLLength",
+                payload: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="cjp-depth-in-footing">{t("Profondeur dans la semelle")}</label>
+          <FormTextField
+            id="cjp-depth-in-footing"
+            fullWidth
+            size="small"
+            className="input-spacing"
+            value={buildBlockFormState.coldJointPin.depthInFooting}
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setCJPDepthInFooting",
+                payload: e.target.value,
+              });
+            }}
+          />
+          <label htmlFor="cjp-rebar-diameter">{t("Armature spécifiée")}</label>
+          <Select
+            id="cjp-rebar-diameter"
+            value={buildBlockFormState.coldJointPin.diameter}
+            fullWidth
+            size="small"
+            onChange={(e) => {
+              buildBlockFormDispatch({
+                type: "setCJPDiameter",
+                payload: e.target.value,
+              });
+            }}
+            color="primary"
+          >
+            <MenuItem value={""}>ㅤ</MenuItem>
+            <MenuItem value={"0.375"}>#3</MenuItem>
+            <MenuItem value={"0.5"}>#4</MenuItem>
+            <MenuItem value={"0.625"}>#5</MenuItem>
+            <MenuItem value={"0.75"}>#6</MenuItem>
+            <MenuItem value={"0.875"}>#7</MenuItem>
+            <MenuItem value={"1.0"}>#8</MenuItem>
+          </Select>
+        </Drawer>
         <div className="flex-end" style={{ marginBottom: 100, marginTop: 20 }}>
           <Button type="submit" variant="contained" color="secondary" onClick={handleComputeClick}>
             {t("Calculer")}

@@ -1,7 +1,7 @@
 interface SRFProps {}
 
 const SRF: React.FC<SRFProps> = () => {
-  return <p>srf</p>;
+  return <p>Disponible Prochainement</p>;
 };
 
 export default SRF;

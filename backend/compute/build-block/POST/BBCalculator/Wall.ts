@@ -4,7 +4,7 @@ import Dimensions from "./Dimensions.js";
 import Opening from "./Opening.js";
 import Corners from "./Corners.js";
 import SpecialBlocks from "./SpecialBlocks.js";
-import { VerticalRebar, HorizontalRebar } from "./Rebars.js";
+import { VerticalRebar, HorizontalRebar, ColdJointPin } from "./Rebars.js";
 
 class Wall {
   private dimensions: Dimensions;
@@ -13,6 +13,7 @@ class Wall {
   private openings: Opening[];
   private horizontalRebar: HorizontalRebar;
   private verticalRebar: VerticalRebar;
+  private coldJointPin: ColdJointPin;
   private thermalserts: { nLayers: number; width: string };
   private nCourses: number = 0;
 
@@ -23,6 +24,7 @@ class Wall {
     openings: Opening[],
     horizontalRebar: HorizontalRebar,
     verticalRebar: VerticalRebar,
+    coldJointPin: ColdJointPin,
     thermalserts: { nLayers: number; width: string }
   ) {
     this.dimensions = dimensions;
@@ -30,6 +32,7 @@ class Wall {
     this.specialBlocks = specialBlocks;
     this.verticalRebar = verticalRebar;
     this.horizontalRebar = horizontalRebar;
+    this.coldJointPin = coldJointPin;
     this.openings = openings;
     this.thermalserts = thermalserts;
   }
@@ -73,6 +76,7 @@ class Wall {
 
     const verticalRebars = this.verticalRebar.computeVerticalRebars();
     const horizontalRebars = this.horizontalRebar.computeHorizontalRebars();
+    const coldJointPins = this.coldJointPin.computeColdJointPins();
 
     const concreteVolume =
       this.corners.getTotalConcreteVolume() +
@@ -87,6 +91,7 @@ class Wall {
       blockQuantities: blockQuantities,
       horizontalRebars: horizontalRebars,
       verticalRebars: verticalRebars,
+      coldJointPins: coldJointPins,
       concreteVolume: concreteVolume,
       bridges: bridgeQuantity,
       nBlocks: nBlocks,

@@ -23,6 +23,12 @@ export type BuildBlockFormState = {
   thermalsert: { nLayers: string; width: string };
   horizontalRebar: { quantity: string; diameter: string };
   verticalRebar: { spacing: string; diameter: string };
+  coldJointPin: {
+    centerSpacing: string;
+    lLength: string;
+    depthInFooting: string;
+    diameter: string;
+  };
 };
 
 export type BuildBlockFormAction =
@@ -51,6 +57,12 @@ export type BuildBlockFormAction =
         thermalsert: { nLayers: string; width: string };
         horizontalRebar: { quantity: string; diameter: string };
         verticalRebar: { spacing: string; diameter: string };
+        coldJointPin: {
+          centerSpacing: string;
+          lLength: string;
+          depthInFooting: string;
+          diameter: string;
+        };
       };
     }
   | { type: "setNThermalsertLayers"; payload: string }
@@ -58,7 +70,11 @@ export type BuildBlockFormAction =
   | { type: "setHorizontalRebarQuantity"; payload: string }
   | { type: "setHorizontalRebarDiameter"; payload: string }
   | { type: "setVerticalRebarSpacing"; payload: string }
-  | { type: "setVerticalRebarDiameter"; payload: string };
+  | { type: "setVerticalRebarDiameter"; payload: string }
+  | { type: "setCJPCenterSpacing"; payload: string }
+  | { type: "setCJPLLength"; payload: string }
+  | { type: "setCJPDepthInFooting"; payload: string }
+  | { type: "setCJPDiameter"; payload: string };
 
 export type OpeningState = {
   openings: { width: string; height: string; quantity: string }[];

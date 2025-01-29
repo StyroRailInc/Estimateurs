@@ -67,6 +67,58 @@ function buildBlockFormReducer(
         },
       };
 
+    case "setVerticalRebarSpacing":
+      return {
+        ...state,
+        verticalRebar: {
+          ...state.verticalRebar,
+          spacing: action.payload,
+        },
+      };
+    case "setVerticalRebarDiameter":
+      return {
+        ...state,
+        verticalRebar: {
+          ...state.verticalRebar,
+          diameter: action.payload,
+        },
+      };
+
+    case "setCJPCenterSpacing":
+      return {
+        ...state,
+        coldJointPin: {
+          ...state.coldJointPin,
+          centerSpacing: action.payload,
+        },
+      };
+
+    case "setCJPLLength":
+      return {
+        ...state,
+        coldJointPin: {
+          ...state.coldJointPin,
+          lLength: action.payload,
+        },
+      };
+    case "setCJPDepthInFooting":
+      return {
+        ...state,
+        coldJointPin: {
+          ...state.coldJointPin,
+          depthInFooting: action.payload,
+        },
+      };
+
+    case "setCJPDiameter":
+      return {
+        ...state,
+        coldJointPin: {
+          ...state.coldJointPin,
+          diameter: action.payload,
+        },
+      };
+
     default:
       return state;
   }
@@ -85,6 +137,7 @@ const initialBuildBlockFormState: BuildBlockFormState = {
   thermalsert: { nLayers: "", width: "" },
   horizontalRebar: { quantity: "5", diameter: "0.625" },
   verticalRebar: { spacing: '12"', diameter: "0.625" },
+  coldJointPin: { centerSpacing: '12"', lLength: '36"', depthInFooting: '7"', diameter: "0.625" },
 };
 
 function openingReducer(state: OpeningState, action: OpeningAction) {

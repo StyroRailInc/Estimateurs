@@ -21,6 +21,7 @@ export type WallSpecifications = {
   blockQuantities: Record<BlockType, number>;
   horizontalRebars: { type: string; quantity: number };
   verticalRebars: { type: string; quantity: number };
+  coldJointPins: { type: string; quantity: number };
   concreteVolume: number;
   bridges: number;
   nBlocks: number;

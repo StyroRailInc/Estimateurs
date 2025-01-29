@@ -28,6 +28,7 @@ class House {
       blockQuantities: sourceQuantities,
       horizontalRebars,
       verticalRebars,
+      coldJointPins,
       concreteVolume,
       bridges,
       nBlocks,
@@ -54,6 +55,7 @@ class House {
 
     this.rebars[horizontalRebars.type] += horizontalRebars.quantity;
     this.rebars[verticalRebars.type] += verticalRebars.quantity;
+    this.rebars[coldJointPins.type] += coldJointPins.quantity;
     this.concreteVolume += concreteVolume;
     this.nBridges += bridges;
     this.nBlocks += nBlocks;
