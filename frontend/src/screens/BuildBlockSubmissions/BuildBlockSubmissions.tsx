@@ -23,7 +23,10 @@ const BuildBlockSubmissions: React.FC = () => {
   useEffect(() => {
     fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json", Authorization: user ? user.token : "null" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user ? user.token : "null"}`,
+      },
     })
       .then(async (response) => {
         if (response.ok) {
@@ -57,8 +60,11 @@ const BuildBlockSubmissions: React.FC = () => {
 
     fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: user ? user.token : "null" },
-      body: JSON.stringify(updatedSubmissions),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user ? user.token : "null"}`,
+      },
+      body: JSON.stringify({ submissions: updatedSubmissions }),
     })
       .then((response) => {
         if (response.ok) {
@@ -81,7 +87,10 @@ const BuildBlockSubmissions: React.FC = () => {
     });
     fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}&name=${name}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json", Authorization: user ? user.token : "null" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user ? user.token : "null"}`,
+      },
     })
       .then((response) => {
         if (response.ok) {

@@ -1,5 +1,7 @@
 .home-page {
-  font-family: "Roboto", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding-left: 5%;
   padding-right: 5%;
 }
@@ -32,8 +34,8 @@
 .image-wrapper {
   flex: 1;
   position: relative;
-  max-width: 700px; /* Limit image size */
-  width: 100%; /* Make it responsive */
+  max-width: 700px;
+  width: 100%;
 }
 
 .overlap-image {
@@ -42,7 +44,7 @@
   position: absolute;
   top: 20%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-2deg); /* Center on smaller screens */
+  transform: translate(-50%, -50%) rotate(-2deg);
   z-index: 2;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -57,10 +59,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive Design */
 @media (max-width: 767px) {
   .image-wrapper {
-    display: none; /* Hide the entire image container on small screens */
+    display: none;
   }
 }
 

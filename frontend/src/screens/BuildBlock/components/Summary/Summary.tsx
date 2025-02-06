@@ -70,7 +70,10 @@ const Summary: React.FC = () => {
   const submitData = (replace: boolean) => {
     fetch(`${Constants.API}/compute/buildblock/submissions?replace=${replace}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user ? user.token : "null"}`,
+      },
       body: JSON.stringify({
         ...user,
         payload: {

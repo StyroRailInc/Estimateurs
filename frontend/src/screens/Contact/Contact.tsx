@@ -83,6 +83,7 @@ export default function Contact() {
                 className="input-spacing"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
 
               <label htmlFor="email">{t("Courriel")}</label>
@@ -94,6 +95,7 @@ export default function Contact() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
+                required
               />
 
               <label htmlFor="phone">{t("Téléphone")}</label>
@@ -105,6 +107,7 @@ export default function Contact() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 type="tel"
+                required
               />
 
               <label htmlFor="additional-info"></label>

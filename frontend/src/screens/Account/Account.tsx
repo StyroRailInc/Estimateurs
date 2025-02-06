@@ -31,7 +31,10 @@ const Account: React.FC = () => {
   const handleLogoutClick = () => {
     fetch(`${Constants.API}/auth/logout`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
       body: JSON.stringify(user),
     })
       .then(async (response) => {
