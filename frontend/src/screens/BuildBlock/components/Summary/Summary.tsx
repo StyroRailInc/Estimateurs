@@ -67,6 +67,38 @@ const Summary: React.FC = () => {
       });
   }, []);
 
+  const generateReport = () => {
+    console.log(JSON.stringify(data));
+    fetch(`${Constants.API}/compute/buildblock/submissions/pdf`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const byteCharacters = atob(data.pdf);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+
+        // Create a link element and trigger the download
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "output.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const submitData = (replace: boolean) => {
     fetch(`${Constants.API}/compute/buildblock/submissions?replace=${replace}`, {
       method: "POST",
@@ -139,14 +171,12 @@ const Summary: React.FC = () => {
           {data ? (
             <TableBody>
               {blockTypes.map((type) => {
-                // Filter widths with non-zero quantities for this block type
                 const filteredWidths = Object.keys(data["blockQuantities"]).filter(
                   (width) =>
                     data["blockQuantities"][width][type.key] &&
                     data["blockQuantities"][width][type.key]["quantity"]
                 );
 
-                // Skip rendering this type if no widths have non-zero quantities
                 if (filteredWidths.length === 0) return null;
 
                 return filteredWidths.map((width, index) => {
@@ -232,6 +262,12 @@ const Summary: React.FC = () => {
       <div className="flex-end">
         <Button variant={"contained"} color="secondary" onClick={handleSave}>
           {t("Enregistrer")}
+        </Button>
+      </div>
+
+      <div className="flex-end">
+        <Button variant={"contained"} color="secondary" onClick={generateReport}>
+          {t("Générer PDF")}
         </Button>
       </div>
 

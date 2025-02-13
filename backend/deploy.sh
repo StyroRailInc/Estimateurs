@@ -1,6 +1,6 @@
 #!/bin/bash
-HANDLERS=("login" "logout" "sign-up" "delete-submission" "get-submissions" "create-submission" "replace-submissions")
-LAMBDAS=("login" "logout" "sign-up" "deleteBuildBlock" "getBuildblock" "saveBuildBlock" "updateBuildBlock")
+HANDLERS=("login" "logout" "sign-up" "delete-submission" "get-submissions" "create-submission" "replace-submissions" "generate-pdf")
+LAMBDAS=("login" "logout" "sign-up" "deleteBuildBlock" "getBuildblock" "saveBuildBlock" "updateBuildBlock" "generate-build-block-pdf")
 AWS_REGION="us-east-2"
 
 echo "Compiling TypeScript..."
@@ -17,7 +17,7 @@ deploy_lambda() {
   rm -rf "$ZIP_FILE"
 
   cd dist
-  zip -r "../$ZIP_FILE" handlers/$HANDLER.mjs utils middlewares managers
+  zip -r "../$ZIP_FILE" handlers/$HANDLER.mjs utils middlewares managers constants
   cd ..
   zip -r "$ZIP_FILE" node_modules package-lock.json package.json
 
@@ -27,12 +27,20 @@ deploy_lambda() {
   rm -rf "$ZIP_FILE"
 }
 
-for i in "${!HANDLERS[@]}"; do
-  deploy_lambda "${HANDLERS[$i]}" "${LAMBDAS[$i]}" &
-done
-
-wait  
+if [ "$#" -gt 0 ]; then
+  for name in "$@"; do
+    for i in "${!HANDLERS[@]}"; do
+      if [ "${HANDLERS[$i]}" == "$name" ]; then
+        deploy_lambda "${HANDLERS[$i]}" "${LAMBDAS[$i]}"
+      fi
+    done
+  done
+else
+  for i in "${!HANDLERS[@]}"; do
+    deploy_lambda "${HANDLERS[$i]}" "${LAMBDAS[$i]}" &
+  done
+  wait
+fi
 
 rm -rf dist
-
 echo "Build & Deployment Done"
