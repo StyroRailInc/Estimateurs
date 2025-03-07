@@ -89,7 +89,7 @@ const Summary: React.FC = () => {
         // Create a link element and trigger the download
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "output.pdf";
+        link.download = "report.pdf";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
