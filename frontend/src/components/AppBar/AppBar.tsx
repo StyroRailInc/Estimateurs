@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 import "./AppBar.css";
 import "./../../global.css";
 import { Button, IconButton, useMediaQuery } from "@mui/material";
@@ -13,14 +12,14 @@ import ProfileIcon from "../ProfileIcon";
 import AppBarDrawer from "./AppBarDrawer";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useLanguage } from "src/context/LanguageContext";
-import { Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
 
 export default function ButtonAppBar() {
   const { t } = useTranslation();
   const { mode, toggleColorMode } = useColorMode();
   const { language, toggleLanguage } = useLanguage();
-  const isLargeScreen = useMediaQuery("(min-width:992px)");
 
+  const isLargeScreen = useMediaQuery("(min-width:992px)");
   const screens = ["Accueil", "Build Block", "SR-F", "Contact"];
   const paths = ["/", "/buildblock", "/srf", "/contact"];
 
@@ -47,29 +46,24 @@ export default function ButtonAppBar() {
                     to={paths[index]}
                     fullWidth
                     color="secondary"
-                    component={RouterLink}
-                    className="button-no-caps"
-                    sx={{ color: "var(--text-color-header)" }}
+                    component={NavLink}
+                    className="button-no-caps app-bar-button"
                   >
                     {t(screen)}
                   </Button>
                 ))}
               </div>
               <div className="right-container flex-end">
-                <IconButton onClick={toggleColorMode} sx={{ color: "var(--text-color-header)" }}>
+                <IconButton onClick={toggleColorMode} className="app-bar-button">
                   {mode === "dark" && <LightMode />}
                   {mode === "light" && <DarkMode />}
                 </IconButton>
-                <Button
-                  color="secondary"
-                  onClick={toggleLanguage}
-                  sx={{ color: "var(--text-color-header)" }}
-                >
+                <Button color="secondary" onClick={toggleLanguage} className="app-bar-button">
                   {language}
                 </Button>
                 <ProfileIcon
                   ButtonComponent={
-                    <IconButton sx={{ color: "var(--text-color-header)" }}>
+                    <IconButton className="app-bar-button">
                       <AccountCircleIcon />
                     </IconButton>
                   }

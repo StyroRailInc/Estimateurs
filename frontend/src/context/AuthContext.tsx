@@ -26,9 +26,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };
+
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.clear();
+    sessionStorage.clear();
   };
 
   const value = { user, login, logout };

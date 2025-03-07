@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { SetStateAction, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import HomeIcon from "@mui/icons-material/Home";
 import List from "@mui/material/List";
@@ -16,6 +16,7 @@ import ProfileIcon from "../ProfileIcon";
 import FoundationIcon from "@mui/icons-material/Foundation";
 import HouseSidingIcon from "@mui/icons-material/HouseSiding";
 import "./../../global.css";
+import "./AppBar.css";
 import CustomListItem from "../CustomListItem";
 
 const AppBarDrawer: React.FC = () => {
@@ -33,7 +34,7 @@ const AppBarDrawer: React.FC = () => {
         <MenuIcon />
       </IconButton>
       <Drawer open={open} onClose={toggleDrawer(false)}>
-        <div style={{ width: 250 }} role="presentation">
+        <div id="presentation" role="presentation">
           <List onClick={toggleDrawer(false)}>
             <CustomListItem title="Accueil" icon={<HomeIcon />} to="/" />
             <CustomListItem title="Build Block" icon={<HouseSidingIcon />} to="/buildblock" />

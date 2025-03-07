@@ -38,3 +38,11 @@
   margin: 0;
   padding: 0;
 }
+
+#presentation {
+  width: 250px;
+}
+
+.app-bar-button {
+  color: var(--text-color-header);
+}

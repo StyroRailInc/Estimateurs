@@ -1,4 +1,3 @@
-import { grey } from "@mui/material/colors";
 import { PaletteMode } from "@mui/material";
 
 const getDesignTokens = (mode: PaletteMode) => ({

@@ -14,6 +14,7 @@
   --medium-screen: 768px;
   --small-screen: 500px;
   --app-bar-height: 48px;
+  --drawer-width: 250px;
 }
 
 .error {
