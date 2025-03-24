@@ -175,7 +175,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             </div>
           </div>
         </Drawer>
-        <Drawer title={t("Ouverture")} isOpen={true}>
+        <Drawer title={t("Ouvertures")} isOpen={true}>
           {openingState.openings.map((_, index) => {
             return (
               <div key={index} className="flex-horizontal">
@@ -259,7 +259,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
           <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
           <FormTextField id="brick-ledge-45" fullWidth size="small" className="input-spacing" />
         </Drawer>
-        <Drawer title={t("Double Biseaux")} isOpen>
+        <Drawer title={t("Double Biseau")} isOpen>
           <label htmlFor="double-taper-length">{t("Longueur")}</label>
           <FormTextField
             id="double-taper-length"

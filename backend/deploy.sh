@@ -1,6 +1,6 @@
 #!/bin/bash
-HANDLERS=("login" "logout" "sign-up" "delete-submission" "get-submissions" "create-submission" "replace-submissions" "generate-pdf")
-LAMBDAS=("login" "logout" "sign-up" "deleteBuildBlock" "getBuildblock" "saveBuildBlock" "updateBuildBlock" "generate-build-block-pdf")
+HANDLERS=("login" "logout" "sign-up" "delete-submission" "get-submissions" "create-submission" "replace-submissions" "generate-pdf" "contact-us")
+LAMBDAS=("login" "logout" "sign-up" "deleteBuildBlock" "getBuildblock" "saveBuildBlock" "updateBuildBlock" "generate-build-block-pdf" "contact-us")
 AWS_REGION="us-east-2"
 
 echo "Compiling TypeScript..."
@@ -17,7 +17,7 @@ deploy_lambda() {
   rm -rf "$ZIP_FILE"
 
   cd dist
-  zip -r "../$ZIP_FILE" handlers/$HANDLER.mjs utils middlewares managers constants
+  zip -r "../$ZIP_FILE" handlers/$HANDLER.mjs utils middlewares managers constants assets/*
   cd ..
   zip -r "$ZIP_FILE" node_modules package-lock.json package.json
 

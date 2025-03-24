@@ -1,10 +1,8 @@
 import { createContext, ReactNode, useContext, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-type Language = "eng" | "fr";
-
 const LanguageContext = createContext<{
-  language: Language;
+  language: "eng" | "fr";
   toggleLanguage: () => void;
 }>({
   language: "fr",
@@ -17,7 +15,7 @@ interface LanguageProviderProps {
 
 const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const { i18n } = useTranslation();
-  const [language, setLanguage] = useState<Language>(i18n.language === "eng" ? "eng" : "fr");
+  const [language, setLanguage] = useState<"eng" | "fr">(i18n.language === "eng" ? "eng" : "fr");
 
   const toggleLanguage = () => {
     const newLanguage = language === "fr" ? "eng" : "fr";

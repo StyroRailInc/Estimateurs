@@ -6,6 +6,11 @@ export class HttpError extends Error {
   }
 }
 
+interface User {
+  email: string;
+  token: string;
+}
+
 export const apiService = {
   get: async (endpoint: string) => {
     try {
@@ -18,9 +23,9 @@ export const apiService = {
     }
   },
 
-  post: async (endpoint: string, data: any, user?: { email: string; token: string } | null) => {
+  post: async (endpoint: string, data: any, user?: User | null) => {
     try {
-      const response = await fetch(`${Constants.API}/auth/${endpoint}`, {
+      const response = await fetch(`${Constants.API}${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +33,7 @@ export const apiService = {
         },
         body: JSON.stringify(data),
       });
+      console.error(response);
       if (!response.ok) throw new HttpError(response.status);
       return await verifyResponseBody(response);
     } catch (error) {
@@ -62,6 +68,26 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error("DELETE request failed:", error);
+      throw error;
+    }
+  },
+
+  fileUpload: async (endpoint: string, file: File | null, data: any) => {
+    try {
+      const formData = new FormData();
+      if (file) formData.append("file", file);
+      else throw new Error("File is required.");
+      formData.append("data", JSON.stringify(data));
+      const response = await fetch(`${Constants.API}${endpoint}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      console.error(response);
+      if (!response.ok) throw new HttpError(response.status);
+      return await verifyResponseBody(response);
+    } catch (error) {
+      console.error("POST request failed:", error);
       throw error;
     }
   },

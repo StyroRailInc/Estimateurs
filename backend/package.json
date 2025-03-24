@@ -6,6 +6,8 @@
   },
   "type": "module",
   "devDependencies": {
+    "@types/busboy": "^1.5.4",
+    "@types/nodemailer": "^6.4.17",
     "@types/pdfkit": "^0.13.9",
     "typescript": "^5.7.2"
   },
@@ -14,7 +16,10 @@
     "@aws-sdk/lib-dynamodb": "^3.716.0",
     "@types/aws-lambda": "^8.10.146",
     "bcrypt": "^5.1.1",
+    "busboy": "^1.6.0",
     "fs": "^0.0.1-security",
-    "pdfkit": "^0.16.0"
+    "nodemailer": "^6.10.0",
+    "pdfkit": "^0.16.0",
+    "stream": "^0.0.3"
   }
 }

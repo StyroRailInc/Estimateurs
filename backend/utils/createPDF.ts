@@ -1,6 +1,7 @@
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import { REPORT } from "./../constants/submission-report.js";
+import path from "path";
 
 export async function createPDF(
   generatePDFContent: (doc: PDFKit.PDFDocument) => void,
@@ -21,8 +22,12 @@ export async function createPDF(
   return fs.readFileSync(path, "base64");
 }
 
-// Need to add type verification for data
 export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "en" | "fr", data: any) {
+  // Add the logo at the top left
+  // const logoPath = path.join(__dirname, "../assets/styrorail.png");
+  // const logoBuffer = fs.readFileSync(logoPath);
+  // doc.image(logoBuffer, 50, 50, { width: 100 });
+
   doc.fontSize(25);
   const text = REPORT[lang]["title"];
   const textWidth = doc.widthOfString(text);

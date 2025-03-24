@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
+
 interface SRFProps {}
 
 const SRF: React.FC<SRFProps> = () => {
-  return <p>Disponible Prochainement</p>;
+  const { t } = useTranslation();
+  return <p>{t("Disponible Prochainement")}</p>;
 };
 
 export default SRF;

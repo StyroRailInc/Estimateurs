@@ -211,7 +211,7 @@ const Summary: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t("Armature spécifié")}</TableCell>
+              <TableCell>{t("Armature spécifiée")}</TableCell>
               <TableCell>{t("Quantité")}</TableCell>
             </TableRow>
           </TableHead>

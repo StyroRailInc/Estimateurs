@@ -59,7 +59,7 @@ export default function ButtonAppBar() {
                   {mode === "light" && <DarkMode />}
                 </IconButton>
                 <Button color="secondary" onClick={toggleLanguage} className="app-bar-button">
-                  {language}
+                  {language === "fr" ? "eng" : "fr"}
                 </Button>
                 <ProfileIcon
                   ButtonComponent={

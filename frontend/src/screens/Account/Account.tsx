@@ -25,7 +25,7 @@ const Account: React.FC = () => {
 
   const handleLogoutClick = async () => {
     try {
-      await apiService.post("logout", user, user);
+      await apiService.post("/auth/logout", user, user);
       logout();
       navigate("/login");
     } catch (error) {

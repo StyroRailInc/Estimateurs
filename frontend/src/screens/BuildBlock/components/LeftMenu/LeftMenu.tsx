@@ -41,16 +41,6 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       <StyledButton
         fullWidth
         className="button-left-aligned padding-left button-centered"
-        isSelected={activeSection === "buildDeckForm"}
-        onClick={() => {
-          onChangeSection("buildDeckForm");
-        }}
-      >
-        Build Deck
-      </StyledButton>
-      <StyledButton
-        fullWidth
-        className="button-left-aligned padding-left button-centered"
         isSelected={activeSection === "summary"}
         onClick={() => {
           onChangeSection("summary");

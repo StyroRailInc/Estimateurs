@@ -3,9 +3,14 @@ import { useTranslation } from "react-i18next";
 import { TextField, Box, Button } from "@mui/material";
 import "./../../global.css";
 import "./Contact.css";
+import { apiService } from "src/services/api";
+import { useLanguage } from "src/context/LanguageContext";
+import { HttpError } from "src/services/api";
+import { HTTP_STATUS } from "src/utils/http";
 
 export default function Contact() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -54,8 +59,20 @@ export default function Contact() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const payload = { name, email, phone, additionalInfo };
+    try {
+      await apiService.fileUpload("/contact", document, payload);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        if (error.status === HTTP_STATUS.BAD_REQUEST) {
+          console.log(t("Il manque des informations"));
+        } else {
+          console.log(t("Échec lors de l'envoie. Réessayez."));
+        }
+      }
+    }
   };
 
   return (
@@ -124,6 +141,7 @@ export default function Contact() {
               <label htmlFor="document">{t("Télécharger un plan")}</label>
               <input
                 id="document"
+                lang={language}
                 type="file"
                 accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.skp,.rvt,.rfa,.rte,.pln,.tpl,.gsm,.ifc,.zip"
                 onChange={handleFileUpload}

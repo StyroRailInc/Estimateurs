@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,7 +10,7 @@ import {
   WallState,
   WallAction,
 } from "../../types/BBTypes";
-import { initialWallState } from "../../reducer";
+import { buildBlockFormReducer, initialWallState } from "../../reducer";
 import { Tab, Tabs, IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SingleInputDialog from "src/components/SingleInputDialog";
@@ -67,11 +67,17 @@ const WallTab: React.FC<WallTabProps> = ({
     const { clickedWallIndex, walls } = wallState;
     if (walls.length === 1) {
       wallDispatch({ type: "setWalls", payload: initialWallState });
+      buildBlockFormDispatch({ type: "resetInputs" });
       return;
     }
-    wallDispatch({ type: "deleteWall", payload: { index: clickedWallIndex } });
     const newClickedIndex = Math.min(clickedWallIndex, walls.length - 2);
     wallDispatch({ type: "setClickedWallIndex", payload: newClickedIndex });
+    console.log(wallState.walls[newClickedIndex]);
+    buildBlockFormDispatch({
+      type: "setInputs",
+      payload: wallState.walls[newClickedIndex].buildBlockFormState,
+    });
+    wallDispatch({ type: "deleteWall", payload: { index: clickedWallIndex } });
   };
 
   const handleEdit = (index: number) => {
@@ -181,7 +187,7 @@ const WallTab: React.FC<WallTabProps> = ({
       </div>
 
       <SingleInputDialog
-        title="Nom du mur"
+        title={t("Nom du mur")}
         open={editingIndex !== null}
         onClose={() => {
           setEditingIndex(null);

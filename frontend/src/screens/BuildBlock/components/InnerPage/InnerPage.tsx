@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import LeftMenu from "../LeftMenu";
-import BuildDeckForm from "../BuildDeckForm";
 import Summary from "../Summary";
 import BuildBlockForm from "../BuildBlockForm";
 import "./../../../../global.css";
@@ -13,8 +12,6 @@ function InnerPage() {
     switch (activeSection) {
       case "buildBlockForm":
         return <BuildBlockForm setInnerPage={setActiveSection} />;
-      case "buildDeckForm":
-        return <BuildDeckForm />;
       case "summary":
         return <Summary />;
       default:

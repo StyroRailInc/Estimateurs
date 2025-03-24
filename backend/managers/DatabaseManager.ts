@@ -1,6 +1,5 @@
-import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
+import { AttributeValue, DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, UpdateCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 
 class DatabaseManager {
