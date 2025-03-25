@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext<{
-  user: { email: string; token: string } | null;
-  login: (userData: { email: string; token: string }) => void;
+  user: { name: string; email: string; token: string } | null;
+  login: (userData: { name: string; email: string; token: string }) => void;
   logout: () => void;
 }>({
   user: null,
@@ -15,14 +15,14 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<{ email: string; token: string } | null>(() => {
+  const [user, setUser] = useState<{ name: string; email: string; token: string } | null>(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       return JSON.parse(storedUser);
     }
   });
 
-  const login = (userData: { email: string; token: string }) => {
+  const login = (userData: { name: string; email: string; token: string }) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };

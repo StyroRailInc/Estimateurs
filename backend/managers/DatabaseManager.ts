@@ -1,6 +1,7 @@
 import { AttributeValue, DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, UpdateCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 class DatabaseManager {
   private table: string;
@@ -22,6 +23,7 @@ class DatabaseManager {
         name,
         password,
         token,
+        preferences: JSON.stringify({ language: "fr", mode: "light" }),
       },
     };
 
@@ -150,6 +152,24 @@ class DatabaseManager {
       UpdateExpression: "set #buildblock = :buildblock",
       ExpressionAttributeNames: { "#buildblock": "buildblock" },
       ExpressionAttributeValues: { ":buildblock": JSON.stringify(submissions) },
+      ReturnValues: "ALL_NEW" as const,
+    };
+
+    try {
+      await this.dynamodb.send(new UpdateCommand(params));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async updatePreferences(user: Record<string, AttributeValue>, preferences: Object) {
+    const params = {
+      TableName: this.table,
+      Key: { Email: user.Email.S, UserID: user.UserID.S },
+      UpdateExpression: "set #preferences = :preferences",
+      ExpressionAttributeNames: { "#preferences": "preferences" },
+      ExpressionAttributeValues: { ":preferences": JSON.stringify(preferences) },
       ReturnValues: "ALL_NEW" as const,
     };
 

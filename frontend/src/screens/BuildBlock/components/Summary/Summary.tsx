@@ -17,11 +17,12 @@ import { HTTP_STATUS } from "src/utils/http";
 import "./../../../../global.css";
 import { useNavigate } from "react-router-dom";
 import SingleInputDialog from "src/components/SingleInputDialog";
+import { apiService } from "src/services/api";
 
 const Summary: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [data, setData] = useState();
+  const [data, setData] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submissionName, setSubmissionName] = useState(
     sessionStorage.getItem("buildblock-estimation-name")
@@ -43,9 +44,7 @@ const Summary: React.FC = () => {
 
   useEffect(() => {
     const estimation = sessionStorage.getItem("buildblock-estimation");
-    if (!estimation) {
-      return;
-    }
+    if (!estimation) return;
     fetch(`${Constants.API}/compute/buildblock`, {
       method: "POST",
       headers: {

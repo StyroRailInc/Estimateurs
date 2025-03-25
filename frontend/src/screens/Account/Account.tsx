@@ -67,7 +67,6 @@ const Account: React.FC = () => {
           <Divider />
           <List onClick={() => setOpen(false)}>
             <CustomListItem title="Build Block" to="/account/build-block" />
-            <CustomListItem title="SR-F" to="/account/srf" />
           </List>
         </div>
         <div>

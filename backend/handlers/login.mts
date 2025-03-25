@@ -29,9 +29,11 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   }
 
   const token = await databaseManager.updateUserToken(user);
+  let preferences = {};
+  if (user.preferences?.S) preferences = JSON.parse(user.preferences?.S);
 
   if (token) {
-    return jsonResponse(HTTP_STATUS.SUCCESS, { message: "User logged in successfully" }, token);
+    return jsonResponse(HTTP_STATUS.SUCCESS, preferences, token);
   }
 
   return jsonResponse(HTTP_STATUS.UNAUTHORIZED, { message: "There has been an error logging in" });

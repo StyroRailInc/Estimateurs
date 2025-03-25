@@ -1,0 +1,101 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "src/context/AuthContext";
+import { Box } from "@mui/material";
+import { useColorMode } from "src/context/ColorModeContext";
+import { IconButton } from "@mui/material";
+import { LightMode, DarkMode } from "@mui/icons-material";
+import { useLanguage } from "src/context/LanguageContext";
+import "./../../global.css";
+import { apiService } from "src/services/api";
+
+const Preferences: React.FC = () => {
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const { mode, setColorMode } = useColorMode();
+  const { language, setLanguage } = useLanguage();
+
+  const updatePreferences = async () => {
+    try {
+      await apiService.post(
+        "/user/preferences",
+        { email: user?.email, preferences: { language, mode } },
+        user
+      );
+    } catch (error) {
+      console.error("There has been an error updating preferences");
+    }
+  };
+
+  return (
+    <main>
+      <div style={{ padding: "20px" }}>
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>{t("Préférences")}</h1>
+        <Box
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "var(--transparent)"
+                : "var(--background-color-very-dark)",
+            borderRadius: "8px",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <div className="flex-horizontal flex-start">
+            <p style={{ padding: "20px 0px 0px 20px" }}>{t("Thème")}</p>
+            <IconButton
+              onClick={() => {
+                setColorMode("light");
+                updatePreferences();
+              }}
+              className="app-bar-button"
+            >
+              <LightMode />
+              <span style={{ marginLeft: "5px" }}>{t("Light")}</span>
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setColorMode("dark");
+                updatePreferences();
+              }}
+              className="app-bar-button"
+            >
+              <DarkMode />
+              <span style={{ marginLeft: "5px" }}>{t("Dark")}</span>
+            </IconButton>
+          </div>
+
+          <div className="flex-horizontal flex-start">
+            <p style={{ padding: "20px 0px 0px 20px" }}>{t("Language")}</p>
+            <IconButton
+              onClick={() => {
+                setLanguage("fr");
+                updatePreferences();
+              }}
+              className="app-bar-button"
+            >
+              <span role="img" aria-label="French">
+                🇨🇦
+              </span>
+              <span style={{ marginLeft: "5px" }}>Français</span>
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setLanguage("eng");
+                updatePreferences();
+              }}
+              className="app-bar-button"
+            >
+              <span role="img" aria-label="English">
+                🇬🇧
+              </span>
+              <span style={{ marginLeft: "5px" }}>English</span>
+            </IconButton>
+          </div>
+        </Box>
+      </div>
+    </main>
+  );
+};
+
+export default Preferences;

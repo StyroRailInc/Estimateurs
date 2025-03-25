@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "src/context/AuthContext";
 import { TextField } from "@mui/material";
 import { Box } from "@mui/material";
+import { useColorMode } from "src/context/ColorModeContext";
+import { useLanguage } from "src/context/LanguageContext";
 
 interface LoginProps {}
 
@@ -21,6 +23,8 @@ const Login: React.FC<LoginProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { setLanguage } = useLanguage();
+  const { setColorMode } = useColorMode();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,11 +48,14 @@ const Login: React.FC<LoginProps> = () => {
         const token = response.headers.get("x-auth-token");
 
         if (token) {
-          login({ email, token });
+          login({ name: "mon nom", email, token });
         }
         return response.json();
       })
-      .then(() => {
+      .then((response) => {
+        console.log(response.language, response.mode, response);
+        if (response.language) setLanguage(response.language);
+        if (response.mode) setColorMode(response.mode);
         const redirectPath = location.state?.from?.pathname || "/account";
         navigate(redirectPath);
       })

@@ -33,7 +33,6 @@ export const apiService = {
         },
         body: JSON.stringify(data),
       });
-      console.error(response);
       if (!response.ok) throw new HttpError(response.status);
       return await verifyResponseBody(response);
     } catch (error) {
@@ -82,8 +81,6 @@ export const apiService = {
         method: "POST",
         body: formData,
       });
-
-      console.error(response);
       if (!response.ok) throw new HttpError(response.status);
       return await verifyResponseBody(response);
     } catch (error) {

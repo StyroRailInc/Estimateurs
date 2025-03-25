@@ -1,6 +1,6 @@
 #!/bin/bash
-HANDLERS=("login" "logout" "sign-up" "delete-submission" "get-submissions" "create-submission" "replace-submissions" "generate-pdf" "contact-us")
-LAMBDAS=("login" "logout" "sign-up" "deleteBuildBlock" "getBuildblock" "saveBuildBlock" "updateBuildBlock" "generate-build-block-pdf" "contact-us")
+HANDLERS=("login" "logout" "sign-up" "delete-submission" "get-submissions" "create-submission" "replace-submissions" "generate-pdf" "contact-us" "set-preferences")
+LAMBDAS=("login" "logout" "sign-up" "deleteBuildBlock" "getBuildblock" "saveBuildBlock" "updateBuildBlock" "generate-build-block-pdf" "contact-us" "update-preferences")
 AWS_REGION="us-east-2"
 
 echo "Compiling TypeScript..."

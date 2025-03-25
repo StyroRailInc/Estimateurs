@@ -103,73 +103,75 @@ const BuildBlockSubmissions: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-        {t("Mes soumissions Build Block")}
-      </h1>
-      <List
-        className="buildblock-submission-list"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? "var(--transparent)"
-              : "var(--background-color-very-dark)",
-          borderRadius: "8px",
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {submissions?.length ? (
-          submissions.map((submission, index) => (
-            <ListItem
-              key={index}
-              secondaryAction={
-                <div>
-                  <IconButton
-                    edge="end"
-                    onClick={() => handleEdit(index)}
-                    aria-label={t("Modifier")}
-                  >
-                    <EditIcon sx={{ color: "#1976d2" }} />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
-                    onClick={() => handleDelete(index)}
-                    aria-label={t("Supprimer")}
-                  >
-                    <DeleteIcon sx={{ color: "#d32f2f" }} />
-                  </IconButton>
-                </div>
-              }
-              disablePadding
-            >
-              <ListItemButton onClick={() => handleSubmissionClick(index)}>
-                <ListItemText primary={submission.name} />
-              </ListItemButton>
-            </ListItem>
-          ))
-        ) : (
-          <p style={{ marginLeft: "20px" }}>{t("Vous n'avez aucune soumission")}</p>
-        )}
-      </List>
+    <main>
+      <div style={{ padding: "20px" }}>
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+          {t("Mes soumissions Build Block")}
+        </h1>
+        <List
+          className="buildblock-submission-list"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "var(--transparent)"
+                : "var(--background-color-very-dark)",
+            borderRadius: "8px",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          {submissions?.length ? (
+            submissions.map((submission, index) => (
+              <ListItem
+                key={index}
+                secondaryAction={
+                  <div>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleEdit(index)}
+                      aria-label={t("Modifier")}
+                    >
+                      <EditIcon sx={{ color: "#1976d2" }} />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDelete(index)}
+                      aria-label={t("Supprimer")}
+                    >
+                      <DeleteIcon sx={{ color: "#d32f2f" }} />
+                    </IconButton>
+                  </div>
+                }
+                disablePadding
+              >
+                <ListItemButton onClick={() => handleSubmissionClick(index)}>
+                  <ListItemText primary={submission.name} />
+                </ListItemButton>
+              </ListItem>
+            ))
+          ) : (
+            <p style={{ marginLeft: "20px" }}>{t("Vous n'avez aucune soumission")}</p>
+          )}
+        </List>
 
-      <SingleInputDialog
-        title={"Modifier le nom"}
-        open={editingIndex !== null}
-        onClose={() => setEditingIndex(null)}
-        onCancel={() => setEditingIndex(null)}
-        onSubmit={handleSubmit}
-      >
-        <TextField
-          id="name"
-          fullWidth
-          placeholder={t("Entrez un nouveau nom")}
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          size="small"
-          required
-        />
-      </SingleInputDialog>
-    </div>
+        <SingleInputDialog
+          title={"Modifier le nom"}
+          open={editingIndex !== null}
+          onClose={() => setEditingIndex(null)}
+          onCancel={() => setEditingIndex(null)}
+          onSubmit={handleSubmit}
+        >
+          <TextField
+            id="name"
+            fullWidth
+            placeholder={t("Entrez un nouveau nom")}
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            size="small"
+            required
+          />
+        </SingleInputDialog>
+      </div>
+    </main>
   );
 };
 

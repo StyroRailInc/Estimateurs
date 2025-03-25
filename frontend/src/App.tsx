@@ -17,6 +17,7 @@ import Account from "./screens/Account";
 import LanguageProvider from "./context/LanguageContext";
 import PersonalInfo from "./screens/PersonalInfo";
 import BuildBlockSubmissions from "./screens/BuildBlockSubmissions";
+import Preferences from "./screens/Preferences";
 
 function App() {
   return (
@@ -43,9 +44,8 @@ function App() {
                       }
                     >
                       <Route index element={<PersonalInfo />} />
-                      <Route path="preferences" element={<PersonalInfo />} />
+                      <Route path="preferences" element={<Preferences />} />
                       <Route path="build-block" element={<BuildBlockSubmissions />} />
-                      <Route path="srf" element={<PersonalInfo />} />
                     </Route>
                     <Route path="*" element={<NoPage />} />
                   </Route>

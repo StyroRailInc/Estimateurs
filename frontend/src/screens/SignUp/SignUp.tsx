@@ -55,7 +55,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 
         const token = response.headers.get("x-auth-token");
         if (token) {
-          login({ email: formData.email, token });
+          login({ name: "mon nom", email: formData.email, token });
         }
         return response.json();
       })
