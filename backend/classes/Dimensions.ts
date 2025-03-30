@@ -13,11 +13,11 @@ class Dimensions {
   }
 
   getSurfaceArea(): number {
-    return this.height * this.length;
+    return this.getNCourses() * getBlockSpecifications("straight", this.width).height * this.length;
   }
 
   getNCourses() {
-    return this.height / getBlockSpecifications("straight", this.width).height;
+    return Math.ceil((this.height / getBlockSpecifications("straight", this.width).height) * 2) / 2;
   }
 
   getHeight(): number {

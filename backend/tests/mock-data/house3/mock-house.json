@@ -1,0 +1,62 @@
+{
+  "walls": [
+    {
+      "name": "Wall 1",
+      "buildBlockFormState": {
+        "wallType": "Reg",
+        "length": "2000",
+        "height": "10",
+        "width": "6\"",
+        "nInsideCorners": "4",
+        "nOutsideCorners": "5",
+        "n45InsideCorners": "2",
+        "n45OutsideCorners": "3",
+        "doubleTaperTopLength": "",
+        "brickLedgeLength": "",
+        "thermalsert": { "nLayers": "2", "width": "2\"" },
+        "horizontalRebar": { "quantity": "5", "diameter": "0.625" },
+        "verticalRebar": { "spacing": "12\"", "diameter": "0.625" },
+        "coldJointPin": {
+          "centerSpacing": "12\"",
+          "lLength": "36\"",
+          "depthInFooting": "7\"",
+          "diameter": "0.625"
+        }
+      },
+      "openingState": {
+        "openings": [
+          { "width": "5", "height": "5", "quantity": "6" },
+          { "width": "2", "height": "2", "quantity": "2" }
+        ]
+      }
+    },
+    {
+      "name": "Wall 2",
+      "buildBlockFormState": {
+        "wallType": "Reg",
+        "length": "3434",
+        "height": "15",
+        "width": "4\"",
+        "nInsideCorners": "3",
+        "nOutsideCorners": "4",
+        "n45InsideCorners": "1",
+        "n45OutsideCorners": "2",
+        "doubleTaperTopLength": "",
+        "brickLedgeLength": "",
+        "thermalsert": { "nLayers": "0", "width": "2\"" },
+        "horizontalRebar": { "quantity": "5", "diameter": "0.625" },
+        "verticalRebar": { "spacing": "12\"", "diameter": "0.625" },
+        "coldJointPin": {
+          "centerSpacing": "12\"",
+          "lLength": "36\"",
+          "depthInFooting": "7\"",
+          "diameter": "0.625"
+        }
+      },
+      "openingState": {
+        "openings": [{ "width": "3", "height": "10", "quantity": "3" }]
+      }
+    }
+  ],
+  "clickedWallIndex": 0
+}

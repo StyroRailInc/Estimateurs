@@ -54,15 +54,23 @@ class Wall {
     let openingSurfaceArea = 0;
     let buckWidthSurfaceArea = 0;
 
+    console.log(
+      "surface",
+      remainingSurfaceArea,
+      this.corners.getTotalSurfaceArea(),
+      this.specialBlocks.getTotalSurfaceArea()
+    );
+
     for (let opening of this.openings) {
       openingPerimeter += opening.getPerimeter();
       openingSurfaceArea += opening.getSurfaceArea();
       remainingSurfaceArea -= opening.getSurfaceArea();
-      if (opening.getPerimeter()) buckWidthSurfaceArea += 4 * buck.height;
+      if (opening.getPerimeter()) buckWidthSurfaceArea += 4 * buck.height * opening.getQuantity();
     }
 
     remainingSurfaceArea -=
       this.corners.getTotalSurfaceArea() * this.nCourses + this.specialBlocks.getTotalSurfaceArea();
+
     this.specialBlocks.setBuckLength(openingPerimeter + buckWidthSurfaceArea);
 
     const calculateTotalBlocksExcludingBuckAndThermalsert = (): number => {
@@ -81,17 +89,16 @@ class Wall {
     };
 
     const getTotalNinetyCorner = (blockType: BlockType) => {
-      if (blockType === "ninetyCorner" && this.wallType !== "KD")
-        return this.corners.getTotal90() * this.nCourses;
-      if (blockType === "kdNinetyCorner" && this.wallType === "KD")
-        return this.corners.getTotal90() * this.nCourses;
+      const nCorners = Math.ceil(this.corners.getTotal90() * this.nCourses);
+      if (blockType === "ninetyCorner" && this.wallType !== "KD") return nCorners;
+      if (blockType === "kdNinetyCorner" && this.wallType === "KD") return nCorners;
       return 0;
     };
 
     const blockQuantities: Record<BlockType, number> = {
       straight: getTotalStraight("straight"),
       ninetyCorner: getTotalNinetyCorner("ninetyCorner"),
-      fortyFiveCorner: this.corners.getTotal45() * this.nCourses,
+      fortyFiveCorner: Math.ceil(this.corners.getTotal45() * this.nCourses),
       doubleTaperTop: this.specialBlocks.getTotalDoubleTaperTop(),
       brickLedge: this.specialBlocks.getTotalBrickLedge(),
       buck: this.specialBlocks.getTotalBuck(),

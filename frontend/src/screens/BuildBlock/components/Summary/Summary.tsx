@@ -45,7 +45,7 @@ const Summary: React.FC = () => {
   useEffect(() => {
     const estimation = sessionStorage.getItem("buildblock-estimation");
     if (!estimation) return;
-    console.log(JSON.parse(estimation));
+    console.log(estimation);
     fetch(`${Constants.API}/compute/buildblock`, {
       method: "POST",
       headers: {
@@ -59,7 +59,7 @@ const Summary: React.FC = () => {
         }
       })
       .then((e) => {
-        console.log(e);
+        console.log(JSON.stringify(e));
         setData(e);
       })
       .catch((error) => {

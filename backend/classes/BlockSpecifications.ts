@@ -191,7 +191,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 0,
       concreteVolume: 0,
       surfaceArea: { ext: 0, int: 0 },
-      qtyPerBundle: 0,
+      qtyPerBundle: 1,
     },
     '6"': {
       length: { ext: 48, int: 48 },
@@ -217,7 +217,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 0,
       concreteVolume: 0,
       surfaceArea: { ext: 0, int: 0 },
-      qtyPerBundle: 0,
+      qtyPerBundle: 1,
     },
     '6"': {
       length: { ext: 48, int: 48 },
@@ -238,7 +238,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
   },
   buck: {
     '4"': {
-      length: { ext: 52, int: 52 },
+      length: { ext: 48, int: 48 },
       width: 9,
       height: 2,
       concreteVolume: 0, // Not provided
@@ -246,7 +246,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       qtyPerBundle: 19,
     },
     '6"': {
-      length: { ext: 52, int: 52 },
+      length: { ext: 48, int: 48 },
       width: 11,
       height: 2,
       concreteVolume: 0, // Not provided
@@ -254,7 +254,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       qtyPerBundle: 18,
     },
     '8"': {
-      length: { ext: 52, int: 52 },
+      length: { ext: 48, int: 48 },
       width: 13,
       height: 2,
       concreteVolume: 0, // Not provided
