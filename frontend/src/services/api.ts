@@ -75,7 +75,7 @@ export const apiService = {
     try {
       const formData = new FormData();
       if (file) formData.append("file", file);
-      else throw new Error("File is required.");
+      // else throw new Error("File is required.");
       formData.append("data", JSON.stringify(data));
       const response = await fetch(`${Constants.API}${endpoint}`, {
         method: "POST",

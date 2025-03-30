@@ -17,6 +17,7 @@ export default function Contact() {
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
   const [document, setDocument] = useState<File | null>(null);
   const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState(false);
 
   const MAX_FILE_SIZE_MB = 250;
   const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -64,6 +65,10 @@ export default function Contact() {
     const payload = { name, email, phone, additionalInfo };
     try {
       await apiService.fileUpload("/contact", document, payload);
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
     } catch (error) {
       if (error instanceof HttpError) {
         if (error.status === HTTP_STATUS.BAD_REQUEST) {
@@ -138,7 +143,7 @@ export default function Contact() {
                 onChange={(e) => setAdditionalInfo(e.target.value)}
               />
 
-              <label htmlFor="document">{t("Télécharger un plan")}</label>
+              {/* <label htmlFor="document">{t("Télécharger un plan")}</label>
               <input
                 id="document"
                 lang={language}
@@ -153,7 +158,7 @@ export default function Contact() {
                 <p>
                   {t("Fichier sélectionné")}: {document.name}
                 </p>
-              )}
+              )} */}
               <div className="flex-end">
                 <Button type="submit" variant="contained" color="secondary">
                   {t("Envoyer")}

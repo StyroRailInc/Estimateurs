@@ -43,6 +43,7 @@ export default function ButtonAppBar() {
               <div className="center-container flex-center">
                 {screens.map((screen, index) => (
                   <Button
+                    key={screen}
                     to={paths[index]}
                     fullWidth
                     color="secondary"

@@ -27,7 +27,7 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   const token = await databaseManager.createUser(email, name, password);
 
   if (token) {
-    return jsonResponse(HTTP_STATUS.CREATED, { message: "User added successfully" }, token);
+    return jsonResponse(HTTP_STATUS.CREATED, { name }, token);
   }
 
   return jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error creating account" });

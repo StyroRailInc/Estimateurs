@@ -12,6 +12,8 @@ function buildBlockFormReducer(
   action: BuildBlockFormAction
 ): BuildBlockFormState {
   switch (action.type) {
+    case "setWallType":
+      return { ...state, wallType: action.payload };
     case "setLength":
       return { ...state, length: action.payload };
     case "setHeight":
@@ -125,6 +127,7 @@ function buildBlockFormReducer(
 }
 
 const initialBuildBlockFormState: BuildBlockFormState = {
+  wallType: "Reg",
   length: "",
   height: "",
   width: '8"',

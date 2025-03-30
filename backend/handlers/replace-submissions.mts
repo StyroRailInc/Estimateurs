@@ -29,14 +29,37 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
     return jsonResponse(HTTP_STATUS.NOT_FOUND, { message: "User not found" });
   }
 
+  token = token.substring(7, token.length);
+
   if (user.token.S !== token) {
     return jsonResponse(HTTP_STATUS.UNAUTHORIZED, { message: `Invalid token ${token}` });
+  }
+
+  let buildBlock = validateRequestBody(user.buildblock?.S || "[]");
+  if (!buildBlock) {
+    return jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error parsing buildblock" });
+  }
+
+  const nameCountSet = new Set();
+  const nameCountArray = [];
+
+  submissions.forEach((submission: any) => {
+    nameCountSet.add(submission.name);
+    nameCountArray.push(submission.name);
+  });
+
+  const hasDuplicates = Array.from(nameCountSet).length !== nameCountArray.length;
+
+  if (hasDuplicates) {
+    return jsonResponse(HTTP_STATUS.CONFLICT, {
+      message: `Resource with name already exists`,
+    });
   }
 
   const isReplacedSubmissions = await databaseManager.replaceSubmissions(user, submissions);
 
   if (isReplacedSubmissions) {
-    return jsonResponse(HTTP_STATUS.CREATED);
+    return jsonResponse(HTTP_STATUS.SUCCESS);
   }
 
   return jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error creating submission" });

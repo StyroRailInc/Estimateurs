@@ -1,4 +1,12 @@
-import { createContext, ReactNode, useContext, useState, useMemo, SetStateAction } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useMemo,
+  SetStateAction,
+  useEffect,
+} from "react";
 import { PaletteMode } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material";
 import getDesignTokens from "./../themes/getDesignTokens";
@@ -18,10 +26,24 @@ interface ColorModeProviderProps {
 }
 
 const ColorModeProvider: React.FC<ColorModeProviderProps> = ({ children }) => {
-  const [mode, setColorMode] = useState<PaletteMode>("light");
+  const getMode = () => {
+    const savedMode = localStorage.getItem("colorMode") as PaletteMode;
+    if (savedMode && (savedMode === "light" || savedMode === "dark")) return savedMode;
+    else return "light";
+  };
+
+  const [mode, setColorMode] = useState<PaletteMode>(getMode());
+
+  useEffect(() => {
+    setColorMode(getMode());
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("colorMode", mode);
+  }, [mode]);
 
   const toggleColorMode = () => {
-    setColorMode(mode === "dark" ? "light" : "dark");
+    setColorMode((prevMode) => (prevMode === "dark" ? "light" : "dark"));
   };
 
   const value = { mode, toggleColorMode, setColorMode };

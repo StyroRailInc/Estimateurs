@@ -11,7 +11,9 @@ interface LeftMenuProps {
   onChangeSection: Dispatch<React.SetStateAction<string>>;
 }
 
-const StyledButton = styled(Button)<{ isSelected: boolean }>(({ theme, isSelected }) => ({
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "isSelected",
+})<{ isSelected: boolean }>(({ theme, isSelected }) => ({
   backgroundColor: isSelected
     ? theme.palette.mode === "light"
       ? "white"

@@ -11,6 +11,7 @@ export type BlockType =
   | "buck";
 
 export type BuildBlockFormState = {
+  wallType: string;
   length: string;
   height: string;
   width: string;
@@ -32,6 +33,7 @@ export type BuildBlockFormState = {
 };
 
 export type BuildBlockFormAction =
+  | { type: "setWallType"; payload: string }
   | { type: "setLength"; payload: string }
   | { type: "setHeight"; payload: string }
   | { type: "setWidth"; payload: string }
@@ -45,6 +47,7 @@ export type BuildBlockFormAction =
   | {
       type: "setInputs";
       payload: {
+        wallType: string;
         length: string;
         height: string;
         width: string;

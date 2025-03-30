@@ -9,6 +9,7 @@ import "./BuildBlockSubmissions.css";
 import { useNavigate } from "react-router-dom";
 import "./../../global.css";
 import SingleInputDialog from "src/components/SingleInputDialog";
+import { HTTP_STATUS } from "src/utils/http";
 
 const BuildBlockSubmissions: React.FC = () => {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ const BuildBlockSubmissions: React.FC = () => {
   const { user } = useAuth();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [newName, setNewName] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,6 +58,7 @@ const BuildBlockSubmissions: React.FC = () => {
     e.preventDefault();
     if (editingIndex === null || !submissions) return;
     const updatedSubmissions = [...submissions];
+    const oldName = updatedSubmissions[editingIndex].name;
     updatedSubmissions[editingIndex].name = newName;
 
     fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}`, {
@@ -70,6 +73,11 @@ const BuildBlockSubmissions: React.FC = () => {
         if (response.ok) {
           setSubmissions(updatedSubmissions);
           setEditingIndex(null);
+        } else {
+          if (response.status === HTTP_STATUS.CONFLICT) {
+            updatedSubmissions[editingIndex].name = oldName;
+            setError("Une soumission avec ce nom existe déjà. Veuillez choisir un autre nom");
+          }
         }
       })
       .catch((error) => {
@@ -156,10 +164,20 @@ const BuildBlockSubmissions: React.FC = () => {
         <SingleInputDialog
           title={"Modifier le nom"}
           open={editingIndex !== null}
-          onClose={() => setEditingIndex(null)}
-          onCancel={() => setEditingIndex(null)}
-          onSubmit={handleSubmit}
+          onClose={() => {
+            setEditingIndex(null);
+            setError("");
+          }}
+          onCancel={() => {
+            setEditingIndex(null);
+            setError("");
+          }}
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+            handleSubmit(e);
+            setError("");
+          }}
         >
+          {error && <p className="error">{t(error)}</p>}
           <TextField
             id="name"
             fullWidth

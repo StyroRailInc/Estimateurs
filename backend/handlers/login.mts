@@ -33,7 +33,7 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   if (user.preferences?.S) preferences = JSON.parse(user.preferences?.S);
 
   if (token) {
-    return jsonResponse(HTTP_STATUS.SUCCESS, preferences, token);
+    return jsonResponse(HTTP_STATUS.SUCCESS, { preferences, name: user.name?.S }, token);
   }
 
   return jsonResponse(HTTP_STATUS.UNAUTHORIZED, { message: "There has been an error logging in" });

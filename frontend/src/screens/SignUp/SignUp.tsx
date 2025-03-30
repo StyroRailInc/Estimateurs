@@ -31,7 +31,7 @@ const SignUp: React.FC<SignUpProps> = () => {
     const { password, confirmPassword } = formData;
 
     if (password !== confirmPassword) {
-      setError(t("Les mots de passe ne correspondent pas."));
+      setError("Les mots de passe ne correspondent pas.");
       return;
     }
 
@@ -44,7 +44,7 @@ const SignUp: React.FC<SignUpProps> = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           if (response.status === HTTP_STATUS.CONFLICT) {
             throw new Error(t("Courriel déjà sélectionné. Changez le courriel."));
@@ -54,12 +54,10 @@ const SignUp: React.FC<SignUpProps> = () => {
         }
 
         const token = response.headers.get("x-auth-token");
-        if (token) {
-          login({ name: "mon nom", email: formData.email, token });
+        const parsedResponse = await response.json();
+        if (token && parsedResponse) {
+          login({ name: parsedResponse.name, email: formData.email, token });
         }
-        return response.json();
-      })
-      .then(() => {
         setIsAccountCreated(true);
       })
       .catch((error) => {
@@ -148,9 +146,19 @@ const SignUp: React.FC<SignUpProps> = () => {
               </div>
             </div>
           ) : (
-            <>
-              <h1>{t("Bienvenu") + " " + formData.name + "!"}</h1>
-            </>
+            <div className="flex-center flex-vertical">
+              <h1>{t("Bienvenue") + " " + formData.name + "!"}</h1>
+              <Button
+                color="secondary"
+                variant="contained"
+                className="button-no-caps"
+                // sx={{ color: "var(--secondary-color-light)" }}
+                component={RouterLink}
+                to="/account"
+              >
+                {t("Continuer")}
+              </Button>
+            </div>
           )}
         </Box>
       </div>

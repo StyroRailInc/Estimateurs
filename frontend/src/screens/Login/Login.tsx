@@ -38,24 +38,25 @@ const Login: React.FC<LoginProps> = () => {
       .then(async (response) => {
         if (!response.ok) {
           if (response.status === HTTP_STATUS.NOT_FOUND) {
-            throw new Error(t("Le courriel est invalide"));
+            throw new Error("Le courriel est invalide");
           } else if (response.status === HTTP_STATUS.UNAUTHORIZED) {
-            throw new Error(t("Mot de passe incorrecte. Réessayez."));
+            throw new Error("Mot de passe incorrecte. Réessayez.");
           } else {
-            throw new Error(t("Échec de l'inscription. Réessayez."));
+            throw new Error("Échec de l'inscription. Réessayez.");
           }
         }
         const token = response.headers.get("x-auth-token");
 
+        const parsedResponse = await response.json();
+        const preferences = JSON.parse(parsedResponse.preferences);
+
         if (token) {
-          login({ name: "mon nom", email, token });
+          login({ name: parsedResponse.name, email, token });
         }
-        return response.json();
-      })
-      .then((response) => {
-        console.log(response.language, response.mode, response);
-        if (response.language) setLanguage(response.language);
-        if (response.mode) setColorMode(response.mode);
+
+        if (preferences.language) setLanguage(preferences.language);
+        if (preferences.mode) setColorMode(preferences.mode);
+
         const redirectPath = location.state?.from?.pathname || "/account";
         navigate(redirectPath);
       })
@@ -107,7 +108,7 @@ const Login: React.FC<LoginProps> = () => {
                 variant="contained"
                 className="login-button button-no-caps"
               >
-                {t("Login")}
+                {t("Se connecter")}
               </Button>
             </form>
             <div className="flex-horizontal">

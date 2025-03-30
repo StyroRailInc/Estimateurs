@@ -15,11 +15,11 @@ const Preferences: React.FC = () => {
   const { mode, setColorMode } = useColorMode();
   const { language, setLanguage } = useLanguage();
 
-  const updatePreferences = async () => {
+  const updatePreferences = async (newMode: string, newLanguage: string) => {
     try {
       await apiService.post(
         "/user/preferences",
-        { email: user?.email, preferences: { language, mode } },
+        { email: user?.email, preferences: { language: newLanguage, mode: newMode } },
         user
       );
     } catch (error) {
@@ -46,31 +46,31 @@ const Preferences: React.FC = () => {
             <IconButton
               onClick={() => {
                 setColorMode("light");
-                updatePreferences();
+                updatePreferences("light", language);
               }}
               className="app-bar-button"
             >
               <LightMode />
-              <span style={{ marginLeft: "5px" }}>{t("Light")}</span>
+              <span style={{ marginLeft: "5px" }}>{t("Clair")}</span>
             </IconButton>
             <IconButton
               onClick={() => {
                 setColorMode("dark");
-                updatePreferences();
+                updatePreferences("dark", language);
               }}
               className="app-bar-button"
             >
               <DarkMode />
-              <span style={{ marginLeft: "5px" }}>{t("Dark")}</span>
+              <span style={{ marginLeft: "5px" }}>{t("Sombre")}</span>
             </IconButton>
           </div>
 
           <div className="flex-horizontal flex-start">
-            <p style={{ padding: "20px 0px 0px 20px" }}>{t("Language")}</p>
+            <p style={{ padding: "20px 0px 0px 20px" }}>{t("Langue")}</p>
             <IconButton
               onClick={() => {
                 setLanguage("fr");
-                updatePreferences();
+                updatePreferences(mode, "fr");
               }}
               className="app-bar-button"
             >
@@ -82,7 +82,7 @@ const Preferences: React.FC = () => {
             <IconButton
               onClick={() => {
                 setLanguage("eng");
-                updatePreferences();
+                updatePreferences(mode, "eng");
               }}
               className="app-bar-button"
             >

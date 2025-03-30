@@ -59,7 +59,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1160px) {
   .image-wrapper {
     display: none;
   }

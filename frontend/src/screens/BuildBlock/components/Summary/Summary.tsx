@@ -45,6 +45,7 @@ const Summary: React.FC = () => {
   useEffect(() => {
     const estimation = sessionStorage.getItem("buildblock-estimation");
     if (!estimation) return;
+    console.log(JSON.parse(estimation));
     fetch(`${Constants.API}/compute/buildblock`, {
       method: "POST",
       headers: {
@@ -58,8 +59,8 @@ const Summary: React.FC = () => {
         }
       })
       .then((e) => {
-        setData(e);
         console.log(e);
+        setData(e);
       })
       .catch((error) => {
         console.error(error);
@@ -67,7 +68,6 @@ const Summary: React.FC = () => {
   }, []);
 
   const generateReport = () => {
-    console.log(JSON.stringify(data));
     fetch(`${Constants.API}/compute/buildblock/submissions/pdf`, {
       method: "POST",
       headers: {
@@ -118,7 +118,7 @@ const Summary: React.FC = () => {
           sessionStorage.removeItem("buildblock-estimation-name");
           setIsModalOpen(false);
         } else if (response.status === HTTP_STATUS.CONFLICT) {
-          setError(t("Une soumission avec ce nom existe déjà. Voulez-vous l'écraser?"));
+          setError("Une soumission avec ce nom existe déjà. Voulez-vous l'écraser?");
         }
       })
       .catch((error) => {
@@ -148,10 +148,12 @@ const Summary: React.FC = () => {
     { key: "straight", label: t("Blocs droits") },
     { key: "ninetyCorner", label: t("Coins 90") },
     { key: "fortyFiveCorner", label: t("Coins 45") },
-    { key: "brickLedge", label: t("Support à Maçon") },
-    { key: "doubleTaperTop", label: t("Double Biseaux") },
+    { key: "brickLedge", label: t("Supports à Maçon") },
+    { key: "doubleTaperTop", label: t("Doubles Biseaux") },
     { key: "buck", label: t("Bucks") },
-    { key: "thermalsert", label: t("Insertion Isométriques") },
+    { key: "thermalsert", label: t("Insertions Isométriques") },
+    { key: "kdStraight", label: t("Déconstruits droits") },
+    { key: "kdNinetyCorner", label: t("Déconstruits coins 90") },
   ];
 
   return (
@@ -181,7 +183,7 @@ const Summary: React.FC = () => {
                 return filteredWidths.map((width, index) => {
                   const isFirstRow = index === 0;
                   return (
-                    <TableRow key={`${type.key}-${width}`}>
+                    <TableRow key={`${type.key}-${width}-${index}`}>
                       {isFirstRow && (
                         <TableCell rowSpan={filteredWidths.length}>{type.label}</TableCell>
                       )}
@@ -198,7 +200,11 @@ const Summary: React.FC = () => {
           ) : (
             <TableBody>
               <TableRow>
-                <TableCell>{t("Veuillez remplir le formulaire Build Block")}</TableCell>
+                <TableCell>
+                  {t(
+                    "Veuillez remplir le formulaire de Build Block. Assurez-vous que la hauteur, la largeur et la longueur de vos murs ne soient pas vides."
+                  )}
+                </TableCell>
               </TableRow>
             </TableBody>
           )}
@@ -217,11 +223,11 @@ const Summary: React.FC = () => {
           {data ? (
             <TableBody>
               {Object.keys(data["rebars"]).map(
-                (width) =>
+                (width, index) =>
                   data["rebars"][width] !== 0 && (
-                    <TableRow>
-                      <TableCell key={width}>{width}</TableCell>
-                      <TableCell key={width}>{data["rebars"][width]}</TableCell>
+                    <TableRow key={`row-${width}-${index}`}>
+                      <TableCell>{width + '"'}</TableCell>
+                      <TableCell>{data["rebars"][width]}</TableCell>
                     </TableRow>
                   )
               )}
@@ -229,44 +235,94 @@ const Summary: React.FC = () => {
           ) : (
             <TableBody>
               <TableRow>
-                <TableCell>{t("Veuillez remplir le formulaire Build Block")}</TableCell>
+                <TableCell>
+                  {t(
+                    "Veuillez remplir le formulaire de Build Block. Assurez-vous que la hauteur, la largeur et la longueur de vos murs ne soient pas vides."
+                  )}
+                </TableCell>
               </TableRow>
             </TableBody>
           )}
         </Table>
       </TableContainer>
+
+      <h2>{t("Bridges")}</h2>
+      <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t("Largeur")}</TableCell>
+              <TableCell>{t("Quantité")}</TableCell>
+              <TableCell>{t("Paquets")}</TableCell>
+            </TableRow>
+          </TableHead>
+          {data ? (
+            <TableBody>
+              {Object.keys(data["bridges"]).map((width) => (
+                <TableRow key={width}>
+                  <TableCell>{width}</TableCell>
+                  <TableCell>{data["bridges"][width].quantity}</TableCell>
+                  <TableCell>{data["bridges"][width].nBundles}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  {t(
+                    "Veuillez remplir le formulaire de Build Block. Assurez-vous que la hauteur, la largeur et la longueur de vos murs ne soient pas vides."
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
+
       <h2>{t("Informations supplémentaires")}</h2>
       <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t("Volume de béton")}</TableCell>
+              <TableCell></TableCell>
+              <TableCell>{t("Quantité")}</TableCell>
+              <TableCell>{t("Paquets")}</TableCell>
             </TableRow>
           </TableHead>
           {data ? (
             <TableBody>
               <TableRow>
+                <TableCell>{t("Volume de béton") + " (Net)"}</TableCell>
                 <TableCell>{data["concreteVolume"] + " m3"}</TableCell>
+                <TableCell>{"X"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{"Clips"}</TableCell>
+                <TableCell>{data["clips"].quantity}</TableCell>
+                <TableCell>{Math.ceil(data["clips"].nBundles)}</TableCell>
               </TableRow>
             </TableBody>
           ) : (
             <TableBody>
               <TableRow>
-                <TableCell>{t("Veuillez remplir le formulaire Build Block")}</TableCell>
+                <TableCell>
+                  {t(
+                    "Veuillez remplir le formulaire de Build Block. Assurez-vous que la hauteur, la largeur et la longueur de vos murs ne soient pas vides."
+                  )}
+                </TableCell>
               </TableRow>
             </TableBody>
           )}
         </Table>
       </TableContainer>
-      <div className="flex-end">
+
+      <div className="space-between">
+        <Button variant={"outlined"} color="secondary" onClick={generateReport}>
+          {t("Générer PDF")}
+        </Button>
         <Button variant={"contained"} color="secondary" onClick={handleSave}>
           {t("Enregistrer")}
-        </Button>
-      </div>
-
-      <div className="flex-end">
-        <Button variant={"contained"} color="secondary" onClick={generateReport}>
-          {t("Générer PDF")}
         </Button>
       </div>
 

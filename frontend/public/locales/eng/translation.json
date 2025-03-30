@@ -63,7 +63,7 @@
   "Longueur L": "L Length",
   "Profondeur dans la semelle": "Depth in Footing",
   "Type de bloc": "Block Type",
-  "Veuillez remplir le formulaire Build Block": "Please fill out the Build Block form",
+  "Veuillez remplir le formulaire de Build Block. Assurez-vous que la hauteur, la largeur et la longueur de vos murs ne soient pas vides.": "Please fill out the Build Block form. Make sure the height, width, and length of your walls are not empty.",
   "Barres d'armature d'acier (20')": "Steel reinforcement bars (20')",
   "Paquets": "Bundles",
   "Informations supplémentaires": "Additional Information",
@@ -85,5 +85,13 @@
   "Aucun fichier choisi": "No File Chosen",
   "Envoyer": "Send",
   "Adresse": "Address",
-  "Heures: 7:30am - 4:30pm, Lundi - Vendredi": "Hours: 7:30am - 4:30pm, Monday - Friday"
+  "Heures: 7:30am - 4:30pm, Lundi - Vendredi": "Hours: 7:30am - 4:30pm, Monday - Friday",
+  "Mot de passe incorrecte. Réessayez.": "Invalid password. Retry",
+  "Informations Personnelles": "Personal Information",
+  "Préférences": "Preferences",
+  "Thème": "Theme",
+  "Langue": "Language",
+  "Clair": "Light",
+  "Sombre": "Dark",
+  "Une soumission avec ce nom existe déjà. Veuillez choisir un autre nom": "A submission with this name already exists. Please choose another name"
 }

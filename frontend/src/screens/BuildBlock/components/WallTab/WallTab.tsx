@@ -70,14 +70,23 @@ const WallTab: React.FC<WallTabProps> = ({
       buildBlockFormDispatch({ type: "resetInputs" });
       return;
     }
+
     const newClickedIndex = Math.min(clickedWallIndex, walls.length - 2);
+
     wallDispatch({ type: "setClickedWallIndex", payload: newClickedIndex });
-    console.log(wallState.walls[newClickedIndex]);
-    buildBlockFormDispatch({
-      type: "setInputs",
-      payload: wallState.walls[newClickedIndex].buildBlockFormState,
-    });
-    wallDispatch({ type: "deleteWall", payload: { index: clickedWallIndex } });
+
+    setTimeout(() => {
+      const updatedWalls = walls.filter((_, index) => index !== clickedWallIndex);
+
+      if (updatedWalls[newClickedIndex]) {
+        buildBlockFormDispatch({
+          type: "setInputs",
+          payload: updatedWalls[newClickedIndex].buildBlockFormState,
+        });
+      }
+
+      wallDispatch({ type: "deleteWall", payload: { index: clickedWallIndex } });
+    }, 0);
   };
 
   const handleEdit = (index: number) => {
@@ -152,6 +161,7 @@ const WallTab: React.FC<WallTabProps> = ({
                 <div className="flex-horizontal">
                   <p>{wall.name}</p>
                   <IconButton
+                    component="span"
                     edge="end"
                     onClick={() => handleEdit(index)}
                     aria-label={t("Modifier")}

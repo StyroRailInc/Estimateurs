@@ -46,11 +46,13 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
       }
 
       console.log(fileName2);
+      const email = JSON.parse(data);
 
       const emailParams = {
-        to: "technologie@styrorail.ca",
+        to: "plans@styrorail.ca",
         subject: "Estimation Build Block",
-        text: data,
+        text: `Nom : ${email.name}\nCourriel : ${email.email}\nTel : ${email.phone}\n\nObjet: ${email.additionalInfo}
+        `,
         attachments: [{ filename: fileName2, content: buffer2, contentType: mimeType }],
       };
 
