@@ -226,7 +226,7 @@ function wallReducer(state: WallState, action: WallAction) {
       // Remove payload from type
       const updatedWalls = [...state.walls];
       updatedWalls.push({
-        name: `Wall ${updatedWalls.length + 1}`,
+        name: `Étage ${updatedWalls.length + 1}`,
         buildBlockFormState: initialBuildBlockFormState,
         openingState: initialOpeningState,
       });
@@ -258,7 +258,7 @@ function wallReducer(state: WallState, action: WallAction) {
 const initialWallState: WallState = {
   walls: [
     {
-      name: `Wall 1`,
+      name: `Étage 1`,
       buildBlockFormState: initialBuildBlockFormState,
       openingState: initialOpeningState,
     },

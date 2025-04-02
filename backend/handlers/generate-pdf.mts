@@ -5,9 +5,13 @@ import { createPDF, generateBuildBlockReport } from "../utils/createPDF.js";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   try {
-    const data = JSON.parse(event.body || "{}");
+    const body = JSON.parse(event.body || "{}");
 
-    const fileBuffer = await createPDF((doc) => generateBuildBlockReport(doc, "fr", data));
+    if (!body.data) return jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Missing walls data" });
+
+    const fileBuffer = await createPDF((doc) =>
+      generateBuildBlockReport(doc, body.language, body.data)
+    );
 
     return jsonResponse(HTTP_STATUS.SUCCESS, { pdf: fileBuffer });
   } catch (error) {

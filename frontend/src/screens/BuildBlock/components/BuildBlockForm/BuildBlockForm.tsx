@@ -322,7 +322,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             <FormTextField id="double-taper-45" fullWidth size="small" className="input-spacing" /> */}
             </Drawer>
           )}
-        <Drawer title={t("Insertions Isométriques")} isOpen>
+        <Drawer title={t("Insertions Isolantes")} isOpen>
           <label htmlFor="thermalsert-layer-quantity">{t("Nombre de couches")}</label>
           <FormTextField
             id="thermalsert-layer-quantity"

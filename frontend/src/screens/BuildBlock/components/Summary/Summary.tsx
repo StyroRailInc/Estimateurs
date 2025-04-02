@@ -18,6 +18,7 @@ import "./../../../../global.css";
 import { useNavigate } from "react-router-dom";
 import SingleInputDialog from "src/components/SingleInputDialog";
 import { apiService } from "src/services/api";
+import i18n from "src/i18n";
 
 const Summary: React.FC = () => {
   const { t } = useTranslation();
@@ -73,7 +74,7 @@ const Summary: React.FC = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ language: i18n.language, data }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -145,20 +146,20 @@ const Summary: React.FC = () => {
   };
 
   const blockTypes = [
-    { key: "straight", label: t("Blocs droits") },
-    { key: "ninetyCorner", label: t("Coins 90") },
-    { key: "fortyFiveCorner", label: t("Coins 45") },
-    { key: "brickLedge", label: t("Supports à Maçon") },
-    { key: "doubleTaperTop", label: t("Doubles Biseaux") },
-    { key: "buck", label: t("Bucks") },
-    { key: "thermalsert", label: t("Insertions Isométriques") },
-    { key: "kdStraight", label: t("Déconstruits droits") },
-    { key: "kdNinetyCorner", label: t("Déconstruits coins 90") },
+    { key: "straight", label: t("Bloc droit") },
+    { key: "ninetyCorner", label: t("Coin à 90 degrés") },
+    { key: "fortyFiveCorner", label: t("Coin à 45 degrés") },
+    { key: "brickLedge", label: t("Support à Maçon") },
+    { key: "doubleTaperTop", label: t("Double Biseau") },
+    { key: "buck", label: t("Buck") },
+    { key: "thermalsert", label: t("Insertion Isolante") },
+    { key: "kdStraight", label: t("Déconstruit droit") },
+    { key: "kdNinetyCorner", label: t("Déconstruit coin à 90 degrés") },
   ];
 
   return (
     <>
-      <h2>{t("Blocks")}</h2>
+      <h2>{t("Blocs")}</h2>
       <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Table>
           <TableHead>
@@ -295,6 +296,21 @@ const Summary: React.FC = () => {
               <TableRow>
                 <TableCell>{t("Volume de béton") + " (Net)"}</TableCell>
                 <TableCell>{data["concreteVolume"] + " m3"}</TableCell>
+                <TableCell>{"X"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{"Square Footage (Brut)"}</TableCell>
+                <TableCell>{data["squareFootage"].gross}</TableCell>
+                <TableCell>{"X"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{"Square Footage (Net)"}</TableCell>
+                <TableCell>{data["squareFootage"].net}</TableCell>
+                <TableCell>{"X"}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{"Opening Square Footage"}</TableCell>
+                <TableCell>{data["squareFootage"].opening}</TableCell>
                 <TableCell>{"X"}</TableCell>
               </TableRow>
               <TableRow>

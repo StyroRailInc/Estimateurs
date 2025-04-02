@@ -54,13 +54,6 @@ class Wall {
     let openingSurfaceArea = 0;
     let buckWidthSurfaceArea = 0;
 
-    console.log(
-      "surface",
-      remainingSurfaceArea,
-      this.corners.getTotalSurfaceArea(),
-      this.specialBlocks.getTotalSurfaceArea()
-    );
-
     for (let opening of this.openings) {
       openingPerimeter += opening.getPerimeter();
       openingSurfaceArea += opening.getSurfaceArea();
@@ -120,6 +113,9 @@ class Wall {
 
     const bridgeQuantity = nBlocks * 16;
 
+    const grossSquareFootage = (this.dimensions.getHeight() * this.dimensions.getLength()) / 144;
+    const netSquareFootage = grossSquareFootage - ((openingSurfaceArea / 8) * 10) / 144;
+
     return {
       width: this.dimensions.getWidth(),
       blockQuantities: blockQuantities,
@@ -129,6 +125,11 @@ class Wall {
       concreteVolume: concreteVolume,
       bridges: bridgeQuantity,
       nBlocks: nBlocks,
+      squareFootage: {
+        gross: grossSquareFootage,
+        net: netSquareFootage,
+        opening: ((openingSurfaceArea / 8) * 10) / 144,
+      },
     };
   }
 }

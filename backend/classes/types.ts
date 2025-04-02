@@ -29,6 +29,7 @@ export type WallSpecifications = {
   concreteVolume: number;
   bridges: number;
   nBlocks: number;
+  squareFootage: { gross: number; net: number; opening: number };
 };
 
 export type HouseSpecifications = {
@@ -37,6 +38,11 @@ export type HouseSpecifications = {
   clips: { quantity: number; nBundles: number };
   concreteVolume: number;
   rebars: Record<string, number>;
+  squareFootage: {
+    gross: number;
+    net: number;
+    opening: number;
+  };
 };
 
 export type WallType = "Reg" | "KD" | "HW" | "Pign";

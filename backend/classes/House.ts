@@ -12,6 +12,11 @@ class House {
   private walls: Wall[];
   private blockQuantities: BlockQuantities = {};
   private concreteVolume = 0;
+  private squareFootage = {
+    gross: 0,
+    net: 0,
+    opening: 0,
+  };
   private nBlocks = 0;
   private bridges: BridgeQuantities = {};
   private rebars: Record<string, number> = {
@@ -38,6 +43,7 @@ class House {
       concreteVolume,
       bridges,
       nBlocks,
+      squareFootage,
     } = wallSpecifications;
 
     if (!this.blockQuantities[width]) {
@@ -68,6 +74,9 @@ class House {
     this.rebars[coldJointPins.type] += coldJointPins.quantity;
     this.concreteVolume += concreteVolume;
     this.nBlocks += nBlocks;
+    this.squareFootage.gross += squareFootage.gross;
+    this.squareFootage.net += squareFootage.net;
+    this.squareFootage.opening += squareFootage.opening;
   }
 
   private computeBundleQuantity() {
@@ -99,6 +108,7 @@ class House {
       concreteVolume:
         Math.round((Math.ceil(this.concreteVolume) / 1.308 + Number.EPSILON) * 100) / 100, // To cubic meters instead of cubic yards
       rebars: this.rebars,
+      squareFootage: this.squareFootage,
     };
   }
 }

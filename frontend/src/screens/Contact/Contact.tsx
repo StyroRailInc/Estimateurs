@@ -143,7 +143,7 @@ export default function Contact() {
                 onChange={(e) => setAdditionalInfo(e.target.value)}
               />
 
-              {/* <label htmlFor="document">{t("Télécharger un plan")}</label>
+              <label htmlFor="document">{t("Télécharger un plan")}</label>
               <input
                 id="document"
                 lang={language}
@@ -158,7 +158,7 @@ export default function Contact() {
                 <p>
                   {t("Fichier sélectionné")}: {document.name}
                 </p>
-              )} */}
+              )}
               <div className="flex-end">
                 <Button type="submit" variant="contained" color="secondary">
                   {t("Envoyer")}
