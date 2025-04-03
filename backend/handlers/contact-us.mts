@@ -19,6 +19,9 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
 
     const bb = busboy({ headers: event.headers, limits: { fileSize: 10 * 1024 * 1024 } });
     console.log("Headers:", event.headers);
+    try {
+      const contentType = event.headers["content-type"] || event.headers["Content-Type"];
+    } catch (err) {}
 
     bb.on("file", (name, file, info) => {
       console.log(`File detected: ${info.filename}, MIME type: ${info.mimeType}`);
@@ -46,13 +49,11 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
       }
 
       console.log(fileName2);
-      const email = JSON.parse(data);
 
       const emailParams = {
-        to: "plans@styrorail.ca",
+        to: "technologie@styrorail.ca",
         subject: "Estimation Build Block",
-        text: `Nom : ${email.name}\nCourriel : ${email.email}\nTel : ${email.phone}\n\nObjet: ${email.additionalInfo}
-        `,
+        text: data,
         attachments: [{ filename: fileName2, content: buffer2, contentType: mimeType }],
       };
 

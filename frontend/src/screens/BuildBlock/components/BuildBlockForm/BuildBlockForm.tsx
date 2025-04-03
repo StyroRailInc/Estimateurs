@@ -284,7 +284,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
                 fullWidth
                 size="small"
                 className="input-spacing"
-                value={buildBlockFormState.brickLedgeLength}
+                value={buildBlockFormState.brickLedge.length}
                 onChange={(e) => {
                   buildBlockFormDispatch({
                     type: "setBrickLedgeLength",
@@ -292,10 +292,34 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
                   });
                 }}
               />
-              {/* <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
-            <FormTextField id="brick-ledge-90" fullWidth size="small" className="input-spacing" />
-            <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
-            <FormTextField id="brick-ledge-45" fullWidth size="small" className="input-spacing" /> */}
+              <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
+              <FormTextField
+                id="brick-ledge-90"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.brickLedge.nCorners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setBrickLedgeNCorners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
+              <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
+              <FormTextField
+                id="brick-ledge-45"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.brickLedge.n45Corners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setBrickLedgeN45Corners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
             </Drawer>
           )}
         {buildBlockFormState.wallType !== "KD" &&
@@ -308,7 +332,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
                 fullWidth
                 size="small"
                 className="input-spacing"
-                value={buildBlockFormState.doubleTaperTopLength}
+                value={buildBlockFormState.doubleTaperTop.length}
                 onChange={(e) => {
                   buildBlockFormDispatch({
                     type: "setDoubleTaperTopLength",
@@ -316,10 +340,20 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
                   });
                 }}
               />
-              {/* <label htmlFor="double-taper-90">{t("Coins") + " 90"}</label>
-            <FormTextField id="double-taper-90" fullWidth size="small" className="input-spacing" />
-            <label htmlFor="double-taper-45">{t("Coins") + " 45"}</label>
-            <FormTextField id="double-taper-45" fullWidth size="small" className="input-spacing" /> */}
+              <label htmlFor="double-taper-90">{t("Coins")}</label>
+              <FormTextField
+                id="double-taper-90"
+                fullWidth
+                size="small"
+                className="input-spacing"
+                value={buildBlockFormState.doubleTaperTop.nCorners}
+                onChange={(e) => {
+                  buildBlockFormDispatch({
+                    type: "setDoubleTaperTopNCorners",
+                    payload: e.target.value,
+                  });
+                }}
+              />
             </Drawer>
           )}
         <Drawer title={t("Insertions Isolantes")} isOpen>

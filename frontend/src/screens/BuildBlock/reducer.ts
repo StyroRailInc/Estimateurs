@@ -29,9 +29,15 @@ function buildBlockFormReducer(
     case "setN45OutsideCorners":
       return { ...state, n45OutsideCorners: action.payload };
     case "setDoubleTaperTopLength":
-      return { ...state, doubleTaperTopLength: action.payload };
+      return { ...state, doubleTaperTop: { ...state.doubleTaperTop, length: action.payload } };
+    case "setDoubleTaperTopNCorners":
+      return { ...state, doubleTaperTop: { ...state.doubleTaperTop, nCorners: action.payload } };
     case "setBrickLedgeLength":
-      return { ...state, brickLedgeLength: action.payload };
+      return { ...state, brickLedge: { ...state.brickLedge, length: action.payload } };
+    case "setBrickLedgeNCorners":
+      return { ...state, brickLedge: { ...state.brickLedge, nCorners: action.payload } };
+    case "setBrickLedgeN45Corners":
+      return { ...state, brickLedge: { ...state.brickLedge, n45Corners: action.payload } };
     case "resetInputs":
       return { ...initialBuildBlockFormState };
     case "setInputs":
@@ -135,8 +141,8 @@ const initialBuildBlockFormState: BuildBlockFormState = {
   nOutsideCorners: "",
   n45InsideCorners: "",
   n45OutsideCorners: "",
-  doubleTaperTopLength: "",
-  brickLedgeLength: "",
+  doubleTaperTop: { length: "", nCorners: "" },
+  brickLedge: { length: "", nCorners: "", n45Corners: "" },
   thermalsert: { nLayers: "", width: "" },
   horizontalRebar: { quantity: "5", diameter: "0.625" },
   verticalRebar: { spacing: '12"', diameter: "0.625" },

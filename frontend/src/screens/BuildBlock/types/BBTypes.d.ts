@@ -19,8 +19,8 @@ export type BuildBlockFormState = {
   nOutsideCorners: string;
   n45InsideCorners: string;
   n45OutsideCorners: string;
-  doubleTaperTopLength: string;
-  brickLedgeLength: string;
+  doubleTaperTop: { length: string; nCorners: string };
+  brickLedge: { length: string; nCorners: string; n45Corners: string };
   thermalsert: { nLayers: string; width: string };
   horizontalRebar: { quantity: string; diameter: string };
   verticalRebar: { spacing: string; diameter: string };
@@ -42,7 +42,10 @@ export type BuildBlockFormAction =
   | { type: "setN45OutsideCorners"; payload: string }
   | { type: "setN45InsideCorners"; payload: string }
   | { type: "setBrickLedgeLength"; payload: string }
+  | { type: "setBrickLedgeNCorners"; payload: string }
+  | { type: "setBrickLedgeN45Corners"; payload: string }
   | { type: "setDoubleTaperTopLength"; payload: string }
+  | { type: "setDoubleTaperTopNCorners"; payload: string }
   | { type: "resetInputs" }
   | {
       type: "setInputs";
@@ -55,8 +58,8 @@ export type BuildBlockFormAction =
         nOutsideCorners: string;
         n45InsideCorners: string;
         n45OutsideCorners: string;
-        brickLedgeLength: string;
-        doubleTaperTopLength: string;
+        brickLedge: { length: string; nCorners: string; n45Corners: string };
+        doubleTaperTop: { length: string; nCorners: string };
         thermalsert: { nLayers: string; width: string };
         horizontalRebar: { quantity: string; diameter: string };
         verticalRebar: { spacing: string; diameter: string };

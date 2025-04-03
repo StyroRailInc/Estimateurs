@@ -15,5 +15,10 @@
   "bridges": { "8\"": { "quantity": 6016, "nBundles": 24 } },
   "clips": { "quantity": 376, "nBundles": 2 },
   "concreteVolume": 38.23,
-  "rebars": { "1": 0, "0.375": 0, "0.5": 0, "0.625": 209, "0.75": 0, "0.875": 0 }
+  "rebars": { "1": 0, "0.375": 0, "0.5": 0, "0.625": 209, "0.75": 0, "0.875": 0 },
+  "squareFootage": {
+    "gross": 2000,
+    "net": 2000,
+    "opening": 0
+  }
 }

@@ -33,8 +33,12 @@ class SpecialBlockBase {
 }
 
 class BrickLedge extends SpecialBlockBase {
-  constructor(length: number, width: Width) {
+  readonly nCorners;
+  readonly n45Corners;
+  constructor(length: number, width: Width, nCorners: number, n45Corners: number) {
     super(length, width);
+    this.nCorners = nCorners;
+    this.n45Corners = n45Corners;
   }
 
   getSurfaceArea() {
@@ -51,8 +55,10 @@ class BrickLedge extends SpecialBlockBase {
 }
 
 class DoubleTaperTop extends SpecialBlockBase {
-  constructor(length: number, width: Width) {
+  readonly nCorners;
+  constructor(length: number, width: Width, nCorners: number) {
     super(length, width);
+    this.nCorners = nCorners;
   }
 
   getSurfaceArea() {
@@ -89,13 +95,33 @@ class SpecialBlocks {
 
   constructor(
     doubleTaperTopLength: number,
+    doubleTaperTopNCorners: number,
     brickLedgeLength: number,
+    brickLedgeNCorners: number,
+    brickLedgeN45Corners: number,
     buckLength: number,
     width: Width
   ) {
-    this.doubleTaperTop = new DoubleTaperTop(doubleTaperTopLength, width);
-    this.brickLedge = new BrickLedge(brickLedgeLength, width);
+    this.doubleTaperTop = new DoubleTaperTop(doubleTaperTopLength, width, doubleTaperTopNCorners);
+    this.brickLedge = new BrickLedge(
+      brickLedgeLength,
+      width,
+      brickLedgeNCorners,
+      brickLedgeN45Corners
+    );
     this.buck = new Buck(buckLength, width);
+  }
+
+  getDoubleTaperTopNCorners() {
+    return this.doubleTaperTop.nCorners;
+  }
+
+  getBrickLedgeNCorners() {
+    return this.brickLedge.nCorners;
+  }
+
+  getBrickLedgeN45Corners() {
+    return this.brickLedge.n45Corners;
   }
 
   getTotalSurfaceArea() {

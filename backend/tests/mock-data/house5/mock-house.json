@@ -1,0 +1,48 @@
+{
+  "walls": [
+    {
+      "name": "Étage 1",
+      "buildBlockFormState": {
+        "wallType": "Reg",
+        "length": "189",
+        "height": "18-2",
+        "width": "8\"",
+        "nInsideCorners": "",
+        "nOutsideCorners": "6",
+        "n45InsideCorners": "",
+        "n45OutsideCorners": "",
+        "doubleTaperTop": { "length": "", "nCorners": "" },
+        "brickLedge": { "length": "", "nCorners": "", "n45Corners": "" },
+        "thermalsert": { "nLayers": "", "width": "" },
+        "horizontalRebar": { "quantity": "5", "diameter": "0.625" },
+        "verticalRebar": { "spacing": "12\"", "diameter": "0.625" },
+        "coldJointPin": {
+          "centerSpacing": "12\"",
+          "lLength": "36\"",
+          "depthInFooting": "7\"",
+          "diameter": "0.625"
+        }
+      },
+      "openingState": {
+        "openings": [
+          { "width": "72\"", "height": "40\"", "quantity": "2" },
+          { "width": "72\"", "height": "66\"", "quantity": "2" },
+          { "width": "96\"", "height": "20\"", "quantity": "2" },
+          { "width": "48\"", "height": "72\"", "quantity": "4" },
+          { "width": "72\"", "height": "40\"", "quantity": "2" },
+          { "width": "72\"", "height": "36\"", "quantity": "2" },
+          { "width": "72\"", "height": "40\"", "quantity": "2" },
+          { "width": "72\"", "height": "66\"", "quantity": "1" },
+          { "width": "48\"", "height": "66\"", "quantity": "1" },
+          { "width": "72\"", "height": "66\"", "quantity": "1" },
+          { "width": "72\"", "height": "40\"", "quantity": "2" },
+          { "width": "48\"", "height": "56\"", "quantity": "1" },
+          { "width": "36\"", "height": "96\"", "quantity": "2" },
+          { "width": "96\"", "height": "96\"", "quantity": "2" },
+          { "width": "72\"", "height": "90\"", "quantity": "2" }
+        ]
+      }
+    }
+  ],
+  "clickedWallIndex": 0
+}

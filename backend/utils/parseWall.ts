@@ -10,31 +10,35 @@ import { ColdJointPin } from "../classes/Rebars.js";
 import { IS_FEET, EMPTY_STRING_VALID } from "./../constants/input-parser-constants.js";
 
 export const parseWall = (wallData: any): Wall => {
-  const wallType = wallData.buildBlockFormState.wallType as WallType;
+  const { buildBlockFormState: formState, openingState: openingsState } = wallData;
+  const wallType = formState.wallType as WallType;
 
   const dimensions = new Dimensions(
-    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
-    wallData.buildBlockFormState.width as Width
+    parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.length, IS_FEET, !EMPTY_STRING_VALID),
+    formState.width as Width
   );
 
   const corners = new Corners(
-    parseIntegerInput(wallData.buildBlockFormState.nInsideCorners),
-    parseIntegerInput(wallData.buildBlockFormState.nOutsideCorners),
-    parseIntegerInput(wallData.buildBlockFormState.n45InsideCorners),
-    parseIntegerInput(wallData.buildBlockFormState.n45OutsideCorners),
-    wallData.buildBlockFormState.width as Width,
+    parseIntegerInput(formState.nInsideCorners),
+    parseIntegerInput(formState.nOutsideCorners),
+    parseIntegerInput(formState.n45InsideCorners),
+    parseIntegerInput(formState.n45OutsideCorners),
+    formState.width as Width,
     wallType
   );
 
   const specialBlocks = new SpecialBlocks(
-    parseInput(wallData.buildBlockFormState.doubleTaperTopLength, IS_FEET, EMPTY_STRING_VALID),
-    parseInput(wallData.buildBlockFormState.brickLedgeLength, IS_FEET, EMPTY_STRING_VALID),
+    parseInput(formState.doubleTaperTop.length, IS_FEET, EMPTY_STRING_VALID),
+    parseIntegerInput(formState.doubleTaperTop.nCorners),
+    parseInput(formState.brickLedge.length, IS_FEET, EMPTY_STRING_VALID),
+    parseIntegerInput(formState.brickLedge.nCorners),
+    parseIntegerInput(formState.brickLedge.n45Corners),
     0,
-    wallData.buildBlockFormState.width as Width
+    formState.width as Width
   );
 
-  const openings = (wallData.openingState.openings || []).map(
+  const openings = (openingsState.openings || []).map(
     (opening: any) =>
       new Opening(
         parseInput(opening.width, IS_FEET, EMPTY_STRING_VALID),
@@ -44,42 +48,34 @@ export const parseWall = (wallData: any): Wall => {
   );
 
   const horizontalRebar = new HorizontalRebar(
-    parseIntegerInput(wallData.buildBlockFormState.horizontalRebar.diameter),
-    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
-    parseIntegerInput(wallData.buildBlockFormState.horizontalRebar.quantity)
+    parseIntegerInput(formState.horizontalRebar.diameter),
+    parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseIntegerInput(formState.horizontalRebar.quantity)
   );
 
   const verticalRebar = new VerticalRebar(
-    parseIntegerInput(wallData.buildBlockFormState.verticalRebar.diameter),
-    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(wallData.buildBlockFormState.verticalRebar.spacing, IS_FEET, !EMPTY_STRING_VALID)
+    parseIntegerInput(formState.verticalRebar.diameter),
+    parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.verticalRebar.spacing, IS_FEET, !EMPTY_STRING_VALID)
   );
 
   const coldJointPin = new ColdJointPin(
-    parseIntegerInput(wallData.buildBlockFormState.coldJointPin.diameter),
-    parseInput(wallData.buildBlockFormState.height, IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(wallData.buildBlockFormState.length, IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(
-      wallData.buildBlockFormState.coldJointPin.centerSpacing,
-      !IS_FEET,
-      !EMPTY_STRING_VALID
-    ),
-    parseInput(wallData.buildBlockFormState.coldJointPin.lLength, !IS_FEET, !EMPTY_STRING_VALID),
-    parseInput(
-      wallData.buildBlockFormState.coldJointPin.depthInFooting,
-      !IS_FEET,
-      !EMPTY_STRING_VALID
-    )
+    parseIntegerInput(formState.coldJointPin.diameter),
+    parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.length, IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.coldJointPin.centerSpacing, !IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.coldJointPin.lLength, !IS_FEET, !EMPTY_STRING_VALID),
+    parseInput(formState.coldJointPin.depthInFooting, !IS_FEET, !EMPTY_STRING_VALID)
   );
 
   const thermalserts = {
-    nLayers: parseIntegerInput(wallData.buildBlockFormState.thermalsert.nLayers),
-    width: wallData.buildBlockFormState.thermalsert.width,
+    nLayers: parseIntegerInput(formState.thermalsert.nLayers),
+    width: formState.thermalsert.width,
   };
 
-  return new Wall(
+  const wall = new Wall(
     wallType,
     dimensions,
     corners,
@@ -90,4 +86,6 @@ export const parseWall = (wallData: any): Wall => {
     coldJointPin,
     thermalserts
   );
+
+  return wall;
 };

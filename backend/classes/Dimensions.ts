@@ -13,6 +13,10 @@ class Dimensions {
   }
 
   getSurfaceArea(): number {
+    return this.height * this.length;
+  }
+
+  getRowSurfaceArea(): number {
     return this.getNCourses() * getBlockSpecifications("straight", this.width).height * this.length;
   }
 

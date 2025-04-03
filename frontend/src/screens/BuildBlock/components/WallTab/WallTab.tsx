@@ -10,7 +10,7 @@ import {
   WallState,
   WallAction,
 } from "../../types/BBTypes";
-import { buildBlockFormReducer, initialWallState } from "../../reducer";
+import { buildBlockFormReducer, initialOpeningState, initialWallState } from "../../reducer";
 import { Tab, Tabs, IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SingleInputDialog from "src/components/SingleInputDialog";
@@ -67,6 +67,7 @@ const WallTab: React.FC<WallTabProps> = ({
     const { clickedWallIndex, walls } = wallState;
     if (walls.length === 1) {
       wallDispatch({ type: "setWalls", payload: initialWallState });
+      openingDispatch({ type: "setOpenings", payload: initialOpeningState });
       buildBlockFormDispatch({ type: "resetInputs" });
       return;
     }
@@ -82,6 +83,11 @@ const WallTab: React.FC<WallTabProps> = ({
         buildBlockFormDispatch({
           type: "setInputs",
           payload: updatedWalls[newClickedIndex].buildBlockFormState,
+        });
+
+        openingDispatch({
+          type: "setOpenings",
+          payload: updatedWalls[newClickedIndex].openingState,
         });
       }
 
@@ -201,10 +207,15 @@ const WallTab: React.FC<WallTabProps> = ({
         open={editingIndex !== null}
         onClose={() => {
           setEditingIndex(null);
+          setNewName("");
         }}
-        onSubmit={handleSubmit}
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+          setNewName("");
+          handleSubmit(e);
+        }}
         onCancel={() => {
           setEditingIndex(null);
+          setNewName("");
         }}
       >
         <TextField
