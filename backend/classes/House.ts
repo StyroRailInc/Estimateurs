@@ -52,11 +52,21 @@ class House {
     }
   }
 
+  private roundBlockQuantities() {
+    for (const width of typedKeys(this.hs.blockQuantities)) {
+      for (const blockType of typedKeys(this.hs.blockQuantities[width])) {
+        const block = this.hs.blockQuantities[width][blockType];
+        block.quantity = Math.ceil(block.quantity);
+      }
+    }
+  }
+
   computeHouse(): HouseSpecifications {
     for (let wall of this.walls) {
       const wallBlockQuantities = wall.computeWall();
       this.adjustBlockQuantities(wallBlockQuantities);
     }
+    this.roundBlockQuantities();
     this.computeBundleQuantity();
 
     this.hs.clips = { quantity: this.nBlocks, nBundles: Math.ceil(this.nBlocks / 200) };

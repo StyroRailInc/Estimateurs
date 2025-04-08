@@ -13,6 +13,8 @@ export const parseWall = (wallData: any): Wall => {
   const { buildBlockFormState: formState, openingState: openingsState } = wallData;
   const wallType = formState.wallType as WallType;
 
+  tryApplyPinionWallFilter(formState, openingsState, wallType);
+
   const dimensions = new Dimensions(
     parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
     parseInput(formState.length, IS_FEET, !EMPTY_STRING_VALID),
@@ -80,3 +82,15 @@ export const parseWall = (wallData: any): Wall => {
 
   return new Wall(wallConfig, wallMaterials);
 };
+
+function tryApplyPinionWallFilter(formState: any, openingsState: any, wallType: WallType) {
+  if (!(wallType === "Pign")) return;
+  formState.nInsideCorners = "0";
+  formState.n45InsideCorners = "0";
+  formState.nOutsideCorners = "0";
+  formState.n90OutsideCorners = "0";
+  formState.doubleTaperTop.nCorners = "0";
+  formState.doubleTaperTop.length = "";
+  formState.brickLedge.nCorners = "0";
+  formState.brickLedge.n45Corners = "0";
+}

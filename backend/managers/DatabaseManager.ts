@@ -106,9 +106,7 @@ class DatabaseManager {
       return false;
     }
 
-    const updatedSumbissions = buildBlock.filter(
-      (submission: any) => submission.name !== submissionName
-    );
+    const updatedSumbissions = buildBlock.filter((submission: any) => submission.name !== submissionName);
 
     const params = {
       TableName: this.table,
@@ -128,24 +126,6 @@ class DatabaseManager {
   }
 
   async updateSubmissions(user: Record<string, AttributeValue>, submissions: object) {
-    const params = {
-      TableName: this.table,
-      Key: { Email: user.Email.S, UserID: user.UserID.S },
-      UpdateExpression: "set #buildblock = :buildblock",
-      ExpressionAttributeNames: { "#buildblock": "buildblock" },
-      ExpressionAttributeValues: { ":buildblock": JSON.stringify(submissions) },
-      ReturnValues: "ALL_NEW" as const,
-    };
-
-    try {
-      await this.dynamodb.send(new UpdateCommand(params));
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async replaceSubmissions(user: Record<string, AttributeValue>, submissions: object) {
     const params = {
       TableName: this.table,
       Key: { Email: user.Email.S, UserID: user.UserID.S },

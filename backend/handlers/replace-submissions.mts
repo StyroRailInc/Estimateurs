@@ -56,7 +56,7 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
     });
   }
 
-  const isReplacedSubmissions = await databaseManager.replaceSubmissions(user, submissions);
+  const isReplacedSubmissions = await databaseManager.updateSubmissions(user, submissions);
 
   if (isReplacedSubmissions) {
     return jsonResponse(HTTP_STATUS.SUCCESS);

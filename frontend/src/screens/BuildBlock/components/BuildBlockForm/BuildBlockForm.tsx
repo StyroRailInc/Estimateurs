@@ -7,12 +7,7 @@ import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
 import { InnerPage, WallState } from "../../types/BBTypes";
-import {
-  openingReducer,
-  initialOpeningState,
-  buildBlockFormReducer,
-  initialBuildBlockFormState,
-} from "./../../reducer";
+import { openingReducer, initialOpeningState, buildBlockFormReducer, initialBuildBlockFormState } from "./../../reducer";
 import WallTab from "../WallTab";
 import { wallReducer, initialWallState } from "../../reducer";
 
@@ -275,87 +270,90 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             </Button>
           </div>
         </Drawer>
-        {buildBlockFormState.wallType !== "KD" &&
-          ['6"', '8"'].includes(buildBlockFormState.width) && (
-            <Drawer title={t("Support à Maçon")} isOpen>
-              <label htmlFor="brick-ledge-length">{t("Longueur")}</label>
-              <FormTextField
-                id="brick-ledge-length"
-                fullWidth
-                size="small"
-                className="input-spacing"
-                value={buildBlockFormState.brickLedge.length}
-                onChange={(e) => {
-                  buildBlockFormDispatch({
-                    type: "setBrickLedgeLength",
-                    payload: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
-              <FormTextField
-                id="brick-ledge-90"
-                fullWidth
-                size="small"
-                className="input-spacing"
-                value={buildBlockFormState.brickLedge.nCorners}
-                onChange={(e) => {
-                  buildBlockFormDispatch({
-                    type: "setBrickLedgeNCorners",
-                    payload: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
-              <FormTextField
-                id="brick-ledge-45"
-                fullWidth
-                size="small"
-                className="input-spacing"
-                value={buildBlockFormState.brickLedge.n45Corners}
-                onChange={(e) => {
-                  buildBlockFormDispatch({
-                    type: "setBrickLedgeN45Corners",
-                    payload: e.target.value,
-                  });
-                }}
-              />
-            </Drawer>
-          )}
-        {buildBlockFormState.wallType !== "KD" &&
-          ['6"', '8"'].includes(buildBlockFormState.width) &&
-          !(buildBlockFormState.wallType === "Pign") && (
-            <Drawer title={t("Double Biseau")} isOpen>
-              <label htmlFor="double-taper-length">{t("Longueur")}</label>
-              <FormTextField
-                id="double-taper-length"
-                fullWidth
-                size="small"
-                className="input-spacing"
-                value={buildBlockFormState.doubleTaperTop.length}
-                onChange={(e) => {
-                  buildBlockFormDispatch({
-                    type: "setDoubleTaperTopLength",
-                    payload: e.target.value,
-                  });
-                }}
-              />
-              <label htmlFor="double-taper-90">{t("Coins")}</label>
-              <FormTextField
-                id="double-taper-90"
-                fullWidth
-                size="small"
-                className="input-spacing"
-                value={buildBlockFormState.doubleTaperTop.nCorners}
-                onChange={(e) => {
-                  buildBlockFormDispatch({
-                    type: "setDoubleTaperTopNCorners",
-                    payload: e.target.value,
-                  });
-                }}
-              />
-            </Drawer>
-          )}
+        {buildBlockFormState.wallType !== "KD" && ['6"', '8"'].includes(buildBlockFormState.width) && (
+          <Drawer title={t("Support à Maçon")} isOpen>
+            <label htmlFor="brick-ledge-length">{t("Longueur")}</label>
+            <FormTextField
+              id="brick-ledge-length"
+              fullWidth
+              size="small"
+              className="input-spacing"
+              value={buildBlockFormState.brickLedge.length}
+              onChange={(e) => {
+                buildBlockFormDispatch({
+                  type: "setBrickLedgeLength",
+                  payload: e.target.value,
+                });
+              }}
+            />
+
+            {!(buildBlockFormState.wallType === "Pign") && (
+              <>
+                <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
+                <FormTextField
+                  id="brick-ledge-90"
+                  fullWidth
+                  size="small"
+                  className="input-spacing"
+                  value={buildBlockFormState.brickLedge.nCorners}
+                  onChange={(e) => {
+                    buildBlockFormDispatch({
+                      type: "setBrickLedgeNCorners",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+                <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
+                <FormTextField
+                  id="brick-ledge-45"
+                  fullWidth
+                  size="small"
+                  className="input-spacing"
+                  value={buildBlockFormState.brickLedge.n45Corners}
+                  onChange={(e) => {
+                    buildBlockFormDispatch({
+                      type: "setBrickLedgeN45Corners",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+              </>
+            )}
+          </Drawer>
+        )}
+        {buildBlockFormState.wallType !== "KD" && ['6"', '8"'].includes(buildBlockFormState.width) && !(buildBlockFormState.wallType === "Pign") && (
+          <Drawer title={t("Double Biseau")} isOpen>
+            <label htmlFor="double-taper-length">{t("Longueur")}</label>
+            <FormTextField
+              id="double-taper-length"
+              fullWidth
+              size="small"
+              className="input-spacing"
+              value={buildBlockFormState.doubleTaperTop.length}
+              onChange={(e) => {
+                buildBlockFormDispatch({
+                  type: "setDoubleTaperTopLength",
+                  payload: e.target.value,
+                });
+              }}
+            />
+
+            <label htmlFor="double-taper-90">{t("Coins")}</label>
+            <FormTextField
+              id="double-taper-90"
+              fullWidth
+              size="small"
+              className="input-spacing"
+              value={buildBlockFormState.doubleTaperTop.nCorners}
+              onChange={(e) => {
+                buildBlockFormDispatch({
+                  type: "setDoubleTaperTopNCorners",
+                  payload: e.target.value,
+                });
+              }}
+            />
+          </Drawer>
+        )}
         <Drawer title={t("Insertions Isolantes")} isOpen>
           <label htmlFor="thermalsert-layer-quantity">{t("Nombre de couches")}</label>
           <FormTextField

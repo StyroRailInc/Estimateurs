@@ -8,7 +8,7 @@ import {
   HouseSpecifications,
   BLOCK_TYPES,
   BlockType,
-} from "../classes/types";
+} from "../classes/types.js";
 
 export function createRebarQuantities(): RebarQuantities {
   return {
@@ -54,7 +54,3 @@ export function createHouseSpecifications(): HouseSpecifications {
 function createDefaultQuantity(): Quantity {
   return { quantity: 0, nBundles: 0 };
 }
-
-// function createDefaultRebarQuantity(): RebarQuantity {
-//   return { type: "0.5", quantity: 0 };
-// }

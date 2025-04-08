@@ -23,7 +23,7 @@ class CornerBase {
   }
 
   getConcreteVolume(blockType: BlockType) {
-    return this.getTotal() * getBlockSpecifications(blockType, this.width).concreteVolume;
+    return getBlockSpecifications(blockType, this.width).concreteVolume;
   }
 
   getTotalSurfaceArea(blockType: BlockType) {
@@ -46,6 +46,7 @@ class NinetyDegreeCorner extends CornerBase {
   }
 
   getConcreteVolume() {
+    console.log("corner90", super.getConcreteVolume("ninetyCorner"));
     if (this.wallType === "KD") return super.getConcreteVolume("kdNinetyCorner");
     return super.getConcreteVolume("ninetyCorner");
   }
@@ -69,29 +70,19 @@ class Corners {
   private ninetyDegreeCorner: NinetyDegreeCorner;
   private fortyFiveDegreeCorner: FortyFiveDegreeCorner;
 
-  constructor(
-    nInside90: number,
-    nOutside90: number,
-    nInside45: number,
-    nOutside45: number,
-    width: Width,
-    wallType: WallType
-  ) {
+  constructor(nInside90: number, nOutside90: number, nInside45: number, nOutside45: number, width: Width, wallType: WallType) {
     this.ninetyDegreeCorner = new NinetyDegreeCorner(nInside90, nOutside90, width, wallType);
     this.fortyFiveDegreeCorner = new FortyFiveDegreeCorner(nInside45, nOutside45, width, wallType);
   }
 
   getTotalSurfaceArea() {
-    return (
-      this.ninetyDegreeCorner.getTotalSurfaceArea() +
-      this.fortyFiveDegreeCorner.getTotalSurfaceArea()
-    );
+    return this.ninetyDegreeCorner.getTotalSurfaceArea() + this.fortyFiveDegreeCorner.getTotalSurfaceArea();
   }
 
-  getTotalConcreteVolume() {
-    return (
-      this.ninetyDegreeCorner.getConcreteVolume() + this.fortyFiveDegreeCorner.getConcreteVolume()
-    );
+  getTotalConcreteVolume(totalNinetyCorners: number, totalFortyFiveCorners: number) {
+    const ninetyCornersConcreteVolume = totalNinetyCorners * this.ninetyDegreeCorner.getConcreteVolume();
+    const fortyFiveCornersConcreteVolume = totalFortyFiveCorners * this.fortyFiveDegreeCorner.getConcreteVolume();
+    return ninetyCornersConcreteVolume + fortyFiveCornersConcreteVolume;
   }
 
   getTotal90() {

@@ -2,7 +2,7 @@ import { BlockQuantities, BlockType, BridgeQuantities, HouseSpecifications } fro
 import getBlockSpecifications from "./BlockSpecifications.js";
 import { WallConfig, WallMaterials } from "./types.js";
 import { roundNumber } from "../utils/roundNumber.js";
-import { createBlockQuantities, createBridgeQuantities, createHouseSpecifications, createRebarQuantities } from "../utils/createObject.js";
+import { createBlockQuantities, createBridgeQuantities, createHouseSpecifications } from "../utils/createObject.js";
 
 class Wall {
   private nCourses: number = 0;
@@ -12,16 +12,17 @@ class Wall {
   constructor(private wConfig: WallConfig, private wm: WallMaterials) {}
 
   computeWall(): HouseSpecifications {
-    const width = this.wConfig.dimensions.width;
     this.nCourses = this.wConfig.dimensions.getNCourses();
     let openingSurfaceArea = this.getOpeningSurfaceArea();
+
+    this.wConfig.dimensions.tryApplyPinion(this.wConfig.wallType);
 
     this.computeOpenings(openingSurfaceArea);
     this.computeBlockQuantities();
     this.adjustDttQuantities();
 
     const nBlocks = this.computeTotalBlocks();
-    this.hs.blockQuantities[width].thermalsert.quantity = this.wm.thermalserts.nLayers * nBlocks;
+    this.hs.blockQuantities[this.wConfig.dimensions.width].thermalsert.quantity = this.wm.thermalserts.nLayers * nBlocks;
 
     this.computeRebars();
     this.computeClips(nBlocks);
@@ -33,12 +34,12 @@ class Wall {
   }
 
   private computeOpenings(openingSurfaceArea: number) {
-    this.remainingSurfaceArea = this.wConfig.dimensions.getCoursesSurfaceArea(this.wConfig.wallType);
+    this.remainingSurfaceArea = this.wConfig.dimensions.getCoursesSurfaceArea();
     let openingPerimeter = this.getOpeningPerimeter();
+    console.log("surface area", this.remainingSurfaceArea, openingSurfaceArea);
 
     this.remainingSurfaceArea -= openingSurfaceArea;
     this.remainingSurfaceArea -= this.wm.corners.getTotalSurfaceArea() * this.nCourses;
-    this.remainingSurfaceArea += this.wm.specialBlocks.getTotalSurfaceArea();
 
     this.wm.specialBlocks.setBuckLength(openingPerimeter);
   }
@@ -58,6 +59,7 @@ class Wall {
     bq.straight.quantity =
       this.getTotalStraight("straight") + this.wm.specialBlocks.getBrickLedgeN45Corners() + this.wm.specialBlocks.getBrickLedgeNCorners();
     bq.ninetyCorner.quantity = this.getTotalNinetyCorner("ninetyCorner") - this.wm.specialBlocks.getBrickLedgeNCorners();
+
     bq.fortyFiveCorner.quantity = Math.ceil(this.wm.corners.getTotal45() * this.nCourses) - this.wm.specialBlocks.getBrickLedgeN45Corners();
     bq.doubleTaperTop.quantity = this.wm.specialBlocks.getTotalDoubleTaperTop() + this.wm.specialBlocks.getDoubleTaperTopNCorners();
     bq.brickLedge.quantity = this.wm.specialBlocks.getTotalBrickLedge();
@@ -67,7 +69,7 @@ class Wall {
   }
 
   private computeSquareFootage(openingSurfaceArea: number) {
-    this.hs.squareFootage.gross = roundNumber(Math.round(this.wConfig.dimensions.height * this.wConfig.dimensions.length) / 144);
+    this.hs.squareFootage.gross = roundNumber(Math.round(this.wConfig.dimensions.getSurfaceArea()) / 144);
     this.hs.squareFootage.net = roundNumber(this.hs.squareFootage.gross - ((openingSurfaceArea / 8) * 10) / 144);
     this.hs.squareFootage.opening = roundNumber(((openingSurfaceArea / 8) * 10) / 144);
   }
@@ -89,12 +91,13 @@ class Wall {
 
   private computeConcreteVolume() {
     const width = this.wConfig.dimensions.width;
+    const bq = this.hs.blockQuantities[width];
     const straight = getBlockSpecifications("straight", this.wConfig.dimensions.width);
-    const cornerConcreteVolume = this.wm.corners.getTotalConcreteVolume() * this.nCourses;
-    const specialBlockConcreteVolume = this.wm.specialBlocks.getTotalConcreteVolume() * this.nCourses;
-    const straightConcreteVolume = this.hs.blockQuantities[width].straight.quantity * straight.concreteVolume;
-    const kdStraightConcreteVolume = this.hs.blockQuantities[width].kdStraight.quantity * straight.concreteVolume;
-    this.hs.concreteVolume = cornerConcreteVolume + specialBlockConcreteVolume + straightConcreteVolume + kdStraightConcreteVolume;
+    const cornersConcreteVolume = this.wm.corners.getTotalConcreteVolume(bq.ninetyCorner.quantity, bq.fortyFiveCorner.quantity);
+    const specialBlocksConcreteVolume = this.wm.specialBlocks.getTotalConcreteVolume(bq.brickLedge.quantity, bq.doubleTaperTop.quantity);
+    const straightConcreteVolume = bq.straight.quantity * straight.concreteVolume;
+    const kdStraightConcreteVolume = bq.kdStraight.quantity * straight.concreteVolume;
+    this.hs.concreteVolume = cornersConcreteVolume + specialBlocksConcreteVolume + straightConcreteVolume + kdStraightConcreteVolume;
   }
 
   private computeClips(nBlocks: number) {
@@ -110,7 +113,9 @@ class Wall {
 
   private getTotalStraight(blockType: BlockType) {
     const straight = getBlockSpecifications("straight", this.wConfig.dimensions.width);
-    if (blockType === "straight" && this.wConfig.wallType !== "KD") return Math.ceil(this.remainingSurfaceArea / straight.surfaceArea.ext);
+    const specialBlocks = this.wm.specialBlocks.getTotalDoubleTaperTop() + this.wm.specialBlocks.getTotalBrickLedge();
+    if (blockType === "straight" && this.wConfig.wallType !== "KD")
+      return Math.ceil(this.remainingSurfaceArea / straight.surfaceArea.ext) - specialBlocks;
     if (blockType === "kdStraight" && this.wConfig.wallType === "KD") return Math.ceil(this.remainingSurfaceArea / straight.surfaceArea.ext) * 2;
     return 0;
   }
@@ -123,8 +128,6 @@ class Wall {
   }
 
   private getOpeningPerimeter(): number {
-    // let buckWidthSurfaceArea = 0;
-    // if (opening.getPerimeter()) buckWidthSurfaceArea += 4 * buck.height * opening.quantity; //I am not sure if i should keep this
     return this.wm.openings.reduce((total, opening) => total + opening.perimeter, 0);
   }
 

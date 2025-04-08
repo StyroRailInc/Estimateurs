@@ -269,7 +269,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.014999421, // Concrete displacement
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 150,
+      qtyPerBundle: 75, // used to be 150
     },
     '2"': {
       length: { ext: 48, int: 48 },
@@ -285,7 +285,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.060009709, // Concrete displacement
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 36,
+      qtyPerBundle: 75, // used to be 36
     },
     '6"': {
       length: { ext: 48, int: 48 },
@@ -293,7 +293,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.090008553, // Concrete displacement APPROXIMATION
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 25,
+      qtyPerBundle: 75, // used to be 25
     },
     '8"': {
       length: { ext: 48, int: 48 },
@@ -301,7 +301,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.120019418, // Concrete displacement APPROXIMATION
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 18,
+      qtyPerBundle: 75, // used to be 18
     },
   },
 };

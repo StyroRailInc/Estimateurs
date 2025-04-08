@@ -10,14 +10,6 @@ class SpecialBlockBase {
     this.width = width;
   }
 
-  getSurfaceArea(blockType: BlockType) {
-    return getBlockSpecifications(blockType, this.width).height * this.length;
-  }
-
-  getBlockSurfaceArea(blockType: BlockType) {
-    return getBlockSpecifications(blockType, this.width).surfaceArea.ext;
-  }
-
   getBlockLength(blockType: BlockType) {
     return getBlockSpecifications(blockType, this.width).length.ext;
   }
@@ -41,12 +33,12 @@ class BrickLedge extends SpecialBlockBase {
     this.n45Corners = n45Corners;
   }
 
-  getSurfaceArea() {
-    return super.getSurfaceArea("brickLedge");
+  getBlockLength() {
+    return super.getBlockLength("brickLedge");
   }
 
-  getBlockSurfaceArea() {
-    return super.getBlockSurfaceArea("brickLedge");
+  getLength() {
+    return this.length;
   }
 
   getConcreteVolume() {
@@ -61,12 +53,12 @@ class DoubleTaperTop extends SpecialBlockBase {
     this.nCorners = nCorners;
   }
 
-  getSurfaceArea() {
-    return super.getSurfaceArea("doubleTaperTop");
+  getBlockLength() {
+    return super.getBlockLength("doubleTaperTop");
   }
 
-  getBlockSurfaceArea() {
-    return super.getBlockSurfaceArea("doubleTaperTop");
+  getLength() {
+    return this.length;
   }
 
   getConcreteVolume() {
@@ -103,12 +95,7 @@ class SpecialBlocks {
     width: Width
   ) {
     this.doubleTaperTop = new DoubleTaperTop(doubleTaperTopLength, width, doubleTaperTopNCorners);
-    this.brickLedge = new BrickLedge(
-      brickLedgeLength,
-      width,
-      brickLedgeNCorners,
-      brickLedgeN45Corners
-    );
+    this.brickLedge = new BrickLedge(brickLedgeLength, width, brickLedgeNCorners, brickLedgeN45Corners);
     this.buck = new Buck(buckLength, width);
   }
 
@@ -124,36 +111,30 @@ class SpecialBlocks {
     return this.brickLedge.n45Corners;
   }
 
-  getTotalSurfaceArea() {
-    return this.doubleTaperTop.getSurfaceArea() + this.brickLedge.getSurfaceArea();
-  }
-
   getTotalBrickLedge() {
-    const total = Math.ceil(
-      this.brickLedge.getSurfaceArea() / this.brickLedge.getBlockSurfaceArea()
-    );
+    const total = Math.ceil(this.brickLedge.getLength() / this.brickLedge.getBlockLength());
     if (Number.isNaN(total)) return 0;
     else return total;
   }
 
   getTotalDoubleTaperTop() {
-    const total = Math.ceil(
-      this.doubleTaperTop.getSurfaceArea() / this.doubleTaperTop.getBlockSurfaceArea()
-    );
+    const total = Math.ceil(this.doubleTaperTop.getLength() / this.doubleTaperTop.getBlockLength());
     if (Number.isNaN(total)) return 0;
     else return total;
   }
 
   getTotalBuck() {
-    return Math.ceil(this.buck.getLength() / this.buck.getBlockLength());
+    return this.buck.getLength() / this.buck.getBlockLength();
   }
 
   setBuckLength(length: number) {
     this.buck.setLength(length);
   }
 
-  getTotalConcreteVolume() {
-    return this.doubleTaperTop.getConcreteVolume() + this.brickLedge.getConcreteVolume();
+  getTotalConcreteVolume(totalBrickLedge: number, totalDoubleTaperTop: number) {
+    const brickLedgeConcreteVolume = totalBrickLedge * this.brickLedge.getConcreteVolume();
+    const doubleTaperTopConcreteVolume = totalDoubleTaperTop * this.doubleTaperTop.getConcreteVolume();
+    return brickLedgeConcreteVolume + doubleTaperTopConcreteVolume;
   }
 }
 
