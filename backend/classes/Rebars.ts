@@ -1,4 +1,4 @@
-import { WallType } from "./types";
+import { RebarQuantity, RebarSize, WallType } from "./types";
 
 class Rebar {
   readonly type;
@@ -28,16 +28,13 @@ export class HorizontalRebar extends Rebar {
     this.nRows = nRows;
   }
 
-  computeHorizontalRebars(wallType: WallType) {
+  computeHorizontalRebars(wallType: WallType): RebarQuantity {
     let multplier = 1;
     if (wallType === "Pign") multplier = 0.5;
     return {
-      type: this.type.toString(),
+      type: this.type.toString() as RebarSize,
       quantity: Math.ceil(
-        ((this.wallLength * this.nRows * (1 + (this.getSpacing() * 2) / this.barLength)) /
-          this.barLength /
-          this.nInchesInFoot) *
-          multplier
+        ((this.wallLength * this.nRows * (1 + (this.getSpacing() * 2) / this.barLength)) / this.barLength / this.nInchesInFoot) * multplier
       ),
     };
   }
@@ -51,11 +48,11 @@ export class VerticalRebar extends Rebar {
     this.verticalSpacing = verticalSpacing;
   }
 
-  computeVerticalRebars(wallType: WallType) {
+  computeVerticalRebars(wallType: WallType): RebarQuantity {
     let multplier = 1;
     if (wallType === "Pign") multplier = 0.5;
     return {
-      type: this.type.toString(),
+      type: this.type.toString() as RebarSize,
       quantity: Math.ceil(
         (((this.getSpacing() + this.wallHeight / this.nInchesInFoot) * this.wallLength) /
           (this.verticalSpacing / this.nInchesInFoot) /
@@ -73,14 +70,7 @@ export class ColdJointPin extends Rebar {
   readonly depthInFooting;
   readonly BEND_RADIUS = 6;
 
-  constructor(
-    type: number,
-    wallHeight: number,
-    wallLength: number,
-    centerSpacing: number,
-    lLength: number,
-    depthInFooting: number
-  ) {
+  constructor(type: number, wallHeight: number, wallLength: number, centerSpacing: number, lLength: number, depthInFooting: number) {
     super(type, wallHeight, wallLength);
     this.centerSpacing = centerSpacing;
     this.lLength = lLength;
@@ -108,15 +98,12 @@ export class ColdJointPin extends Rebar {
     return this.wallLength / this.centerSpacing;
   }
 
-  computeColdJointPins(wallType: WallType) {
+  computeColdJointPins(wallType: WallType): RebarQuantity {
     let multplier = 1;
     if (wallType === "Pign") multplier = 0.5;
     return {
-      type: this.type.toString(),
-      quantity: Math.ceil(
-        (multplier * this.getNBarColumns() * this.getHeight()) /
-          (this.barLength * this.nInchesInFoot)
-      ),
+      type: this.type.toString() as RebarSize,
+      quantity: Math.ceil((multplier * this.getNBarColumns() * this.getHeight()) / (this.barLength * this.nInchesInFoot)),
     };
   }
 }

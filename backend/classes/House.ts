@@ -1,96 +1,54 @@
 import Wall from "./Wall.js";
-import {
-  BlockType,
-  BlockQuantities,
-  WallSpecifications,
-  HouseSpecifications,
-  BridgeQuantities,
-} from "./types.js";
+import { BlockType, HouseSpecifications, BridgeQuantities, RebarQuantities, SquareFootage, Width } from "./types.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
+import { createBlockQuantities, createBridgeQuantities, createHouseSpecifications } from "../utils/createObject.js";
+import { typedKeys } from "../utils/typedKeys.js";
 
 class House {
-  private walls: Wall[];
-  private blockQuantities: BlockQuantities = {};
-  private concreteVolume = 0;
-  private squareFootage = {
-    gross: 0,
-    net: 0,
-    opening: 0,
-  };
-  private nBlocks = 0;
-  private bridges: BridgeQuantities = {};
-  private rebars: Record<string, number> = {
-    "0.375": 0,
-    "0.5": 0,
-    "0.625": 0,
-    "0.75": 0,
-    "0.875": 0,
-    "1": 0,
-  };
-  private CONCRETE_VOLUME_CONVERSION_FACTOR = 0.7645;
+  private nBlocks: number = 0;
+  private hs: HouseSpecifications = createHouseSpecifications();
+  private CONCRETE_VOLUME_CONVERSION_FACTOR = 1.308;
 
-  constructor(walls: Wall[]) {
-    this.walls = walls;
-  }
+  constructor(private walls: Wall[]) {}
 
-  private adjustBlockQuantities(wallSpecifications: WallSpecifications) {
-    const {
-      width,
-      blockQuantities: sourceQuantities,
-      horizontalRebars,
-      verticalRebars,
-      coldJointPins,
-      concreteVolume,
-      bridges,
-      nBlocks,
-      squareFootage,
-    } = wallSpecifications;
+  private adjustBlockQuantities(ws: HouseSpecifications) {
+    const [widthKey] = Object.entries(ws.blockQuantities)[0];
+    const width = widthKey as Width;
 
-    if (!this.blockQuantities[width]) {
-      this.blockQuantities[width] = {
-        straight: { quantity: 0, nBundles: 0 },
-        ninetyCorner: { quantity: 0, nBundles: 0 },
-        fortyFiveCorner: { quantity: 0, nBundles: 0 },
-        doubleTaperTop: { quantity: 0, nBundles: 0 },
-        brickLedge: { quantity: 0, nBundles: 0 },
-        buck: { quantity: 0, nBundles: 0 },
-        thermalsert: { quantity: 0, nBundles: 0 },
-        kdStraight: { quantity: 0, nBundles: 0 },
-        kdNinetyCorner: { quantity: 0, nBundles: 0 },
-      };
-
-      this.bridges[width] = { quantity: 0, nBundles: 0 };
+    if (!this.hs.blockQuantities[width]) {
+      this.hs.blockQuantities = createBlockQuantities(this.hs.blockQuantities, width);
+      this.hs.bridges = createBridgeQuantities(this.hs.bridges, width);
     }
 
-    for (const blockType in sourceQuantities) {
-      const block = blockType as BlockType;
-      const quantity = sourceQuantities[block];
-      this.blockQuantities[width][block].quantity += quantity;
-    }
-
-    this.bridges[width].quantity += bridges;
-    this.rebars[horizontalRebars.type] += horizontalRebars.quantity;
-    this.rebars[verticalRebars.type] += verticalRebars.quantity;
-    this.rebars[coldJointPins.type] += coldJointPins.quantity;
-    this.concreteVolume += concreteVolume;
-    this.nBlocks += nBlocks;
-    this.squareFootage.gross += squareFootage.gross;
-    this.squareFootage.net += squareFootage.net;
-    this.squareFootage.opening += squareFootage.opening;
-  }
-
-  private computeBundleQuantity() {
-    for (const width in this.blockQuantities) {
-      for (const blockType in this.blockQuantities[width]) {
-        const block = this.blockQuantities[width][blockType as BlockType];
-        block.nBundles += Math.ceil(
-          block.quantity / getBlockSpecifications(blockType as BlockType, width).qtyPerBundle
-        );
+    for (const width of typedKeys(ws.blockQuantities)) {
+      for (const blockType of typedKeys(ws.blockQuantities[width])) {
+        const quantity = ws.blockQuantities[width][blockType].quantity;
+        this.hs.blockQuantities[width][blockType].quantity += quantity;
       }
     }
 
-    for (const width in this.bridges) {
-      this.bridges[width].nBundles = Math.ceil(this.bridges[width].quantity / 256);
+    for (const size of typedKeys(ws.rebars)) {
+      this.hs.rebars[size] += ws.rebars[size];
+    }
+
+    this.nBlocks += ws.clips.quantity;
+    this.hs.concreteVolume += ws.concreteVolume;
+    this.hs.squareFootage.net += ws.squareFootage.net;
+    this.hs.squareFootage.gross += ws.squareFootage.gross;
+    this.hs.squareFootage.opening += ws.squareFootage.opening;
+    this.hs.bridges[width].quantity += ws.bridges[width].quantity;
+  }
+
+  private computeBundleQuantity() {
+    for (const width of typedKeys(this.hs.blockQuantities)) {
+      for (const blockType of typedKeys(this.hs.blockQuantities[width])) {
+        const block = this.hs.blockQuantities[width][blockType];
+        block.nBundles += Math.ceil(block.quantity / getBlockSpecifications(blockType as BlockType, width).qtyPerBundle);
+      }
+    }
+
+    for (const width of typedKeys(this.hs.bridges)) {
+      this.hs.bridges[width].nBundles = Math.ceil(this.hs.bridges[width].quantity / 256);
     }
   }
 
@@ -101,15 +59,9 @@ class House {
     }
     this.computeBundleQuantity();
 
-    return {
-      blockQuantities: this.blockQuantities,
-      bridges: this.bridges,
-      clips: { quantity: this.nBlocks, nBundles: Math.ceil(this.nBlocks / 200) },
-      concreteVolume:
-        Math.round((Math.ceil(this.concreteVolume) / 1.308 + Number.EPSILON) * 100) / 100, // To cubic meters instead of cubic yards
-      rebars: this.rebars,
-      squareFootage: this.squareFootage,
-    };
+    this.hs.clips = { quantity: this.nBlocks, nBundles: Math.ceil(this.nBlocks / 200) };
+    this.hs.concreteVolume = Math.round((Math.ceil(this.hs.concreteVolume) / this.CONCRETE_VOLUME_CONVERSION_FACTOR + Number.EPSILON) * 100) / 100; // To cubic meters instead of cubic yards
+    return this.hs;
   }
 }
 

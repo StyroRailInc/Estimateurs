@@ -75,17 +75,8 @@ export const parseWall = (wallData: any): Wall => {
     width: formState.thermalsert.width,
   };
 
-  const wall = new Wall(
-    wallType,
-    dimensions,
-    corners,
-    specialBlocks,
-    openings,
-    horizontalRebar,
-    verticalRebar,
-    coldJointPin,
-    thermalserts
-  );
+  const wallConfig = { wallType, dimensions };
+  const wallMaterials = { corners, specialBlocks, openings, horizontalRebar, verticalRebar, coldJointPin, thermalserts };
 
-  return wall;
+  return new Wall(wallConfig, wallMaterials);
 };
