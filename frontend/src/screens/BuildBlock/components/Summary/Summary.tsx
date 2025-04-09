@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Constants } from "src/constants";
 import { Button } from "@mui/material";
@@ -25,10 +17,9 @@ const Summary: React.FC = () => {
   const { user } = useAuth();
   const [data, setData] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submissionName, setSubmissionName] = useState(
-    sessionStorage.getItem("buildblock-estimation-name")
-  );
+  const [submissionName, setSubmissionName] = useState(sessionStorage.getItem("buildblock-estimation-name"));
   const [error, setError] = useState("");
+  const [saveError, setSaveError] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,13 +45,15 @@ const Summary: React.FC = () => {
       },
       body: JSON.stringify(JSON.parse(estimation).walls),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (response.ok) {
           return response.json();
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message);
         }
       })
       .then((e) => {
-        console.log(JSON.stringify(e));
         setData(e);
       })
       .catch((error) => {
@@ -119,7 +112,7 @@ const Summary: React.FC = () => {
           sessionStorage.removeItem("buildblock-estimation-name");
           setIsModalOpen(false);
         } else if (response.status === HTTP_STATUS.CONFLICT) {
-          setError("Une soumission avec ce nom existe déjà. Voulez-vous l'écraser?");
+          setSaveError("Une soumission avec ce nom existe déjà. Voulez-vous l'écraser?");
         }
       })
       .catch((error) => {
@@ -134,14 +127,14 @@ const Summary: React.FC = () => {
 
   const handleClose = () => {
     setIsModalOpen(false);
-    setError("");
+    setSaveError("");
   };
 
   const handleCancel = () => {
-    if (!error) {
+    if (!saveError) {
       setIsModalOpen(false);
     } else {
-      setError("");
+      setSaveError("");
     }
   };
 
@@ -149,16 +142,17 @@ const Summary: React.FC = () => {
     { key: "straight", label: t("Bloc droit") },
     { key: "ninetyCorner", label: t("Coin à 90 degrés") },
     { key: "fortyFiveCorner", label: t("Coin à 45 degrés") },
-    { key: "brickLedge", label: t("Support à Maçon") },
-    { key: "doubleTaperTop", label: t("Double Biseau") },
+    { key: "brickLedge", label: t("Support à maçon") },
+    { key: "doubleTaperTop", label: t("Double biseau") },
     { key: "buck", label: t("Buck") },
-    { key: "thermalsert", label: t("Insertion Isolante") },
+    { key: "thermalsert", label: t("Insertion isolante") },
     { key: "kdStraight", label: t("Déconstruit droit") },
     { key: "kdNinetyCorner", label: t("Déconstruit coin à 90 degrés") },
   ];
 
   return (
     <>
+      <h2 className="error">{error}</h2>
       <h2>{t("Blocs")}</h2>
       <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Table>
@@ -174,9 +168,7 @@ const Summary: React.FC = () => {
             <TableBody>
               {blockTypes.map((type) => {
                 const filteredWidths = Object.keys(data["blockQuantities"]).filter(
-                  (width) =>
-                    data["blockQuantities"][width][type.key] &&
-                    data["blockQuantities"][width][type.key]["quantity"]
+                  (width) => data["blockQuantities"][width][type.key] && data["blockQuantities"][width][type.key]["quantity"]
                 );
 
                 if (filteredWidths.length === 0) return null;
@@ -185,13 +177,9 @@ const Summary: React.FC = () => {
                   const isFirstRow = index === 0;
                   return (
                     <TableRow key={`${type.key}-${width}-${index}`}>
-                      {isFirstRow && (
-                        <TableCell rowSpan={filteredWidths.length}>{type.label}</TableCell>
-                      )}
+                      {isFirstRow && <TableCell rowSpan={filteredWidths.length}>{type.label}</TableCell>}
                       <TableCell>{width}</TableCell>
-                      <TableCell>
-                        {data["blockQuantities"][width][type.key]["quantity"] || 0}
-                      </TableCell>
+                      <TableCell>{data["blockQuantities"][width][type.key]["quantity"] || 0}</TableCell>
                       <TableCell>{data["blockQuantities"][width][type.key]["nBundles"]}</TableCell>
                     </TableRow>
                   );
@@ -247,7 +235,7 @@ const Summary: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <h2>{t("Bridges")}</h2>
+      <h2>{"Bridges"}</h2>
       <TableContainer component={Paper} style={{ marginTop: "20px", marginBottom: "20px" }}>
         <Table>
           <TableHead>
@@ -295,22 +283,22 @@ const Summary: React.FC = () => {
             <TableBody>
               <TableRow>
                 <TableCell>{t("Volume de béton") + " (Net)"}</TableCell>
-                <TableCell>{data["concreteVolume"] + " m3"}</TableCell>
+                <TableCell>{data["concreteVolume"] + " m³"}</TableCell>
                 <TableCell>{"X"}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>{"Square Footage (Brut)"}</TableCell>
-                <TableCell>{data["squareFootage"].gross}</TableCell>
+                <TableCell>{t("Superficie (Brute)")}</TableCell>
+                <TableCell>{data["squareFootage"].gross + " ft²"}</TableCell>
                 <TableCell>{"X"}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>{"Square Footage (Net)"}</TableCell>
-                <TableCell>{data["squareFootage"].net}</TableCell>
+                <TableCell>{t("Superficie (Net)")}</TableCell>
+                <TableCell>{data["squareFootage"].net + " ft²"}</TableCell>
                 <TableCell>{"X"}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>{"Opening Square Footage"}</TableCell>
-                <TableCell>{data["squareFootage"].opening}</TableCell>
+                <TableCell>{t("Superficie des ouvertures")}</TableCell>
+                <TableCell>{data["squareFootage"].opening + " ft²"}</TableCell>
                 <TableCell>{"X"}</TableCell>
               </TableRow>
               <TableRow>
@@ -342,24 +330,11 @@ const Summary: React.FC = () => {
         </Button>
       </div>
 
-      <SingleInputDialog
-        title="Nom de la soumission"
-        open={isModalOpen}
-        onClose={handleClose}
-        onSubmit={handleSubmit}
-        onCancel={handleCancel}
-      >
-        {!error ? (
-          <TextField
-            id="name"
-            fullWidth
-            value={submissionName}
-            onChange={handleInputChange}
-            size="small"
-            required
-          />
+      <SingleInputDialog title="Nom de la soumission" open={isModalOpen} onClose={handleClose} onSubmit={handleSubmit} onCancel={handleCancel}>
+        {!saveError ? (
+          <TextField id="name" fullWidth value={submissionName} onChange={handleInputChange} size="small" required />
         ) : (
-          <p className="error">{t(error)}</p>
+          <p className="error">{t(saveError)}</p>
         )}
       </SingleInputDialog>
     </>

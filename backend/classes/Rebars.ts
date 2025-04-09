@@ -1,18 +1,15 @@
 import { RebarQuantity, RebarSize, WallType } from "./types";
 
 class Rebar {
-  readonly type;
-  readonly wallHeight;
-  readonly wallLength;
   readonly barLength = 20;
 
   readonly excelFileConstant = 40; // Conventionally 40 times rebar diameter
   readonly nInchesInFoot = 12;
 
-  constructor(type: number, wallHeight: number, wallLength: number) {
-    this.type = type;
-    this.wallHeight = wallHeight;
-    this.wallLength = wallLength;
+  protected pinionMultiplier = 1;
+
+  constructor(readonly type: number, readonly wallHeight: number, readonly wallLength: number, readonly wallType: WallType) {
+    if (wallType === "Pign") this.pinionMultiplier = 0.5;
   }
 
   getSpacing() {
@@ -23,18 +20,17 @@ class Rebar {
 export class HorizontalRebar extends Rebar {
   private nRows;
 
-  constructor(type: number, wallHeight: number, wallLength: number, nRows: number) {
-    super(type, wallHeight, wallLength);
+  constructor(type: number, wallHeight: number, wallLength: number, nRows: number, wallType: WallType) {
+    super(type, wallHeight, wallLength, wallType);
     this.nRows = nRows;
   }
 
-  computeHorizontalRebars(wallType: WallType): RebarQuantity {
-    let multplier = 1;
-    if (wallType === "Pign") multplier = 0.5;
+  computeHorizontalRebars(): RebarQuantity {
     return {
       type: this.type.toString() as RebarSize,
       quantity: Math.ceil(
-        ((this.wallLength * this.nRows * (1 + (this.getSpacing() * 2) / this.barLength)) / this.barLength / this.nInchesInFoot) * multplier
+        ((this.wallLength * this.nRows * (1 + (this.getSpacing() * 2) / this.barLength)) / this.barLength / this.nInchesInFoot) *
+          this.pinionMultiplier
       ),
     };
   }
@@ -43,14 +39,12 @@ export class HorizontalRebar extends Rebar {
 export class VerticalRebar extends Rebar {
   private verticalSpacing;
 
-  constructor(type: number, wallHeight: number, wallLength: number, verticalSpacing: number) {
-    super(type, wallHeight, wallLength);
+  constructor(type: number, wallHeight: number, wallLength: number, verticalSpacing: number, wallType: WallType) {
+    super(type, wallHeight, wallLength, wallType);
     this.verticalSpacing = verticalSpacing;
   }
 
-  computeVerticalRebars(wallType: WallType): RebarQuantity {
-    let multplier = 1;
-    if (wallType === "Pign") multplier = 0.5;
+  computeVerticalRebars(): RebarQuantity {
     return {
       type: this.type.toString() as RebarSize,
       quantity: Math.ceil(
@@ -58,7 +52,7 @@ export class VerticalRebar extends Rebar {
           (this.verticalSpacing / this.nInchesInFoot) /
           this.barLength /
           this.nInchesInFoot) *
-          multplier
+          this.pinionMultiplier
       ),
     };
   }
@@ -70,8 +64,16 @@ export class ColdJointPin extends Rebar {
   readonly depthInFooting;
   readonly BEND_RADIUS = 6;
 
-  constructor(type: number, wallHeight: number, wallLength: number, centerSpacing: number, lLength: number, depthInFooting: number) {
-    super(type, wallHeight, wallLength);
+  constructor(
+    type: number,
+    wallHeight: number,
+    wallLength: number,
+    centerSpacing: number,
+    lLength: number,
+    depthInFooting: number,
+    wallType: WallType
+  ) {
+    super(type, wallHeight, wallLength, wallType);
     this.centerSpacing = centerSpacing;
     this.lLength = lLength;
     this.depthInFooting = depthInFooting;
@@ -98,12 +100,10 @@ export class ColdJointPin extends Rebar {
     return this.wallLength / this.centerSpacing;
   }
 
-  computeColdJointPins(wallType: WallType): RebarQuantity {
-    let multplier = 1;
-    if (wallType === "Pign") multplier = 0.5;
+  computeColdJointPins(): RebarQuantity {
     return {
       type: this.type.toString() as RebarSize,
-      quantity: Math.ceil((multplier * this.getNBarColumns() * this.getHeight()) / (this.barLength * this.nInchesInFoot)),
+      quantity: Math.ceil((this.pinionMultiplier * this.getNBarColumns() * this.getHeight()) / (this.barLength * this.nInchesInFoot)),
     };
   }
 }

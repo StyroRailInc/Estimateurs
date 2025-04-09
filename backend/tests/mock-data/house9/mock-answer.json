@@ -1,26 +1,28 @@
 {
   "blockQuantities": {
-    "8\"": {
-      "straight": { "quantity": 376, "nBundles": 32 },
+    "12\"": {
+      "straight": { "quantity": 0, "nBundles": 0 },
       "ninetyCorner": { "quantity": 0, "nBundles": 0 },
       "fortyFiveCorner": { "quantity": 0, "nBundles": 0 },
       "doubleTaperTop": { "quantity": 0, "nBundles": 0 },
       "brickLedge": { "quantity": 0, "nBundles": 0 },
       "buck": { "quantity": 0, "nBundles": 0 },
       "thermalsert": { "quantity": 0, "nBundles": 0 },
-      "kdStraight": { "quantity": 0, "nBundles": 0 },
+      "kdStraight": { "quantity": 5354, "nBundles": 168 },
       "kdNinetyCorner": { "quantity": 0, "nBundles": 0 },
       "kdBrickLedge": { "quantity": 0, "nBundles": 0 },
       "kdDoubleTaperTop": { "quantity": 0, "nBundles": 0 }
     }
   },
-  "bridges": { "8\"": { "quantity": 6016, "nBundles": 24 } },
-  "clips": { "quantity": 376, "nBundles": 2 },
-  "concreteVolume": 38.23,
-  "rebars": { "1": 0, "0.375": 0, "0.5": 0, "0.625": 209, "0.75": 0, "0.875": 0 },
+  "bridges": {
+    "12\"": { "quantity": 42832, "nBundles": 168 }
+  },
+  "clips": { "quantity": 2677, "nBundles": 14 },
+  "concreteVolume": 404.43,
+  "rebars": { "1": 0, "0.375": 0, "0.5": 0, "0.625": 882, "0.75": 0, "0.875": 161 },
   "squareFootage": {
-    "gross": 2000,
-    "net": 2000,
-    "opening": 0
+    "gross": 14175,
+    "net": 13927,
+    "opening": 248
   }
 }
