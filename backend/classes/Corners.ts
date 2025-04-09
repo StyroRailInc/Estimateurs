@@ -15,15 +15,15 @@ class CornerBase {
   }
 
   getInsideSurfaceArea(blockType: BlockType) {
-    return this.nInside * getBlockSpecifications(blockType, this.width).surfaceArea.int;
+    return this.nInside * getBlockSpecifications(blockType, this.width)?.surfaceArea?.int || 0;
   }
 
   getOutsideSurfaceArea(blockType: BlockType) {
-    return this.nOutside * getBlockSpecifications(blockType, this.width).surfaceArea.ext;
+    return this.nOutside * getBlockSpecifications(blockType, this.width)?.surfaceArea?.ext || 0;
   }
 
   getConcreteVolume(blockType: BlockType) {
-    return getBlockSpecifications(blockType, this.width).concreteVolume;
+    return getBlockSpecifications(blockType, this.width)?.concreteVolume || 0;
   }
 
   getTotalSurfaceArea(blockType: BlockType) {
@@ -36,19 +36,18 @@ class CornerBase {
 }
 
 class NinetyDegreeCorner extends CornerBase {
+  readonly corner: BlockType = "ninetyCorner";
   constructor(nInside: number, nOutside: number, width: Width, wallType: WallType) {
     super(nInside, nOutside, width, wallType);
+    if (wallType === "KD" && ['10"', '12"'].includes(this.width)) this.corner = "kdNinetyCorner";
   }
 
   getTotalSurfaceArea() {
-    if (this.wallType === "KD") return super.getTotalSurfaceArea("kdNinetyCorner");
-    return super.getTotalSurfaceArea("ninetyCorner");
+    return super.getTotalSurfaceArea(this.corner);
   }
 
   getConcreteVolume() {
-    console.log("corner90", super.getConcreteVolume("ninetyCorner"));
-    if (this.wallType === "KD") return super.getConcreteVolume("kdNinetyCorner");
-    return super.getConcreteVolume("ninetyCorner");
+    return super.getConcreteVolume(this.corner);
   }
 }
 
@@ -75,8 +74,8 @@ class Corners {
     this.fortyFiveDegreeCorner = new FortyFiveDegreeCorner(nInside45, nOutside45, width, wallType);
   }
 
-  getTotalSurfaceArea() {
-    return this.ninetyDegreeCorner.getTotalSurfaceArea() + this.fortyFiveDegreeCorner.getTotalSurfaceArea();
+  getTotalSurfaceArea(nCourses: number) {
+    return (this.ninetyDegreeCorner.getTotalSurfaceArea() + this.fortyFiveDegreeCorner.getTotalSurfaceArea()) * nCourses;
   }
 
   getTotalConcreteVolume(totalNinetyCorners: number, totalFortyFiveCorners: number) {
@@ -85,8 +84,9 @@ class Corners {
     return ninetyCornersConcreteVolume + fortyFiveCornersConcreteVolume;
   }
 
-  getTotal90() {
-    return this.ninetyDegreeCorner.getTotal();
+  getTotal90(blockType: BlockType) {
+    if (blockType !== this.ninetyDegreeCorner.corner) return 0;
+    else return this.ninetyDegreeCorner.getTotal();
   }
 
   getTotal45() {

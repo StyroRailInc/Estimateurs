@@ -3,6 +3,7 @@ import Opening from "./Opening";
 import { ColdJointPin, VerticalRebar, HorizontalRebar } from "./Rebars";
 import SpecialBlocks from "./SpecialBlocks";
 import Corners from "./Corners";
+import { Straight } from "./Straight";
 
 export type Width = '4"' | '6"' | '8"';
 
@@ -20,6 +21,8 @@ export const BLOCK_TYPES = {
   thermalsert: true,
   kdStraight: true,
   kdNinetyCorner: true,
+  kdBrickLedge: true,
+  kdDoubleTaperTop: true,
 } as const;
 
 export type BlockType = keyof typeof BLOCK_TYPES;
@@ -59,6 +62,7 @@ export interface WallMaterials {
   verticalRebar: VerticalRebar;
   coldJointPin: ColdJointPin;
   thermalserts: { nLayers: number; width: string };
+  straight: Straight;
 }
 
 export interface HouseSpecifications {

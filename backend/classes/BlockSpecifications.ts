@@ -18,7 +18,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.065844,
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 15,
+      qtyPerBundle: 15, // 12 or 15
     },
     '6"': {
       length: { ext: 48, int: 48 },
@@ -109,33 +109,6 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
     },
   },
   kdNinetyCorner: {
-    '4"': {
-      length: { ext: 31, int: 22 },
-      width: 9,
-      height: 16,
-      concreteVolume: 0.054574,
-      surfaceArea: { ext: 800, int: 512 },
-      qtyPerBundle: 12,
-      return: { ext: 19, int: 10 },
-    },
-    '6"': {
-      length: { ext: 33, int: 22 },
-      width: 11,
-      height: 16,
-      concreteVolume: 0.086528,
-      surfaceArea: { ext: 864, int: 512 },
-      qtyPerBundle: 12,
-      return: { ext: 21, int: 10 },
-    },
-    '8"': {
-      length: { ext: 35, int: 22 },
-      width: 13,
-      height: 16,
-      concreteVolume: 0.121517,
-      surfaceArea: { ext: 928, int: 512 },
-      qtyPerBundle: 12,
-      return: { ext: 23, int: 10 },
-    },
     '10"': {
       length: { ext: 37, int: 22 },
       width: 15,
@@ -210,6 +183,24 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       qtyPerBundle: 12,
     },
   },
+  kdDoubleTaperTop: {
+    '10"': {
+      length: { ext: 48, int: 48 },
+      width: 15,
+      height: 16,
+      concreteVolume: 0.195972, // to verify
+      surfaceArea: { ext: 767.52, int: 767.52 },
+      qtyPerBundle: 12,
+    },
+    '12"': {
+      length: { ext: 48, int: 48 },
+      width: 17,
+      height: 16,
+      concreteVolume: 0.228894, // to verify
+      surfaceArea: { ext: 767.52, int: 767.52 },
+      qtyPerBundle: 12,
+    },
+  },
   brickLedge: {
     '4"': {
       length: { ext: 0, int: 0 },
@@ -234,6 +225,24 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       concreteVolume: 0.167074,
       surfaceArea: { ext: 767.52, int: 767.52 },
       qtyPerBundle: 6,
+    },
+  },
+  kdBrickLedge: {
+    '10"': {
+      length: { ext: 48, int: 48 },
+      width: 15,
+      height: 17,
+      concreteVolume: 0.200008,
+      surfaceArea: { ext: 767.52, int: 767.52 },
+      qtyPerBundle: 6, // to verify
+    },
+    '12"': {
+      length: { ext: 48, int: 48 },
+      width: 13,
+      height: 16,
+      concreteVolume: 0.232942,
+      surfaceArea: { ext: 767.52, int: 767.52 },
+      qtyPerBundle: 6, // to verify
     },
   },
   buck: {

@@ -80,7 +80,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             }}
           >
             <FormControlLabel value={"Reg"} control={<Radio />} label={t("Régulier")} />
-            <FormControlLabel value={"KD"} control={<Radio />} label={t("Déconstruit")} />
+            {/* <FormControlLabel value={"KD"} control={<Radio />} label={t("Déconstruit")} /> */}
             <FormControlLabel value={"Pign"} control={<Radio />} label={t("Pignon")} />
           </RadioGroup>
         </Drawer>
@@ -171,7 +171,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
                   }}
                 />
               </div>
-              {buildBlockFormState.wallType !== "KD" && (
+              {!(['12"', '10"'].includes(buildBlockFormState.width) && buildBlockFormState.wallType === "KD") && (
                 <div className="flex-vertical full-width margin-left">
                   <label htmlFor="inside-45">{t("Interne 45")}</label>
                   <FormTextField
@@ -270,7 +270,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             </Button>
           </div>
         </Drawer>
-        {buildBlockFormState.wallType !== "KD" && ['6"', '8"'].includes(buildBlockFormState.width) && (
+        {!['4"'].includes(buildBlockFormState.width) && (
           <Drawer title={t("Support à Maçon")} isOpen>
             <label htmlFor="brick-ledge-length">{t("Longueur")}</label>
             <FormTextField
@@ -287,22 +287,22 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
               }}
             />
 
-            {!(buildBlockFormState.wallType === "Pign") && (
+            <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
+            <FormTextField
+              id="brick-ledge-90"
+              fullWidth
+              size="small"
+              className="input-spacing"
+              value={buildBlockFormState.brickLedge.nCorners}
+              onChange={(e) => {
+                buildBlockFormDispatch({
+                  type: "setBrickLedgeNCorners",
+                  payload: e.target.value,
+                });
+              }}
+            />
+            {!(buildBlockFormState.wallType === "KD" && ['10"', '12"'].includes(buildBlockFormState.width)) && (
               <>
-                <label htmlFor="brick-ledge-90">{t("Coins") + " 90"}</label>
-                <FormTextField
-                  id="brick-ledge-90"
-                  fullWidth
-                  size="small"
-                  className="input-spacing"
-                  value={buildBlockFormState.brickLedge.nCorners}
-                  onChange={(e) => {
-                    buildBlockFormDispatch({
-                      type: "setBrickLedgeNCorners",
-                      payload: e.target.value,
-                    });
-                  }}
-                />
                 <label htmlFor="brick-ledge-45">{t("Coins") + " 45"}</label>
                 <FormTextField
                   id="brick-ledge-45"
@@ -321,7 +321,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             )}
           </Drawer>
         )}
-        {buildBlockFormState.wallType !== "KD" && ['6"', '8"'].includes(buildBlockFormState.width) && !(buildBlockFormState.wallType === "Pign") && (
+        {!['4"'].includes(buildBlockFormState.width) && !(buildBlockFormState.wallType === "Pign") && (
           <Drawer title={t("Double Biseau")} isOpen>
             <label htmlFor="double-taper-length">{t("Longueur")}</label>
             <FormTextField
@@ -337,7 +337,6 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
                 });
               }}
             />
-
             <label htmlFor="double-taper-90">{t("Coins")}</label>
             <FormTextField
               id="double-taper-90"

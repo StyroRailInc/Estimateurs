@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TextField, Box, Button } from "@mui/material";
+import { TextField, Box, Button, useTheme } from "@mui/material";
 import "./../../global.css";
 import "./Contact.css";
 import { apiService } from "src/services/api";
 import { useLanguage } from "src/context/LanguageContext";
 import { HttpError } from "src/services/api";
 import { HTTP_STATUS } from "src/utils/http";
+import CustomTextField from "src/components/CustomTextField";
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ export default function Contact() {
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
   const [document, setDocument] = useState<File | null>(null);
   const [error, setError] = useState<string>("");
+  const theme = useTheme();
   const [success, setSuccess] = useState(false);
 
   const MAX_FILE_SIZE_MB = 250;
@@ -48,9 +50,7 @@ export default function Contact() {
       }
 
       if (file.size > MAX_FILE_SIZE) {
-        setError(
-          t(`Le fichier est trop volumineux. La taille maximale est de ${MAX_FILE_SIZE_MB}MB.`)
-        );
+        setError(t(`Le fichier est trop volumineux. La taille maximale est de ${MAX_FILE_SIZE_MB}MB.`));
         setDocument(null);
         return;
       }
@@ -85,10 +85,7 @@ export default function Contact() {
       <Box
         className="flex-vertical contact-container"
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark"
-              ? "var(--background-color-very-dark)"
-              : "var(--transparent)",
+          backgroundColor: (theme) => (theme.palette.mode === "dark" ? "var(--background-color-very-dark)" : "var(--transparent)"),
         }}
       >
         <div className="flex-center full-width">
@@ -98,7 +95,7 @@ export default function Contact() {
           <div className="form-container">
             <form name="Contact" onSubmit={handleSubmit} acceptCharset="UTF-8">
               <label htmlFor="name">{t("Nom")}</label>
-              <TextField
+              <CustomTextField
                 id="name"
                 fullWidth
                 size="small"
@@ -109,7 +106,7 @@ export default function Contact() {
               />
 
               <label htmlFor="email">{t("Courriel")}</label>
-              <TextField
+              <CustomTextField
                 id="email"
                 fullWidth
                 size="small"
@@ -121,7 +118,7 @@ export default function Contact() {
               />
 
               <label htmlFor="phone">{t("Téléphone")}</label>
-              <TextField
+              <CustomTextField
                 id="phone"
                 fullWidth
                 size="small"
@@ -133,7 +130,7 @@ export default function Contact() {
               />
 
               <label htmlFor="additional-info"></label>
-              <TextField
+              <CustomTextField
                 id="additional-info"
                 fullWidth
                 multiline
