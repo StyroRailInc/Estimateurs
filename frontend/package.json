@@ -2,7 +2,6 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://styrorailinc.github.io/Estimateurs",
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
@@ -51,7 +50,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0",
     "react-router-dom": "^7.0.1"
   },
   "overrides": {
