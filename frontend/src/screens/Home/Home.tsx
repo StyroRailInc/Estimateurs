@@ -28,21 +28,12 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="image-wrapper">
-            <img className="image-styrowork" src="./../../../styrowork.jpg" alt="Styro Work" />
-            <img
-              className="image-styro-upscaled overlap-image"
-              src="./../../../buildblock.jpg"
-              alt="Styrorail logo"
-            />
+            <img className="image-styrowork" src="/Estimateurs/styrowork.jpg" alt="Styro Work" />
+            <img className="image-styro-upscaled overlap-image" src="/Estimateurs/BuildBlock.jpg" alt="Styrorail logo" />
           </div>
         </div>
 
-        <Button
-          variant="contained"
-          color="primary"
-          className="button-no-caps"
-          onClick={handleContinueClick}
-        >
+        <Button variant="contained" color="primary" className="button-no-caps" onClick={handleContinueClick}>
           {t("Continuer")}
         </Button>
       </div>

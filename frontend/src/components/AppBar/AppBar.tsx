@@ -35,21 +35,14 @@ export default function ButtonAppBar() {
       >
         <Toolbar className="toolbar">
           <div className="flex-start left-container">
-            <img src="/styro.png" alt="Company-logo" className="image"></img>
+            <img src="/Estimateurs/styro.png" alt="Company-logo" className="image"></img>
             <p className="styrorail">STYRORAIL</p>
           </div>
           {isLargeScreen ? (
             <>
               <div className="center-container flex-center">
                 {screens.map((screen, index) => (
-                  <Button
-                    key={screen}
-                    to={paths[index]}
-                    fullWidth
-                    color="secondary"
-                    component={NavLink}
-                    className="button-no-caps app-bar-button"
-                  >
+                  <Button key={screen} to={paths[index]} fullWidth color="secondary" component={NavLink} className="button-no-caps app-bar-button">
                     {t(screen)}
                   </Button>
                 ))}
