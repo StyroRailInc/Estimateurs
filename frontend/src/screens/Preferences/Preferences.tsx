@@ -8,18 +8,20 @@ import { LightMode, DarkMode } from "@mui/icons-material";
 import { useLanguage } from "src/context/LanguageContext";
 import "./../../global.css";
 import { apiService } from "src/services/api";
-import { useTheme } from "@mui/material";
 
 const Preferences: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { mode, setColorMode } = useColorMode();
   const { language, setLanguage } = useLanguage();
-  const theme = useTheme();
 
   const updatePreferences = async (newMode: string, newLanguage: string) => {
     try {
-      await apiService.post("/user/preferences", { email: user?.email, preferences: { language: newLanguage, mode: newMode } }, user);
+      await apiService.post(
+        "/user/preferences",
+        { email: user?.email, preferences: { language: newLanguage, mode: newMode } },
+        user
+      );
     } catch (error) {
       console.error("There has been an error updating preferences");
     }
@@ -31,7 +33,10 @@ const Preferences: React.FC = () => {
         <h1 style={{ textAlign: "center", marginBottom: "20px" }}>{t("Préférences")}</h1>
         <Box
           sx={{
-            backgroundColor: (theme) => (theme.palette.mode === "light" ? "var(--transparent)" : "var(--background-color-very-dark)"),
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "var(--transparent)"
+                : "var(--background-color-very-dark)",
             borderRadius: "8px",
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
           }}
@@ -44,7 +49,6 @@ const Preferences: React.FC = () => {
                 updatePreferences("light", language);
               }}
               className="app-bar-button"
-              sx={{ color: theme.palette.text.primary + " !important" }}
             >
               <LightMode />
               <span style={{ marginLeft: "5px" }}>{t("Clair")}</span>
@@ -55,7 +59,6 @@ const Preferences: React.FC = () => {
                 updatePreferences("dark", language);
               }}
               className="app-bar-button"
-              sx={{ color: theme.palette.text.primary + " !important" }}
             >
               <DarkMode />
               <span style={{ marginLeft: "5px" }}>{t("Sombre")}</span>
@@ -70,7 +73,6 @@ const Preferences: React.FC = () => {
                 updatePreferences(mode, "fr");
               }}
               className="app-bar-button"
-              sx={{ color: theme.palette.text.primary + " !important" }}
             >
               <span role="img" aria-label="French">
                 🇨🇦
@@ -83,7 +85,6 @@ const Preferences: React.FC = () => {
                 updatePreferences(mode, "eng");
               }}
               className="app-bar-button"
-              sx={{ color: theme.palette.text.primary + " !important" }}
             >
               <span role="img" aria-label="English">
                 🇬🇧

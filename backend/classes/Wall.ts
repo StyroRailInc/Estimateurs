@@ -8,16 +8,16 @@ class Wall {
   private nCourses: number = 0;
   private remainingSurfaceArea: number = 0;
   private hs: HouseSpecifications = createHouseSpecifications();
-  private straightType: BlockType;
 
-  constructor(private wConfig: WallConfig, private wm: WallMaterials) {
-    this.straightType = this.wConfig.wallType === "KD" ? "kdStraight" : "straight";
-  }
+  constructor(private wConfig: WallConfig, private wm: WallMaterials) {}
 
   computeWall(): HouseSpecifications {
     this.nCourses = this.wConfig.dimensions.getNCourses();
+    let openingSurfaceArea = this.getOpeningSurfaceArea();
 
-    this.computeOpenings();
+    this.wConfig.dimensions.tryApplyPinion(this.wConfig.wallType);
+
+    this.computeOpenings(openingSurfaceArea);
     this.computeBlockQuantities();
     this.adjustDttQuantities();
 
@@ -28,18 +28,18 @@ class Wall {
     this.computeClips(nBlocks);
     this.computeBridges(nBlocks);
     this.computeConcreteVolume();
-    this.computeSquareFootage();
+    this.computeSquareFootage(openingSurfaceArea);
 
     return this.hs;
   }
 
-  private computeOpenings() {
-    const openingSurfaceArea = this.getOpeningSurfaceArea();
+  private computeOpenings(openingSurfaceArea: number) {
     this.remainingSurfaceArea = this.wConfig.dimensions.getCoursesSurfaceArea();
     let openingPerimeter = this.getOpeningPerimeter();
+    console.log("surface area", this.remainingSurfaceArea, openingSurfaceArea);
 
     this.remainingSurfaceArea -= openingSurfaceArea;
-    this.remainingSurfaceArea -= this.wm.corners.getTotalSurfaceArea(this.nCourses);
+    this.remainingSurfaceArea -= this.wm.corners.getTotalSurfaceArea() * this.nCourses;
 
     this.wm.specialBlocks.setBuckLength(openingPerimeter);
   }
@@ -47,44 +47,37 @@ class Wall {
   private adjustDttQuantities() {
     const width = this.wConfig.dimensions.width;
     if (this.wm.specialBlocks.getTotalDoubleTaperTop()) {
-      this.hs.blockQuantities[width].ninetyCorner.quantity -= this.wm.corners.getTotal90("ninetyCorner");
+      this.hs.blockQuantities[width].ninetyCorner.quantity -= this.wm.corners.getTotal90();
       this.hs.blockQuantities[width].fortyFiveCorner.quantity -= this.wm.corners.getTotal45();
       this.hs.blockQuantities[width].straight.quantity += this.wm.specialBlocks.getDoubleTaperTopNCorners();
     }
   }
 
-  adjustSpecialBlocks() {
-    const specialBlocks = this.wm.specialBlocks.getTotalDoubleTaperTop() + this.wm.specialBlocks.getTotalBrickLedge();
-    this.hs.blockQuantities[this.wConfig.dimensions.width][this.straightType].quantity +=
-      -specialBlocks + this.wm.specialBlocks.getBrickLedgeN45Corners() + this.wm.specialBlocks.getBrickLedgeNCorners();
-  }
-
   private computeBlockQuantities() {
     this.hs.blockQuantities = createBlockQuantities({} as BlockQuantities, this.wConfig.dimensions.width);
     const bq = this.hs.blockQuantities[this.wConfig.dimensions.width];
-
-    this.getTotalStraight();
+    bq.straight.quantity =
+      this.getTotalStraight("straight") + this.wm.specialBlocks.getBrickLedgeN45Corners() + this.wm.specialBlocks.getBrickLedgeNCorners();
     bq.ninetyCorner.quantity = this.getTotalNinetyCorner("ninetyCorner") - this.wm.specialBlocks.getBrickLedgeNCorners();
 
     bq.fortyFiveCorner.quantity = Math.ceil(this.wm.corners.getTotal45() * this.nCourses) - this.wm.specialBlocks.getBrickLedgeN45Corners();
     bq.doubleTaperTop.quantity = this.wm.specialBlocks.getTotalDoubleTaperTop() + this.wm.specialBlocks.getDoubleTaperTopNCorners();
     bq.brickLedge.quantity = this.wm.specialBlocks.getTotalBrickLedge();
     bq.buck.quantity = this.wm.specialBlocks.getTotalBuck();
+    bq.kdStraight.quantity = this.getTotalStraight("kdStraight");
     bq.kdNinetyCorner.quantity = this.getTotalNinetyCorner("kdNinetyCorner");
-    // bq.kdDoubleTaperTop.quantity =
   }
 
-  private computeSquareFootage() {
-    const openingSurfaceArea = this.getOpeningSurfaceArea();
+  private computeSquareFootage(openingSurfaceArea: number) {
     this.hs.squareFootage.gross = roundNumber(Math.round(this.wConfig.dimensions.getSurfaceArea()) / 144);
     this.hs.squareFootage.net = roundNumber(this.hs.squareFootage.gross - ((openingSurfaceArea / 8) * 10) / 144);
     this.hs.squareFootage.opening = roundNumber(((openingSurfaceArea / 8) * 10) / 144);
   }
 
   private computeRebars() {
-    const verticalRebars = this.wm.verticalRebar.computeVerticalRebars();
-    const horizontalRebars = this.wm.horizontalRebar.computeHorizontalRebars();
-    const coldJointPins = this.wm.coldJointPin.computeColdJointPins();
+    const verticalRebars = this.wm.verticalRebar.computeVerticalRebars(this.wConfig.wallType);
+    const horizontalRebars = this.wm.horizontalRebar.computeHorizontalRebars(this.wConfig.wallType);
+    const coldJointPins = this.wm.coldJointPin.computeColdJointPins(this.wConfig.wallType);
     this.hs.rebars[verticalRebars.type] += verticalRebars.quantity;
     this.hs.rebars[horizontalRebars.type] += horizontalRebars.quantity;
     this.hs.rebars[coldJointPins.type] += coldJointPins.quantity;
@@ -99,11 +92,11 @@ class Wall {
   private computeConcreteVolume() {
     const width = this.wConfig.dimensions.width;
     const bq = this.hs.blockQuantities[width];
-    const straight = getBlockSpecifications(this.straightType, this.wConfig.dimensions.width);
+    const straight = getBlockSpecifications("straight", this.wConfig.dimensions.width);
     const cornersConcreteVolume = this.wm.corners.getTotalConcreteVolume(bq.ninetyCorner.quantity, bq.fortyFiveCorner.quantity);
     const specialBlocksConcreteVolume = this.wm.specialBlocks.getTotalConcreteVolume(bq.brickLedge.quantity, bq.doubleTaperTop.quantity);
     const straightConcreteVolume = bq.straight.quantity * straight.concreteVolume;
-    const kdStraightConcreteVolume = (bq.kdStraight.quantity / 2) * straight.concreteVolume;
+    const kdStraightConcreteVolume = bq.kdStraight.quantity * straight.concreteVolume;
     this.hs.concreteVolume = cornersConcreteVolume + specialBlocksConcreteVolume + straightConcreteVolume + kdStraightConcreteVolume;
   }
 
@@ -112,19 +105,25 @@ class Wall {
   }
 
   private getTotalNinetyCorner(blockType: BlockType) {
-    return Math.ceil(this.wm.corners.getTotal90(blockType) * this.nCourses);
+    const nCorners = Math.ceil(this.wm.corners.getTotal90() * this.nCourses);
+    if (blockType === "ninetyCorner" && this.wConfig.wallType !== "KD") return nCorners;
+    if (blockType === "kdNinetyCorner" && this.wConfig.wallType === "KD") return nCorners;
+    return 0;
   }
 
-  private getTotalStraight() {
-    const width = this.wConfig.dimensions.width;
-    this.hs.blockQuantities[width][this.straightType].quantity = this.wm.straight.getTotalStraight(this.remainingSurfaceArea, width);
-    this.adjustSpecialBlocks();
+  private getTotalStraight(blockType: BlockType) {
+    const straight = getBlockSpecifications("straight", this.wConfig.dimensions.width);
+    const specialBlocks = this.wm.specialBlocks.getTotalDoubleTaperTop() + this.wm.specialBlocks.getTotalBrickLedge();
+    if (blockType === "straight" && this.wConfig.wallType !== "KD")
+      return Math.ceil(this.remainingSurfaceArea / straight.surfaceArea.ext) - specialBlocks;
+    if (blockType === "kdStraight" && this.wConfig.wallType === "KD") return Math.ceil(this.remainingSurfaceArea / straight.surfaceArea.ext) * 2;
+    return 0;
   }
 
   private computeTotalBlocks() {
     const { buck, thermalsert, ...otherBlocks } = this.hs.blockQuantities[this.wConfig.dimensions.width];
-    return Object.entries(otherBlocks).reduce((total, [key, block]) => {
-      return total + (key === "kdStraight" ? block.quantity / 2 : block.quantity);
+    return Object.entries(otherBlocks).reduce((total, [key, quantity]) => {
+      return total + (key === "kdStraight" ? quantity.quantity / 2 : quantity.quantity);
     }, 0);
   }
 

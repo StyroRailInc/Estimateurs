@@ -12,7 +12,6 @@ import { TextField } from "@mui/material";
 import { Box } from "@mui/material";
 import { useColorMode } from "src/context/ColorModeContext";
 import { useLanguage } from "src/context/LanguageContext";
-import CustomTextField from "src/components/CustomTextField";
 
 interface LoginProps {}
 
@@ -72,7 +71,10 @@ const Login: React.FC<LoginProps> = () => {
         <Box
           className="login-container"
           sx={{
-            backgroundColor: (theme) => (theme.palette.mode === "dark" ? "var(--background-color-very-dark)" : "var(--transparent)"),
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "var(--background-color-very-dark)"
+                : "var(--transparent)",
           }}
         >
           <div className="flex-vertical">
@@ -80,9 +82,17 @@ const Login: React.FC<LoginProps> = () => {
             <form name="Login" onSubmit={handleSubmit} acceptCharset="UTF-8">
               {error && <p className="error">{t(error)}</p>}
               <label htmlFor="email">{t("Courriel")}</label>
-              <CustomTextField type="email" id="email" fullWidth size="small" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <TextField
+                type="email"
+                id="email"
+                fullWidth
+                size="small"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
               <label htmlFor="password">{t("Mot de passe")}</label>
-              <CustomTextField
+              <TextField
                 type="password"
                 id="password"
                 fullWidth
@@ -91,13 +101,25 @@ const Login: React.FC<LoginProps> = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <Button type="submit" fullWidth color="secondary" variant="contained" className="login-button button-no-caps">
+              <Button
+                type="submit"
+                fullWidth
+                color="secondary"
+                variant="contained"
+                className="login-button button-no-caps"
+              >
                 {t("Se connecter")}
               </Button>
             </form>
             <div className="flex-horizontal">
               <p>{t("Vous n'avez pas de compte?")}</p>
-              <Button variant="text" className="button-no-caps" sx={{ color: "var(--secondary-color-light)" }} component={RouterLink} to="/sign-up">
+              <Button
+                variant="text"
+                className="button-no-caps"
+                sx={{ color: "var(--secondary-color-light)" }}
+                component={RouterLink}
+                to="/sign-up"
+              >
                 {t("S'inscrire")}
               </Button>
             </div>

@@ -1,5 +1,5 @@
 import getBlockSpecifications from "./BlockSpecifications.js";
-import { BlockType, WallType, Width } from "./types.js";
+import { BlockType, Width } from "./types.js";
 
 class SpecialBlockBase {
   protected length: number;
@@ -27,16 +27,14 @@ class SpecialBlockBase {
 class BrickLedge extends SpecialBlockBase {
   readonly nCorners;
   readonly n45Corners;
-  private brickLedge: BlockType = "brickLedge";
-  constructor(length: number, width: Width, nCorners: number, n45Corners: number, wallType: WallType) {
+  constructor(length: number, width: Width, nCorners: number, n45Corners: number) {
     super(length, width);
     this.nCorners = nCorners;
     this.n45Corners = n45Corners;
-    if (wallType === "KD" && ['10"', '12"'].includes(width)) this.brickLedge = "kdBrickLedge";
   }
 
   getBlockLength() {
-    return super.getBlockLength(this.brickLedge);
+    return super.getBlockLength("brickLedge");
   }
 
   getLength() {
@@ -44,21 +42,19 @@ class BrickLedge extends SpecialBlockBase {
   }
 
   getConcreteVolume() {
-    return super.getConcreteVolume(this.brickLedge);
+    return super.getConcreteVolume("brickLedge");
   }
 }
 
 class DoubleTaperTop extends SpecialBlockBase {
   readonly nCorners;
-  private doubleTaperTop: BlockType = "doubleTaperTop";
-  constructor(length: number, width: Width, nCorners: number, wallType: WallType) {
+  constructor(length: number, width: Width, nCorners: number) {
     super(length, width);
     this.nCorners = nCorners;
-    if (wallType === "KD" && ['10"', '12"'].includes(width)) this.doubleTaperTop = "kdDoubleTaperTop";
   }
 
   getBlockLength() {
-    return super.getBlockLength(this.doubleTaperTop);
+    return super.getBlockLength("doubleTaperTop");
   }
 
   getLength() {
@@ -66,23 +62,21 @@ class DoubleTaperTop extends SpecialBlockBase {
   }
 
   getConcreteVolume() {
-    return super.getConcreteVolume(this.doubleTaperTop);
+    return super.getConcreteVolume("doubleTaperTop");
   }
 }
 
 class Buck extends SpecialBlockBase {
-  private buckExists = true;
-  constructor(length: number, width: Width, wallType: WallType) {
+  constructor(length: number, width: Width) {
     super(length, width);
-    if (wallType === "KD" && ['10"', '12"'].includes(width)) this.buckExists = false;
   }
 
   getLength() {
-    return this.buckExists ? this.length : 0;
+    return this.length;
   }
 
   getBlockLength() {
-    return this.buckExists ? super.getBlockLength("buck") : 1;
+    return super.getBlockLength("buck");
   }
 }
 
@@ -98,12 +92,11 @@ class SpecialBlocks {
     brickLedgeNCorners: number,
     brickLedgeN45Corners: number,
     buckLength: number,
-    width: Width,
-    wallType: WallType
+    width: Width
   ) {
-    this.doubleTaperTop = new DoubleTaperTop(doubleTaperTopLength, width, doubleTaperTopNCorners, wallType);
-    this.brickLedge = new BrickLedge(brickLedgeLength, width, brickLedgeNCorners, brickLedgeN45Corners, wallType);
-    this.buck = new Buck(buckLength, width, wallType);
+    this.doubleTaperTop = new DoubleTaperTop(doubleTaperTopLength, width, doubleTaperTopNCorners);
+    this.brickLedge = new BrickLedge(brickLedgeLength, width, brickLedgeNCorners, brickLedgeN45Corners);
+    this.buck = new Buck(buckLength, width);
   }
 
   getDoubleTaperTopNCorners() {

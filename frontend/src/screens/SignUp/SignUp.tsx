@@ -6,7 +6,6 @@ import "./../../global.css";
 import { Constants } from "src/constants";
 import { HTTP_STATUS } from "./../../utils/http";
 import { useAuth } from "src/context/AuthContext";
-import CustomTextField from "src/components/CustomTextField";
 
 interface SignUpProps {}
 
@@ -72,7 +71,10 @@ const SignUp: React.FC<SignUpProps> = () => {
         <Box
           className="login-container"
           sx={{
-            backgroundColor: (theme) => (theme.palette.mode === "dark" ? "var(--background-color-very-dark)" : "var(--transparent)"),
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "var(--background-color-very-dark)"
+                : "var(--transparent)",
           }}
         >
           {!isAccountCreated ? (
@@ -82,11 +84,26 @@ const SignUp: React.FC<SignUpProps> = () => {
               <form name="SignUp" onSubmit={handleSubmit} acceptCharset="UTF-8">
                 {error && <p className="error">{t(error)}</p>}
                 <label htmlFor="name">{t("Nom")}</label>
-                <CustomTextField id="name" fullWidth size="small" required value={formData.name} onChange={handleInputChange} />
+                <TextField
+                  id="name"
+                  fullWidth
+                  size="small"
+                  required
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
                 <label htmlFor="email">{t("Courriel")}</label>
-                <CustomTextField type="email" id="email" fullWidth size="small" required value={formData.email} onChange={handleInputChange} />
+                <TextField
+                  type="email"
+                  id="email"
+                  fullWidth
+                  size="small"
+                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
                 <label htmlFor="password">{t("Mot de passe")}</label>
-                <CustomTextField
+                <TextField
                   type="password"
                   id="password"
                   fullWidth
@@ -96,7 +113,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                   onChange={handleInputChange}
                 />
                 <label htmlFor="confirm-password">{t("Confirmez le mot de passe")}</label>
-                <CustomTextField
+                <TextField
                   type="password"
                   id="confirmPassword"
                   fullWidth
@@ -105,13 +122,25 @@ const SignUp: React.FC<SignUpProps> = () => {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                 />
-                <Button type="submit" fullWidth color="secondary" variant="contained" className="login-button button-no-caps">
+                <Button
+                  type="submit"
+                  fullWidth
+                  color="secondary"
+                  variant="contained"
+                  className="login-button button-no-caps"
+                >
                   {t("S'inscrire")}
                 </Button>
               </form>
               <div className="flex-horizontal">
                 <p>{t("Vous possédez déjà un compte?")}</p>
-                <Button variant="text" className="button-no-caps" sx={{ color: "var(--secondary-color-light)" }} component={RouterLink} to="/login">
+                <Button
+                  variant="text"
+                  className="button-no-caps"
+                  sx={{ color: "var(--secondary-color-light)" }}
+                  component={RouterLink}
+                  to="/login"
+                >
                   {t("Se connecter")}
                 </Button>
               </div>

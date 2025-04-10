@@ -1,3 +1,4 @@
+import "./App.css";
 import { CssBaseline } from "@mui/material/";
 import BuildBlock from "./screens/BuildBlock";
 import { StyledEngineProvider } from "@mui/material/styles";

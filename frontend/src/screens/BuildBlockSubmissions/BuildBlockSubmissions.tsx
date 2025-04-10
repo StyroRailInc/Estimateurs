@@ -10,12 +10,12 @@ import { useNavigate } from "react-router-dom";
 import "./../../global.css";
 import SingleInputDialog from "src/components/SingleInputDialog";
 import { HTTP_STATUS } from "src/utils/http";
-import FormTextField from "src/components/FormTextField";
 
 const BuildBlockSubmissions: React.FC = () => {
   const { t } = useTranslation();
-  const [submissions, setSubmissions] = useState<{ name: string; submission: string }[] | undefined>(undefined);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [submissions, setSubmissions] = useState<
+    { name: string; submission: string }[] | undefined
+  >(undefined);
   const { user } = useAuth();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [newName, setNewName] = useState("");
@@ -34,6 +34,7 @@ const BuildBlockSubmissions: React.FC = () => {
         if (response.ok) {
           const sub = await response.json();
           setSubmissions(sub);
+          console.log(sub);
         }
       })
       .catch((error) => {
@@ -109,56 +110,54 @@ const BuildBlockSubmissions: React.FC = () => {
       });
   };
 
-  const filteredSubmissions = submissions?.filter((submission) => submission.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
   return (
     <main>
       <div style={{ padding: "20px" }}>
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>{t("Mes soumissions Build Block")}</h1>
-
-        <FormTextField
-          id="inside-90"
-          fullWidth
-          size="small"
-          className="input-spacing"
-          placeholder={t("Rechercher une soumission...")}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+          {t("Mes soumissions Build Block")}
+        </h1>
         <List
           className="buildblock-submission-list"
           sx={{
-            backgroundColor: (theme) => (theme.palette.mode === "light" ? "var(--transparent)" : "var(--background-color-very-dark)"),
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "var(--transparent)"
+                : "var(--background-color-very-dark)",
             borderRadius: "8px",
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
           }}
         >
-          {filteredSubmissions?.length ? (
-            filteredSubmissions.map((submission) => {
-              const index = submissions?.findIndex((s) => s.name === submission.name) ?? -1;
-              return (
-                <ListItem
-                  key={index}
-                  secondaryAction={
-                    <div>
-                      <IconButton edge="end" onClick={() => handleEdit(index)} aria-label={t("Modifier")}>
-                        <EditIcon sx={{ color: "#1976d2" }} />
-                      </IconButton>
-                      <IconButton edge="end" onClick={() => handleDelete(index)} aria-label={t("Supprimer")}>
-                        <DeleteIcon sx={{ color: "#d32f2f" }} />
-                      </IconButton>
-                    </div>
-                  }
-                  disablePadding
-                >
-                  <ListItemButton onClick={() => handleSubmissionClick(index)}>
-                    <ListItemText primary={submission.name} />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })
+          {submissions?.length ? (
+            submissions.map((submission, index) => (
+              <ListItem
+                key={index}
+                secondaryAction={
+                  <div>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleEdit(index)}
+                      aria-label={t("Modifier")}
+                    >
+                      <EditIcon sx={{ color: "#1976d2" }} />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDelete(index)}
+                      aria-label={t("Supprimer")}
+                    >
+                      <DeleteIcon sx={{ color: "#d32f2f" }} />
+                    </IconButton>
+                  </div>
+                }
+                disablePadding
+              >
+                <ListItemButton onClick={() => handleSubmissionClick(index)}>
+                  <ListItemText primary={submission.name} />
+                </ListItemButton>
+              </ListItem>
+            ))
           ) : (
-            <p style={{ marginLeft: "20px" }}>{t("Aucune soumission trouvée")}</p>
+            <p style={{ marginLeft: "20px" }}>{t("Vous n'avez aucune soumission")}</p>
           )}
         </List>
 

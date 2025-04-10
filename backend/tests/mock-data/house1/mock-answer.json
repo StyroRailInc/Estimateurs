@@ -9,9 +9,7 @@
       "buck": { "quantity": 0, "nBundles": 0 },
       "thermalsert": { "quantity": 0, "nBundles": 0 },
       "kdStraight": { "quantity": 0, "nBundles": 0 },
-      "kdNinetyCorner": { "quantity": 0, "nBundles": 0 },
-      "kdBrickLedge": { "quantity": 0, "nBundles": 0 },
-      "kdDoubleTaperTop": { "quantity": 0, "nBundles": 0 }
+      "kdNinetyCorner": { "quantity": 0, "nBundles": 0 }
     }
   },
   "bridges": { "8\"": { "quantity": 6016, "nBundles": 24 } },

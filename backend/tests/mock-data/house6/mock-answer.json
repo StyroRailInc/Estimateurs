@@ -9,9 +9,7 @@
       "buck": { "quantity": 54, "nBundles": 4 },
       "thermalsert": { "quantity": 0, "nBundles": 0 },
       "kdStraight": { "quantity": 0, "nBundles": 0 },
-      "kdNinetyCorner": { "quantity": 0, "nBundles": 0 },
-      "kdBrickLedge": { "quantity": 0, "nBundles": 0 },
-      "kdDoubleTaperTop": { "quantity": 0, "nBundles": 0 }
+      "kdNinetyCorner": { "quantity": 0, "nBundles": 0 }
     },
     "6\"": {
       "straight": { "quantity": 2472, "nBundles": 206 },
@@ -22,9 +20,7 @@
       "buck": { "quantity": 20, "nBundles": 2 },
       "thermalsert": { "quantity": 0, "nBundles": 0 },
       "kdStraight": { "quantity": 0, "nBundles": 0 },
-      "kdNinetyCorner": { "quantity": 0, "nBundles": 0 },
-      "kdBrickLedge": { "quantity": 0, "nBundles": 0 },
-      "kdDoubleTaperTop": { "quantity": 0, "nBundles": 0 }
+      "kdNinetyCorner": { "quantity": 0, "nBundles": 0 }
     }
   },
   "bridges": {
