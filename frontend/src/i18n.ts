@@ -10,7 +10,9 @@ i18n
   .init({
     fallbackLng: "fr",
     debug: false, // Disable debug mode
-    backend: "/Estimateurs/locales", //only /locales in localhost
+    backend: {
+      loadPath: "/Estimateurs/locales/{{lng}}/{{ns}}.json",
+    },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
