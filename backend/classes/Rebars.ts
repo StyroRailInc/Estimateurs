@@ -1,4 +1,4 @@
-import { RebarQuantity, RebarSize, WallType } from "./types";
+import { RebarQuantity, RebarSize, WallType } from "./../interfaces/build-block.js";
 
 class Rebar {
   readonly barLength = 20;

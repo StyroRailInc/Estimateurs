@@ -71,10 +71,12 @@ export const apiService = {
     }
   },
 
-  fileUpload: async (endpoint: string, file: File | null, data: any) => {
+  fileUpload: async (endpoint: string, file: File[], data: any) => {
     try {
       const formData = new FormData();
-      if (file) formData.append("file", file);
+      file.forEach((f) => {
+        formData.append("file", f);
+      });
       formData.append("data", JSON.stringify(data));
       const response = await fetch(`${Constants.API}${endpoint}`, {
         method: "POST",

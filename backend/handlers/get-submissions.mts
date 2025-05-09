@@ -2,6 +2,7 @@ import { HTTP_STATUS } from "../utils/http.js";
 import { AWSEvent, HandlerResponse } from "../interfaces/aws.js";
 import DatabaseManager from "../managers/DatabaseManager.js";
 import { jsonResponse } from "../utils/response.js";
+import { TOKEN_LENGTH } from "../constants/token-constants.js";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   const databaseManager = new DatabaseManager("Users");
@@ -15,8 +16,7 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
     });
   }
 
-  token = token.substring(7, token.length);
-
+  token = token.substring(TOKEN_LENGTH);
   const user = await databaseManager.findUser(email);
 
   if (!user) {

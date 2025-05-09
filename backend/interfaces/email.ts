@@ -13,3 +13,11 @@ export interface File {
   content: string | Buffer<ArrayBufferLike> | Readable | undefined;
   encoding?: BufferEncoding;
 }
+
+export interface FileInfo {
+  filename: string;
+  encoding: string;
+  mimeType: string;
+}
+
+export type EmailData = Record<string, any>;

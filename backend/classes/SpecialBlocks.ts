@@ -1,5 +1,5 @@
 import getBlockSpecifications from "./BlockSpecifications.js";
-import { BlockType, WallType, Width } from "./types.js";
+import { BlockType, WallType, Width } from "./../interfaces/build-block.js";
 
 class SpecialBlockBase {
   protected length: number;

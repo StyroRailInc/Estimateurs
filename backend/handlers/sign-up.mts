@@ -8,18 +8,16 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   const databaseManager = new DatabaseManager("Users");
 
   const requestBody = validateRequestBody(event.body);
-  if (!requestBody) {
-    return jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Invalid request body" });
-  }
 
-  const { email, name, password } = requestBody;
-  if (!email || !name || !password) {
+  if (!requestBody?.email || !requestBody?.name || !requestBody?.password) {
     return jsonResponse(HTTP_STATUS.BAD_REQUEST, {
-      message: "Missing required fields: email, name or password",
+      message: "Missing or invalid fields: email, name, or password",
     });
   }
 
+  const { email, name, password } = requestBody;
   const isExistingUser = await databaseManager.findUser(email);
+
   if (isExistingUser) {
     return jsonResponse(HTTP_STATUS.CONFLICT, { message: "Email already selected" });
   }

@@ -1,7 +1,6 @@
-import { BlockQuantities, BlockType, BridgeQuantities, HouseSpecifications } from "./types.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
-import { WallConfig, WallMaterials } from "./types.js";
 import { roundNumber } from "../utils/roundNumber.js";
+import { BlockQuantities, BlockType, BridgeQuantities, HouseSpecifications, WallConfig, WallMaterials } from "./../interfaces/build-block.js";
 import { createBlockQuantities, createBridgeQuantities, createHouseSpecifications } from "../utils/createObject.js";
 
 class Wall {

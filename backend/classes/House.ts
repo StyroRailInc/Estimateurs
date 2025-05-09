@@ -1,5 +1,5 @@
 import Wall from "./Wall.js";
-import { BlockType, HouseSpecifications, Width } from "./types.js";
+import { BlockType, HouseSpecifications, Width } from "./../interfaces/build-block.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
 import { createBlockQuantities, createBridgeQuantities, createHouseSpecifications } from "../utils/createObject.js";
 import { typedKeys } from "../utils/typedKeys.js";

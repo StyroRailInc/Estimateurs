@@ -3,26 +3,21 @@ import { jsonResponse } from "../utils/response.js";
 import DatabaseManager from "../managers/DatabaseManager.js";
 import { validateRequestBody } from "../utils/validateRequestBody.js";
 import { AWSEvent, HandlerResponse } from "../interfaces/aws.js";
+import { TOKEN_LENGTH } from "../constants/token-constants.js";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   const databaseManager = new DatabaseManager("Users");
 
   const requestBody = validateRequestBody(event.body);
-  if (!requestBody) {
-    jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Invalid request body" });
+  let token = event.headers.Authorization;
+
+  if (!requestBody?.email || !token.startsWith("Bearer ")) {
+    jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Missing required fields: email or token" });
   }
 
   const { email } = requestBody;
-  let token = event.headers.Authorization;
 
-  if (!email || !token.startsWith("Bearer ")) {
-    return jsonResponse(HTTP_STATUS.BAD_REQUEST, {
-      message: "Missing required fields: email or token",
-    });
-  }
-
-  token = token.substring(7, token.length);
-
+  token = token.substring(TOKEN_LENGTH);
   const user = await databaseManager.findUser(email);
 
   if (!user) {

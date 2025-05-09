@@ -1,7 +1,6 @@
 import { AttributeValue, DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, UpdateCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 class DatabaseManager {
   private table: string;

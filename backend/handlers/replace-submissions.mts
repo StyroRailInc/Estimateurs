@@ -16,7 +16,6 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
 
   const { submissions } = requestBody;
 
-  // Need to add payload verification
   if (!email || !submissions || !token.startsWith("Bearer ")) {
     return jsonResponse(HTTP_STATUS.BAD_REQUEST, {
       message: "Missing required fields: email, token or payload",

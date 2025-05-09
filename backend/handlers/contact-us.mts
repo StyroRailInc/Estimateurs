@@ -1,52 +1,40 @@
 import { HTTP_STATUS } from "../utils/http.js";
-import { sendEmail } from "../utils/sendEmail.js";
+import { generateEmail, sendEmail } from "../utils/sendEmail.js";
 import { jsonResponse } from "../utils/response.js";
 import { AWSEvent, HandlerResponse } from "../interfaces/aws.js";
+import { MAX_FILE_SIZE } from "./../constants/file-constants.js";
+import { FileInfo, EmailData } from "../interfaces/email.js";
 import busboy from "busboy";
 import stream from "stream";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   return new Promise((resolve, reject) => {
-    let fileBuffer: Buffer;
-    let data: any;
-    let fileInfo: any;
+    let fileBuffer: Buffer[] = [];
+    let fileInfo: FileInfo[] = [];
+    let data: EmailData;
 
-    const bb = busboy({ headers: event.headers, limits: { fileSize: 10 * 1024 * 1024 } });
+    const bb = busboy({ headers: event.headers, limits: { fileSize: MAX_FILE_SIZE } });
 
-    bb.on("file", (name, file, info) => {
-      fileInfo = info;
+    bb.on("file", (_, file, info) => {
+      fileInfo.push(info);
       file.on("data", (chunk) => {
-        fileBuffer = chunk;
+        fileBuffer.push(chunk);
       });
     });
 
-    bb.on("field", (name, val) => {
+    bb.on("field", (_, val) => {
       data = JSON.parse(val);
     });
 
     bb.on("finish", async () => {
-      let attachments;
-      if (fileBuffer) {
-        attachments = [{ filename: fileInfo.fileName, content: fileBuffer, contentType: fileInfo.mimeType }];
+      const email = generateEmail(data, fileBuffer, fileInfo);
+
+      const isEmailSent = await sendEmail(email);
+      if (isEmailSent) {
+        return resolve(jsonResponse(HTTP_STATUS.NO_CONTENT, { message: "Email sent successfully" }));
       }
 
-      const emailParams = {
-        to: "technologie@styrorail.ca",
-        subject: "Estimation Build Block",
-        text: `Nom : ${data.name}\nCourriel : ${data.email}\nPhone : ${data.phone}\nMessage : ${data.message}`,
-        attachments: attachments,
-      };
-
-      try {
-        const isEmailSent = await sendEmail(emailParams);
-        if (isEmailSent) {
-          resolve(jsonResponse(HTTP_STATUS.NO_CONTENT, { message: "Email sent successfully" }));
-        } else {
-          reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error sending the email" }));
-        }
-      } catch (error) {
-        reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Exception during email send", error }));
-      }
+      reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error sending the email" }));
     });
 
     bb.on("error", () => {

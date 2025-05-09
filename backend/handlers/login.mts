@@ -8,16 +8,11 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   const databaseManager = new DatabaseManager("Users");
 
   const requestBody = validateRequestBody(event.body);
-  if (!requestBody) {
-    jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Invalid request body" });
+  if (!requestBody?.email || !requestBody?.password) {
+    jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Missing email or password" });
   }
 
   const { email, password } = requestBody;
-
-  if (!email || !password) {
-    return jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Email and password are required." });
-  }
-
   const user = await databaseManager.findUser(email);
 
   if (!user) {

@@ -1,4 +1,4 @@
-import { BlockType } from "./types";
+import { BlockType } from "./../interfaces/build-block.js";
 
 interface BlockSpecification {
   length: { ext: number; int: number }; // Inches

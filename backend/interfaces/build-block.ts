@@ -1,9 +1,9 @@
-import Dimensions from "./Dimensions";
-import Opening from "./Opening";
-import { ColdJointPin, VerticalRebar, HorizontalRebar } from "./Rebars";
-import SpecialBlocks from "./SpecialBlocks";
-import Corners from "./Corners";
-import { Straight } from "./Straight";
+import Opening from "./../classes/Opening";
+import Corners from "./../classes/Corners";
+import Dimensions from "./../classes/Dimensions";
+import { Straight } from "./../classes/Straight";
+import SpecialBlocks from "./../classes/SpecialBlocks";
+import { ColdJointPin, VerticalRebar, HorizontalRebar } from "./../classes/Rebars";
 
 export type Width = '4"' | '6"' | '8"';
 
@@ -56,13 +56,13 @@ export interface WallConfig {
 
 export interface WallMaterials {
   corners: Corners;
-  specialBlocks: SpecialBlocks;
-  openings: Opening[];
-  horizontalRebar: HorizontalRebar;
-  verticalRebar: VerticalRebar;
-  coldJointPin: ColdJointPin;
-  thermalserts: { nLayers: number; width: string };
   straight: Straight;
+  openings: Opening[];
+  coldJointPin: ColdJointPin;
+  specialBlocks: SpecialBlocks;
+  verticalRebar: VerticalRebar;
+  horizontalRebar: HorizontalRebar;
+  thermalserts: { nLayers: number; width: string };
 }
 
 export interface HouseSpecifications {

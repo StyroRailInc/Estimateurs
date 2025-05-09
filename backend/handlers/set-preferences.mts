@@ -3,25 +3,21 @@ import { jsonResponse } from "../utils/response.js";
 import DatabaseManager from "../managers/DatabaseManager.js";
 import { validateRequestBody } from "../utils/validateRequestBody.js";
 import { AWSEvent, HandlerResponse } from "../interfaces/aws.js";
+import { TOKEN_LENGTH } from "../constants/token-constants.js";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   const databaseManager = new DatabaseManager("Users");
 
   const requestBody = validateRequestBody(event.body);
-  if (!requestBody) {
-    jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Invalid request body" });
+  let token = event.headers.Authorization;
+
+  if (!requestBody || !requestBody.email || !requestBody.preferences || !token?.startsWith("Bearer ")) {
+    return jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "Missing or invalid fields: email, token, or preferences" });
   }
 
   const { email, preferences } = requestBody;
-  let token = event.headers.Authorization;
 
-  if (!email || !preferences || !token.startsWith("Bearer ")) {
-    return jsonResponse(HTTP_STATUS.BAD_REQUEST, {
-      message: "Missing required fields: email, token or preferences",
-    });
-  }
-
-  token = token.substring(7, token.length);
+  token = token.substring(TOKEN_LENGTH);
 
   const user = await databaseManager.findUser(email);
 
@@ -39,7 +35,5 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
     return jsonResponse(HTTP_STATUS.NO_CONTENT);
   }
 
-  return jsonResponse(HTTP_STATUS.UNAUTHORIZED, {
-    message: "There has been an error updating preferences",
-  });
+  return jsonResponse(HTTP_STATUS.UNAUTHORIZED, { message: "There has been an error updating preferences" });
 };

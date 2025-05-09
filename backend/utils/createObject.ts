@@ -8,7 +8,7 @@ import {
   HouseSpecifications,
   BLOCK_TYPES,
   BlockType,
-} from "../classes/types.js";
+} from "../interfaces/build-block.js";
 
 export function createRebarQuantities(): RebarQuantities {
   return {

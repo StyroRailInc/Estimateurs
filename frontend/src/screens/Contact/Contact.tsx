@@ -16,7 +16,7 @@ export default function Contact() {
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [additionalInfo, setAdditionalInfo] = useState<string>("");
-  const [document, setDocument] = useState<File | null>(null);
+  const [document, setDocument] = useState<File[]>([]);
   const [error, setError] = useState<string>("");
   const theme = useTheme();
   const [success, setSuccess] = useState(false);
@@ -45,18 +45,18 @@ export default function Contact() {
 
       if (!allowedFormats.includes(file.type)) {
         setError(t("Format non supporté. Veuillez télécharger un fichier valide."));
-        setDocument(null);
+        setDocument([]);
         return;
       }
 
       if (file.size > MAX_FILE_SIZE) {
         setError(t(`Le fichier est trop volumineux. La taille maximale est de ${MAX_FILE_SIZE_MB}MB.`));
-        setDocument(null);
+        setDocument([]);
         return;
       }
 
       setError("");
-      setDocument(file);
+      setDocument([...document, file]);
     }
   };
 
@@ -132,6 +132,7 @@ export default function Contact() {
               <label htmlFor="additional-info"></label>
               <CustomTextField
                 id="additional-info"
+                required
                 fullWidth
                 multiline
                 rows={4}
@@ -151,11 +152,12 @@ export default function Contact() {
               />
 
               {error && <p className="error">{error}</p>}
-              {document && (
-                <p>
-                  {t("Fichier sélectionné")}: {document.name}
+              {document.map((file, i) => (
+                <p key={i}>
+                  {t("Fichier sélectionné")}: {file.name}
                 </p>
-              )}
+              ))}
+
               <div className="flex-end">
                 <Button type="submit" variant="contained" color="secondary">
                   {t("Envoyer")}

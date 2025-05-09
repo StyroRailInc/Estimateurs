@@ -1,6 +1,6 @@
 import Wall from "./../classes/Wall.js";
 import Dimensions from "../classes/Dimensions.js";
-import { WallType, Width } from "../classes/types.js";
+import { WallType, Width } from "./../interfaces/build-block.js";
 import SpecialBlocks from "../classes/SpecialBlocks.js";
 import Opening from "../classes/Opening.js";
 import { HorizontalRebar, VerticalRebar } from "../classes/Rebars.js";
