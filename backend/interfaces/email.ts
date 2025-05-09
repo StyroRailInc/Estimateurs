@@ -5,7 +5,7 @@ export interface EmailParams {
   to: string;
   subject: string;
   text: string;
-  attachments: Attachment[];
+  attachments: Attachment[] | undefined;
 }
 
 export interface File {

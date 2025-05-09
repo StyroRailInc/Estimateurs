@@ -7,70 +7,54 @@ import stream from "stream";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   return new Promise((resolve, reject) => {
-    let fileBuffer: Uint8Array<ArrayBufferLike>[] = [];
-    let data: string = "";
-    let mimeType: string;
-    let fileName2: string;
-
-    // const body = event.isBase64Encoded ? Buffer.from(event.body, "base64") : event.body;
-    console.log("Request body length:", event.body.length);
-    const bodyStream = new stream.PassThrough();
-    bodyStream.end(event.body);
+    let fileBuffer: Buffer;
+    let data: any;
+    let fileInfo: any;
 
     const bb = busboy({ headers: event.headers, limits: { fileSize: 10 * 1024 * 1024 } });
-    console.log("Headers:", event.headers);
-    try {
-      const contentType = event.headers["content-type"] || event.headers["Content-Type"];
-    } catch (err) {}
 
     bb.on("file", (name, file, info) => {
-      console.log(`File detected: ${info.filename}, MIME type: ${info.mimeType}`);
-      fileBuffer = [];
-      mimeType = info.mimeType;
-      fileName2 = info.filename;
-      let totalSize = 0;
+      fileInfo = info;
       file.on("data", (chunk) => {
-        totalSize += chunk.length;
-        fileBuffer.push(chunk);
-        console.log(`Chunk received: ${chunk.length} bytes, Total size so far: ${totalSize} bytes`);
+        fileBuffer = chunk;
       });
     });
 
-    bb.on("field", (name, val, info) => {
-      console.log(`Field detected: ${name} = ${val}`);
-      data = val;
+    bb.on("field", (name, val) => {
+      data = JSON.parse(val);
     });
 
     bb.on("finish", async () => {
-      console.log(fileBuffer.length);
-      const buffer2 = Buffer.concat(fileBuffer);
-      if (!fileBuffer || !data) {
-        reject(jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: "File and data are required." }));
+      let attachments;
+      if (fileBuffer) {
+        attachments = [{ filename: fileInfo.fileName, content: fileBuffer, contentType: fileInfo.mimeType }];
       }
-
-      console.log(fileName2);
 
       const emailParams = {
         to: "technologie@styrorail.ca",
         subject: "Estimation Build Block",
-        text: data,
-        attachments: [{ filename: fileName2, content: buffer2, contentType: mimeType }],
+        text: `Nom : ${data.name}\nCourriel : ${data.email}\nPhone : ${data.phone}\nMessage : ${data.message}`,
+        attachments: attachments,
       };
 
-      const isEmailSent = await sendEmail(emailParams);
-
-      if (isEmailSent) {
-        resolve(jsonResponse(HTTP_STATUS.NO_CONTENT, { message: "Email sent successfully" }));
-        return;
+      try {
+        const isEmailSent = await sendEmail(emailParams);
+        if (isEmailSent) {
+          resolve(jsonResponse(HTTP_STATUS.NO_CONTENT, { message: "Email sent successfully" }));
+        } else {
+          reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error sending the email" }));
+        }
+      } catch (error) {
+        reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Exception during email send", error }));
       }
-
-      reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error sending the email" }));
     });
 
     bb.on("error", () => {
       reject(jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error processing file upload" }));
     });
 
+    const bodyStream = new stream.PassThrough();
+    bodyStream.end(Buffer.from(event.body, event.isBase64Encoded ? "base64" : "utf8"));
     bodyStream.pipe(bb);
   });
 };
