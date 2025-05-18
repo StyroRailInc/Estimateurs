@@ -5,6 +5,19 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.file-list {
+  max-height: 100px;
+  overflow-y: auto;
+  margin-bottom: 5px;
+}
+
+.file-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
 .page-container {
   height: 94vh;
   align-items: center;

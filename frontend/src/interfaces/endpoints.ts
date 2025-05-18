@@ -3,4 +3,5 @@ export enum Endpoints {
   LOGIN = "/auth/login",
   PREFERENCES = "/user/preferences",
   SIGN_UP = "/auth/sign-up",
+  CONTACT = "/contact",
 }

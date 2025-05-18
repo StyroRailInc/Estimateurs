@@ -113,5 +113,9 @@
   "Knockdown straight": "Déconstruit droit",
   "Knockdown 90-degree corner": "Déconstruit coin à 90 degrés",
   "Search submission...": "Rechercher une soumission...",
-  "No submission found": "Aucune soumission trouvée"
+  "No submission found": "Aucune soumission trouvée",
+  "Unsupported format. Please upload a valid file": "Format non supporté. Veuillez télécharger un fichier valide",
+  "The files are too large. The maximum size is 5 MB": "Les fichiers sont trop volumineux. La taille maximale est de 5 MB",
+  "Thank you for your message!": "Merci pour votre message!",
+  "We have received your request and will contact you shortly": "Nous avons bien reçu votre demande et vous contacterons sous peu"
 }
