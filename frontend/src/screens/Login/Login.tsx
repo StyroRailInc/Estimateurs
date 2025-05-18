@@ -4,66 +4,58 @@ import "./Login.css";
 import { useTranslation } from "react-i18next";
 import { Button } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { Constants } from "src/constants";
+import { Routes } from "src/interfaces/routes";
 import { HTTP_STATUS } from "src/utils/http";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "src/context/AuthContext";
-import { TextField } from "@mui/material";
 import { Box } from "@mui/material";
 import { useColorMode } from "src/context/ColorModeContext";
 import { useLanguage } from "src/context/LanguageContext";
 import CustomTextField from "src/components/CustomTextField";
+import { apiService } from "src/services/api";
+import { Endpoints } from "src/interfaces/endpoints";
+import { HttpError } from "src/utils/http-error";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  const { t } = useTranslation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
   const { login } = useAuth();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const location = useLocation();
   const { setLanguage } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const { setColorMode } = useColorMode();
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(`${Constants.API}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email, password: password }),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          if (response.status === HTTP_STATUS.NOT_FOUND) {
-            throw new Error("Le courriel est invalide");
-          } else if (response.status === HTTP_STATUS.UNAUTHORIZED) {
-            throw new Error("Mot de passe incorrecte. Réessayez.");
-          } else {
-            throw new Error("Échec de l'inscription. Réessayez.");
-          }
-        }
-        const token = response.headers.get("x-auth-token");
+    try {
+      const { body, headers } = await apiService.post(Endpoints.LOGIN, { email: email, password: password });
+      const token = headers.get("x-auth-token");
+      const preferences = JSON.parse(body.preferences);
 
-        const parsedResponse = await response.json();
-        const preferences = JSON.parse(parsedResponse.preferences);
+      if (token) {
+        login({ name: body.name, email, token });
+      }
 
-        if (token) {
-          login({ name: parsedResponse.name, email, token });
-        }
+      if (preferences.language) setLanguage(preferences.language);
+      if (preferences.mode) setColorMode(preferences.mode);
 
-        if (preferences.language) setLanguage(preferences.language);
-        if (preferences.mode) setColorMode(preferences.mode);
+      const redirectPath = location.state?.from?.pathname || Routes.ACCOUNT;
+      navigate(redirectPath);
+    } catch (error) {
+      const status = (error as HttpError)?.status;
 
-        const redirectPath = location.state?.from?.pathname || "/account";
-        navigate(redirectPath);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+      if (status === HTTP_STATUS.NOT_FOUND) {
+        setError("Le courriel est invalide");
+      } else if (status === HTTP_STATUS.UNAUTHORIZED) {
+        setError("Mot de passe incorrecte. Réessayez.");
+      } else {
+        setError("Échec de l'inscription. Réessayez.");
+      }
+    }
   };
 
   return (
@@ -97,7 +89,7 @@ const Login: React.FC<LoginProps> = () => {
             </form>
             <div className="flex-horizontal">
               <p>{t("Vous n'avez pas de compte?")}</p>
-              <Button variant="text" className="button-no-caps" sx={{ color: "var(--secondary-color-light)" }} component={RouterLink} to="/sign-up">
+              <Button variant="text" className="button-no-caps sign-up-button" component={RouterLink} to={Routes.SIGN_UP}>
                 {t("S'inscrire")}
               </Button>
             </div>

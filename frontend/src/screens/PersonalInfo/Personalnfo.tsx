@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "src/context/AuthContext";
 import { Box } from "@mui/material";
+import "./PersonalInfo.css";
 
 const PersonalInfo: React.FC = () => {
   const { t } = useTranslation();
@@ -9,22 +10,16 @@ const PersonalInfo: React.FC = () => {
 
   return (
     <main>
-      <div style={{ padding: "20px" }}>
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-          {t("Informations Personnelles")}
-        </h1>
+      <div className="personal-info-container">
+        <h1 className="personal-info-title">{t("Informations Personnelles")}</h1>
         <Box
+          className="personal-info-box"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? "var(--transparent)"
-                : "var(--background-color-very-dark)",
-            borderRadius: "8px",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            backgroundColor: (theme) => (theme.palette.mode === "light" ? "var(--transparent)" : "var(--background-color-very-dark)"),
           }}
         >
-          <p style={{ padding: "20px 0px 0px 20px" }}>{t("Nom") + " : " + `${user?.name}`}</p>
-          <p style={{ padding: "0px 0px 20px 20px" }}>{t("Courriel") + " : " + `${user?.email}`}</p>
+          <p className="personal-info-name">{`${t("Nom")} : ${user?.name}`}</p>
+          <p className="personal-info-email">{`${t("Courriel")} : ${user?.email}`}</p>
         </Box>
       </div>
     </main>

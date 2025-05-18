@@ -1,20 +1,14 @@
 import { Constants } from "src/constants";
 import { User } from "./../interfaces/user";
-
-export class HttpError extends Error {
-  constructor(public readonly status: number, message?: string) {
-    super(message);
-  }
-}
+import { HttpError } from "./../utils/http-error";
 
 export const apiService = {
   get: async (endpoint: string) => {
     try {
       const response = await fetch(`${Constants.API}${endpoint}`);
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      if (!response.ok) throw new HttpError(response.status);
       return await response.json();
     } catch (error) {
-      console.error("GET request failed:", error);
       throw error;
     }
   },
@@ -30,9 +24,11 @@ export const apiService = {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new HttpError(response.status);
-      return await verifyResponseBody(response);
+      const headers = response.headers;
+      const body = await verifyResponseBody(response);
+
+      return { body, headers };
     } catch (error) {
-      console.error("POST request failed:", error);
       throw error;
     }
   },
@@ -87,7 +83,7 @@ export const apiService = {
   },
 };
 
-async function verifyResponseBody(response: Response): Promise<string | null> {
+async function verifyResponseBody(response: Response) {
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {
     return await response.json();

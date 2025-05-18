@@ -1,0 +1,26 @@
+.personal-info-container {
+  padding: 20px;
+}
+
+.personal-info-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.personal-info-box {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.personal-info-name,
+.personal-info-email {
+  padding-left: 20px;
+}
+
+.personal-info-name {
+  padding-top: 20px;
+}
+
+.personal-info-email {
+  padding-bottom: 20px;
+}

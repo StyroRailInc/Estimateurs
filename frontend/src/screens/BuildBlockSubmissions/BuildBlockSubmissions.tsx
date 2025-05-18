@@ -11,10 +11,11 @@ import "./../../global.css";
 import SingleInputDialog from "src/components/SingleInputDialog";
 import { HTTP_STATUS } from "src/utils/http";
 import FormTextField from "src/components/FormTextField";
+import { Submissions } from "src/interfaces/submissions";
 
 const BuildBlockSubmissions: React.FC = () => {
   const { t } = useTranslation();
-  const [submissions, setSubmissions] = useState<{ name: string; submission: string }[] | undefined>(undefined);
+  const [submissions, setSubmissions] = useState<Submissions[] | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);

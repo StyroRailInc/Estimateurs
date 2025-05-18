@@ -2,7 +2,6 @@ import { CssBaseline } from "@mui/material/";
 import BuildBlock from "./screens/BuildBlock";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import SRF from "./screens/SRF";
 import NoPage from "./screens/NoPage/NoPage";
 import AppBar from "./../src/components/AppBar";
 import Home from "./screens/Home";
@@ -30,7 +29,6 @@ function App() {
                   <Route path="/" element={<AppBar />}>
                     <Route index element={<Home />} />
                     <Route path="buildblock" element={<BuildBlock />} />
-                    <Route path="srf" element={<SRF />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="login" element={<Login />} />
                     <Route path="sign-up" element={<SignUp />} />

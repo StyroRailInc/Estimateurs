@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { Button, TextField, Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./../../global.css";
-import { Constants } from "src/constants";
+import { Routes } from "src/interfaces/routes";
 import { HTTP_STATUS } from "./../../utils/http";
 import { useAuth } from "src/context/AuthContext";
 import CustomTextField from "src/components/CustomTextField";
+import { Endpoints } from "src/interfaces/endpoints";
+import { apiService } from "src/services/api";
+import { HttpError } from "src/utils/http-error";
+import "./SignUp.css";
 
 interface SignUpProps {}
 
@@ -18,52 +22,39 @@ const SignUp: React.FC<SignUpProps> = () => {
     password: "",
     confirmPassword: "",
   });
+  const { login } = useAuth();
   const [error, setError] = useState("");
   const [isAccountCreated, setIsAccountCreated] = useState(false);
-  const { login } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { password, confirmPassword } = formData;
-
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError("Les mots de passe ne correspondent pas.");
       return;
     }
 
     setError("");
 
-    fetch(`${Constants.API}/auth/sign-up`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          if (response.status === HTTP_STATUS.CONFLICT) {
-            throw new Error(t("Courriel déjà sélectionné. Changez le courriel."));
-          } else {
-            throw new Error(t("Échec de l'inscription. Réessayez."));
-          }
-        }
+    try {
+      const { body, headers } = await apiService.post(Endpoints.SIGN_UP, formData);
+      const token = headers.get("x-auth-token");
 
-        const token = response.headers.get("x-auth-token");
-        const parsedResponse = await response.json();
-        if (token && parsedResponse) {
-          login({ name: parsedResponse.name, email: formData.email, token });
-        }
-        setIsAccountCreated(true);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+      if (token && body) login({ name: body.name, email: formData.email, token });
+      setIsAccountCreated(true);
+    } catch (error) {
+      const status = (error as HttpError)?.status;
+
+      if (status === HTTP_STATUS.CONFLICT) {
+        setError(t("Courriel déjà sélectionné. Changez le courriel."));
+      } else {
+        setError(t("Échec de l'inscription. Réessayez."));
+      }
+    }
   };
 
   return (
@@ -111,7 +102,7 @@ const SignUp: React.FC<SignUpProps> = () => {
               </form>
               <div className="flex-horizontal">
                 <p>{t("Vous possédez déjà un compte?")}</p>
-                <Button variant="text" className="button-no-caps" sx={{ color: "var(--secondary-color-light)" }} component={RouterLink} to="/login">
+                <Button variant="text" className="button-no-caps login-button-color" component={RouterLink} to={Routes.LOGIN}>
                   {t("Se connecter")}
                 </Button>
               </div>
@@ -119,14 +110,7 @@ const SignUp: React.FC<SignUpProps> = () => {
           ) : (
             <div className="flex-center flex-vertical">
               <h1>{t("Bienvenue") + " " + formData.name + "!"}</h1>
-              <Button
-                color="secondary"
-                variant="contained"
-                className="button-no-caps"
-                // sx={{ color: "var(--secondary-color-light)" }}
-                component={RouterLink}
-                to="/account"
-              >
+              <Button color="secondary" variant="contained" className="button-no-caps" component={RouterLink} to={Routes.ACCOUNT}>
                 {t("Continuer")}
               </Button>
             </div>

@@ -13,28 +13,31 @@ import { useNavigate } from "react-router-dom";
 import "./../../global.css";
 import { Outlet } from "react-router-dom";
 import { apiService } from "src/services/api";
-import { HttpError } from "src/services/api";
+import { HttpError } from "src/utils/http-error";
+import { Routes } from "./../../interfaces/routes";
+import { Endpoints } from "./../../interfaces/endpoints";
 
 const Account: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const { t } = useTranslation();
-  const navigate = useNavigate();
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { user, logout } = useAuth();
+  const [open, setOpen] = useState(false);
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleLogoutClick = async () => {
     try {
-      await apiService.post("/auth/logout", user, user);
+      await apiService.post(Endpoints.LOGOUT, user, user);
       logout();
-      navigate("/login");
+      navigate(Routes.LOGIN);
     } catch (error) {
-      if (error instanceof HttpError) {
-        if (error.status === HTTP_STATUS.UNAUTHORIZED) {
-          console.log(t("Jeton de session invalide"));
-        } else {
-          console.log(t("Échec de la déconnexion. Réessayez."));
-        }
+      const status = (error as HttpError)?.status;
+
+      if (status === HTTP_STATUS.UNAUTHORIZED) {
+        console.error(t("Jeton de session invalide"));
+      } else {
+        console.error(t("Échec de la déconnexion. Réessayez."));
       }
     }
   };
@@ -71,11 +74,7 @@ const Account: React.FC = () => {
         </div>
         <div>
           <Divider />
-          <CustomListItem
-            title="Se déconnecter"
-            style={{ color: "red" }}
-            onClick={handleLogoutClick}
-          />
+          <CustomListItem title="Se déconnecter" style={{ color: "red" }} onClick={handleLogoutClick} />
         </div>
       </Drawer>
 

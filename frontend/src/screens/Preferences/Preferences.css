@@ -1,0 +1,35 @@
+.preferences-container {
+  padding: 20px;
+}
+
+.preferences-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.preferences-box {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.preference-row {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.preference-label {
+  padding-top: 20px;
+}
+
+.preference-button {
+  display: flex;
+  align-items: center;
+  color: inherit;
+}
+
+.preference-button span {
+  margin-left: 5px;
+}

@@ -13,3 +13,7 @@
 .login-button {
   margin-top: 20px;
 }
+
+.sign-up-button {
+  color: var(--secondary-color-light);
+}

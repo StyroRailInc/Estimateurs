@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/context/AuthContext";
+import { Routes } from "./../../interfaces/routes";
 
 interface ProfileIconProps {
   ButtonComponent: ReactNode;
@@ -12,9 +13,9 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ ButtonComponent }) => {
 
   const handleProfileClick = () => {
     if (user) {
-      navigate("/account");
+      navigate(Routes.ACCOUNT);
     } else {
-      navigate("/login");
+      navigate(Routes.LOGIN);
     }
   };
 

@@ -46,3 +46,7 @@
 .app-bar-button {
   color: var(--text-color-header);
 }
+
+.app-bar-button-selected {
+  color: var(--secondary-color-light);
+}

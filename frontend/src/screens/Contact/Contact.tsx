@@ -5,7 +5,7 @@ import "./../../global.css";
 import "./Contact.css";
 import { apiService } from "src/services/api";
 import { useLanguage } from "src/context/LanguageContext";
-import { HttpError } from "src/services/api";
+import { HttpError } from "src/utils/http-error";
 import { HTTP_STATUS } from "src/utils/http";
 import CustomTextField from "src/components/CustomTextField";
 

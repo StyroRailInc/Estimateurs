@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 import "./../../global.css";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
+import { Routes } from "../../interfaces/routes";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleContinueClick = () => {
-    navigate("buildblock");
+    navigate(Routes.BUILDBLOCK);
   };
 
   return (
