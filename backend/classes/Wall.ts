@@ -35,7 +35,7 @@ class Wall {
   private computeOpenings() {
     const openingSurfaceArea = this.getOpeningSurfaceArea();
     this.remainingSurfaceArea = this.wConfig.dimensions.getCoursesSurfaceArea();
-    let openingPerimeter = this.getOpeningPerimeter();
+    const openingPerimeter = this.getOpeningPerimeter();
 
     this.remainingSurfaceArea -= openingSurfaceArea;
     this.remainingSurfaceArea -= this.wm.corners.getTotalSurfaceArea(this.nCourses);

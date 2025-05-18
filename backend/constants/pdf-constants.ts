@@ -29,22 +29,18 @@ export enum PdfPosition {
   Margin = 50,
   TitleX = 110,
   TitleY = 57,
-  DateX = 50,
   DateY = 85,
   LineY = 100,
-  LineStartX = 50,
   LineEndX = 550,
   SectionTitleYOffset = 20,
   SectionLineYOffset = 35,
   TextIndent = 60,
   TermsWidth = 500,
-  PageBottomMargin = 50,
 }
 
 export enum PdfSpacingEstimate {
   DefaultRequiredSpace = 100,
   BlockLineHeight = 50,
   RebarLineHeight = 20,
-  BridgeLineHeight = 50,
   AdditionalInfoHeight = 30,
 }

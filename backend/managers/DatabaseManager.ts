@@ -142,7 +142,7 @@ class DatabaseManager {
     }
   }
 
-  async updatePreferences(user: Record<string, AttributeValue>, preferences: Object) {
+  async updatePreferences(user: Record<string, AttributeValue>, preferences: object) {
     const params = {
       TableName: this.table,
       Key: { Email: user.Email.S, UserID: user.UserID.S },

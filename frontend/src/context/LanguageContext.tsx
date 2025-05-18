@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Language } from "./../interfaces/language";
 
 const LanguageContext = createContext<{
-  language: "eng" | "fr";
+  language: Language;
   toggleLanguage: () => void;
-  setLanguage: (language: "fr" | "eng") => void;
+  setLanguage: (language: Language) => void;
 }>({
   language: "fr",
   toggleLanguage: () => {},
@@ -19,12 +20,12 @@ const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const { i18n } = useTranslation();
 
   const getLanguage = () => {
-    const savedLanguage = localStorage.getItem("language") as "eng" | "fr" | null;
+    const savedLanguage = localStorage.getItem("language") as Language | null;
     const browserLanguage = i18n.language;
     return savedLanguage || (browserLanguage === "eng" ? "eng" : "fr");
   };
 
-  const [language, setLanguageState] = useState<"eng" | "fr">(getLanguage());
+  const [language, setLanguageState] = useState<Language>(getLanguage());
 
   useEffect(() => {
     const initialLanguage = getLanguage();
@@ -42,7 +43,7 @@ const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
     setLanguageState(newLanguage);
   };
 
-  const setLanguage = (newLanguage: "fr" | "eng") => {
+  const setLanguage = (newLanguage: Language) => {
     i18n.changeLanguage(newLanguage);
     setLanguageState(newLanguage);
   };

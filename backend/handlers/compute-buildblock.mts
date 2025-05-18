@@ -17,6 +17,6 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
 
     return jsonResponse(HTTP_STATUS.SUCCESS, computedHouse);
   } catch (error) {
-    return jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: `Error processing house` });
+    return jsonResponse(HTTP_STATUS.BAD_REQUEST, { message: `Error processing house`, error: error.message });
   }
 };

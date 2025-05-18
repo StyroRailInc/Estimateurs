@@ -34,7 +34,7 @@ export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
     return jsonResponse(HTTP_STATUS.UNAUTHORIZED, { message: `Invalid token ${token}` });
   }
 
-  let buildBlock = validateRequestBody(user.buildblock?.S || "[]");
+  const buildBlock = validateRequestBody(user.buildblock?.S || "[]");
   if (!buildBlock) {
     return jsonResponse(HTTP_STATUS.SERVER_ERROR, { message: "Error parsing buildblock" });
   }

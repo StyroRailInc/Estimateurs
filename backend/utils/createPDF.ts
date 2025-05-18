@@ -40,18 +40,18 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
     .font(PdfFont.Bold)
     .text(REPORT[lang]["title"], PdfPosition.TitleX, PdfPosition.TitleY)
     .fontSize(PdfFontSize.Text)
-    .text(new Date().toLocaleDateString(), PdfPosition.DateX, PdfPosition.DateY, { align: "right" })
+    .text(new Date().toLocaleDateString(), PdfPosition.Margin, PdfPosition.DateY, { align: "right" })
     .moveDown(2);
 
   doc
     .strokeColor(PdfColor.Primary)
     .lineWidth(1)
-    .moveTo(PdfPosition.LineStartX, PdfPosition.LineY)
+    .moveTo(PdfPosition.Margin, PdfPosition.LineY)
     .lineTo(PdfPosition.LineEndX, PdfPosition.LineY)
     .stroke();
 
   const checkPageEnd = (requiredSpace: number = PdfSpacingEstimate.DefaultRequiredSpace) => {
-    if (doc.y + requiredSpace > doc.page.height - PdfPosition.PageBottomMargin) {
+    if (doc.y + requiredSpace > doc.page.height - PdfPosition.Margin) {
       doc.addPage();
       doc.y = PdfPosition.Margin;
     }
@@ -65,14 +65,14 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
       .fontSize(PdfFontSize.Section)
       .fillColor(PdfColor.Primary)
       .font(PdfFont.Bold)
-      .text(title, PdfPosition.LineStartX, y + PdfPosition.SectionTitleYOffset)
+      .text(title, PdfPosition.Margin, y + PdfPosition.SectionTitleYOffset)
       .fillColor(PdfColor.Text)
       .moveDown(0.5);
 
     doc
       .strokeColor(PdfColor.Primary)
       .lineWidth(0.5)
-      .moveTo(PdfPosition.LineStartX, y + PdfPosition.SectionLineYOffset)
+      .moveTo(PdfPosition.Margin, y + PdfPosition.SectionLineYOffset)
       .lineTo(PdfPosition.LineEndX, y + PdfPosition.SectionLineYOffset)
       .stroke();
   };
@@ -81,9 +81,9 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
   Object.entries(data.blockQuantities || {}).forEach(([size, blockTypes]) => {
     checkPageEnd(30);
     const cleanSize = size.replace(/\\/g, "");
-    doc.fontSize(PdfFontSize.Section).font(PdfFont.Bold).text(`Blocs ${cleanSize}:`, PdfPosition.LineStartX).moveDown(0.3);
+    doc.fontSize(PdfFontSize.Section).font(PdfFont.Bold).text(`Blocs ${cleanSize}:`, PdfPosition.Margin).moveDown(0.3);
 
-    Object.entries(blockTypes as Object).forEach(([type, details]: any) => {
+    Object.entries(blockTypes as object).forEach(([type, details]: any) => {
       if (details.quantity > 0) {
         checkPageEnd(20);
 
@@ -115,7 +115,7 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
     }
   });
 
-  addSection(REPORT[lang]["bridges"], Object.keys(data.bridges || {}).length * PdfSpacingEstimate.BridgeLineHeight);
+  addSection(REPORT[lang]["bridges"], Object.keys(data.bridges || {}).length * PdfSpacingEstimate.BlockLineHeight);
   Object.entries(data.bridges || {}).forEach(([width, details]: any) => {
     checkPageEnd(30);
     const cleanWidth = width.replace(/\\/g, "");
@@ -123,7 +123,7 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
     doc
       .fontSize(PdfFontSize.Section)
       .font(PdfFont.Bold)
-      .text(`Bridges ${cleanWidth}:`, PdfPosition.LineStartX)
+      .text(`Bridges ${cleanWidth}:`, PdfPosition.Margin)
       .moveDown(0.3)
       .font(PdfFont.Bold)
       .text(`• ${details.quantity} ${REPORT[lang]["units"]}`, { indent: PdfPosition.TextIndent, continued: true })

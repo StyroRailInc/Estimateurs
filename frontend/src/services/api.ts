@@ -1,14 +1,10 @@
 import { Constants } from "src/constants";
+import { User } from "./../interfaces/user";
 
 export class HttpError extends Error {
   constructor(public readonly status: number, message?: string) {
     super(message);
   }
-}
-
-interface User {
-  email: string;
-  token: string;
 }
 
 export const apiService = {

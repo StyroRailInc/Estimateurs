@@ -1,8 +1,9 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
+import { User } from "./../interfaces/user";
 
 const AuthContext = createContext<{
-  user: { name: string; email: string; token: string } | null;
-  login: (userData: { name: string; email: string; token: string }) => void;
+  user: User | null;
+  login: (userData: User) => void;
   logout: () => void;
 }>({
   user: null,
@@ -15,14 +16,14 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<{ name: string; email: string; token: string } | null>(() => {
+  const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       return JSON.parse(storedUser);
     }
   });
 
-  const login = (userData: { name: string; email: string; token: string }) => {
+  const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };

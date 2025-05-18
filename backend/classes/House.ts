@@ -63,7 +63,7 @@ class House {
   }
 
   computeHouse(): HouseSpecifications {
-    for (let wall of this.walls) {
+    for (const wall of this.walls) {
       const wallBlockQuantities = wall.computeWall();
       this.adjustBlockQuantities(wallBlockQuantities);
     }

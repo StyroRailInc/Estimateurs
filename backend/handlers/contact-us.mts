@@ -9,8 +9,8 @@ import stream from "stream";
 
 export const handler = async (event: AWSEvent): Promise<HandlerResponse> => {
   return new Promise((resolve, reject) => {
-    let fileBuffer: Buffer[] = [];
-    let fileInfo: FileInfo[] = [];
+    const fileBuffer: Buffer[] = [];
+    const fileInfo: FileInfo[] = [];
     let data: EmailData;
 
     const bb = busboy({ headers: event.headers, limits: { fileSize: MAX_FILE_SIZE } });
