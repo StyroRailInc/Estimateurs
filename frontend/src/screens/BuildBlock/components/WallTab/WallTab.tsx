@@ -2,18 +2,12 @@ import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
-import {
-  OpeningState,
-  BuildBlockFormState,
-  BuildBlockFormAction,
-  OpeningAction,
-  WallState,
-  WallAction,
-} from "../../types/BBTypes";
-import { buildBlockFormReducer, initialOpeningState, initialWallState } from "../../reducer";
+import { OpeningState, BuildBlockFormState, BuildBlockFormAction, OpeningAction, WallState, WallAction } from "../../types/BBTypes";
+import { initialOpeningState, initialWallState } from "../../reducer";
 import { Tab, Tabs, IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SingleInputDialog from "src/components/SingleInputDialog";
+import "./WallTab.css";
 
 interface WallTabProps {
   buildBlockFormState: BuildBlockFormState;
@@ -24,41 +18,45 @@ interface WallTabProps {
   wallDispatch: React.Dispatch<WallAction>;
 }
 
-const WallTab: React.FC<WallTabProps> = ({
-  buildBlockFormState,
-  openingState,
-  wallState,
-  buildBlockFormDispatch,
-  openingDispatch,
-  wallDispatch,
-}) => {
+const WallTab: React.FC<WallTabProps> = ({ buildBlockFormState, openingState, wallState, buildBlockFormDispatch, openingDispatch, wallDispatch }) => {
   const { t } = useTranslation();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [newName, setNewName] = useState<string>("");
 
-  const handleChange = (event: React.SyntheticEvent, index: number) => {
+  useEffect(() => {
+    buildBlockFormDispatch({
+      type: "setInputs",
+      payload: wallState.walls[wallState.clickedWallIndex].buildBlockFormState,
+    });
+    openingDispatch({
+      type: "setOpenings",
+      payload: wallState.walls[wallState.clickedWallIndex].openingState,
+    });
+  }, [wallState.clickedWallIndex]);
+
+  useEffect(() => {
+    dispatchModifyWall();
+  }, [buildBlockFormState, openingState]);
+
+  const dispatchModifyWall = (nameOverride?: string) => {
     wallDispatch({
       type: "modifyWall",
       payload: {
-        name: wallState.walls[wallState.clickedWallIndex].name,
-        buildBlockFormState: buildBlockFormState,
-        openingState: openingState,
+        name: nameOverride ?? wallState.walls[wallState.clickedWallIndex]?.name,
+        buildBlockFormState,
+        openingState,
         index: wallState.clickedWallIndex,
       },
     });
+  };
+
+  const handleChange = (event: React.SyntheticEvent, index: number) => {
+    dispatchModifyWall();
     wallDispatch({ type: "setClickedWallIndex", payload: index });
   };
 
   const handleAddWallTabClick = () => {
-    wallDispatch({
-      type: "modifyWall",
-      payload: {
-        name: wallState.walls[wallState.clickedWallIndex].name,
-        buildBlockFormState: buildBlockFormState,
-        openingState: openingState,
-        index: wallState.clickedWallIndex,
-      },
-    });
+    dispatchModifyWall();
     wallDispatch({ type: "addWall", payload: { buildBlockFormState, openingState } });
     wallDispatch({ type: "setClickedWallIndex", payload: wallState.walls.length });
   };
@@ -73,7 +71,6 @@ const WallTab: React.FC<WallTabProps> = ({
     }
 
     const newClickedIndex = Math.min(clickedWallIndex, walls.length - 2);
-
     wallDispatch({ type: "setClickedWallIndex", payload: newClickedIndex });
 
     setTimeout(() => {
@@ -99,58 +96,15 @@ const WallTab: React.FC<WallTabProps> = ({
     setEditingIndex(index);
   };
 
-  useEffect(() => {
-    buildBlockFormDispatch({
-      type: "setInputs",
-      payload: wallState.walls[wallState.clickedWallIndex].buildBlockFormState,
-    });
-    openingDispatch({
-      type: "setOpenings",
-      payload: wallState.walls[wallState.clickedWallIndex].openingState,
-    });
-  }, [wallState.clickedWallIndex]);
-
-  useEffect(() => {
-    wallDispatch({
-      type: "modifyWall",
-      payload: {
-        name: wallState.walls[wallState.clickedWallIndex].name,
-        buildBlockFormState: buildBlockFormState,
-        openingState: openingState,
-        index: wallState.clickedWallIndex,
-      },
-    });
-  }, [buildBlockFormState, openingState]);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    wallDispatch({
-      type: "modifyWall",
-      payload: {
-        name: newName,
-        buildBlockFormState: buildBlockFormState,
-        openingState: openingState,
-        index: wallState.clickedWallIndex,
-      },
-    });
+    dispatchModifyWall(newName);
     setEditingIndex(null);
   };
 
   return (
-    <div
-      className="flex-horizontal flex-start"
-      style={{
-        padding: "10px 0",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          width: "100%",
-          overflow: "auto",
-        }}
-      >
+    <div className="wall-tab-container">
+      <div className="wall-tab-scroll-area">
         <Tabs
           value={wallState.clickedWallIndex}
           onChange={handleChange}
@@ -164,15 +118,10 @@ const WallTab: React.FC<WallTabProps> = ({
               key={index}
               value={index}
               label={
-                <div className="flex-horizontal">
+                <div className="wall-tab-label">
                   <p>{wall.name}</p>
-                  <IconButton
-                    component="span"
-                    edge="end"
-                    onClick={() => handleEdit(index)}
-                    aria-label={t("Modifier")}
-                  >
-                    <EditIcon sx={{ width: "15px", height: "15px" }} />
+                  <IconButton component="span" edge="end" onClick={() => handleEdit(index)} aria-label={t("Modifier")}>
+                    <EditIcon className="icon-small" />
                   </IconButton>
                 </div>
               }
@@ -182,22 +131,11 @@ const WallTab: React.FC<WallTabProps> = ({
         </Tabs>
       </div>
 
-      <div className="flex-end">
-        <Button
-          onClick={handleAddWallTabClick}
-          disableRipple
-          color={"success"}
-          variant="contained"
-          sx={{ marginRight: "10px" }}
-        >
+      <div className="wall-tab-controls">
+        <Button onClick={handleAddWallTabClick} disableRipple color="success" variant="contained" className="wall-tab-add-btn">
           +
         </Button>
-        <Button
-          onClick={handleDeleteWallTabClick}
-          disableRipple
-          color={"error"}
-          variant="contained"
-        >
+        <Button onClick={handleDeleteWallTabClick} disableRipple color="error" variant="contained">
           -
         </Button>
       </div>
@@ -218,14 +156,7 @@ const WallTab: React.FC<WallTabProps> = ({
           setNewName("");
         }}
       >
-        <TextField
-          id="name"
-          fullWidth
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          size="small"
-          required
-        />
+        <TextField id="name" fullWidth value={newName} onChange={(e) => setNewName(e.target.value)} size="small" required />
       </SingleInputDialog>
     </div>
   );

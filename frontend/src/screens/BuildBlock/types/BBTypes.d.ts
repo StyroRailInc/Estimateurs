@@ -1,14 +1,6 @@
-import Opening from "../utils/BBCalculator/Opening";
-
 export type Width = '4"' | '6"' | '8"';
 
-export type BlockType =
-  | "straight"
-  | "ninetyCorner"
-  | "fortyFiveCorner"
-  | "doubleTaperTop"
-  | "brickLedge"
-  | "buck";
+export type BlockType = "straight" | "ninetyCorner" | "fortyFiveCorner" | "doubleTaperTop" | "brickLedge" | "buck";
 
 export type BuildBlockFormState = {
   wallType: string;
@@ -130,5 +122,3 @@ export type WallAction =
     }
   | { type: "setClickedWallIndex"; payload: number }
   | { type: "setWalls"; payload: WallState };
-
-export type InnerPage = "buildBlockForm" | "buildDeckForm" | "summary";

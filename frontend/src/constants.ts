@@ -17,4 +17,14 @@ export const Constants = {
   ],
   MAX_FILE_SIZE: 5242880, //mb
   FILE_EXTENSIONS: ".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.skp,.rvt,.rfa,.rte,.pln,.tpl,.gsm,.ifc,.zip",
+  WIDTH_OPTIONS: ['4"', '6"', '8"', '10"', '12"'],
+  REBAR_DIAMETER_OPTIONS: [
+    { label: "#3", value: "0.375" },
+    { label: "#4", value: "0.5" },
+    { label: "#5", value: "0.625" },
+    { label: "#6", value: "0.75" },
+    { label: "#7", value: "0.875" },
+    { label: "#8", value: "1.0" },
+  ],
+  THERMALSERT_WIDTH_OPTIONS: ['1"', '2"', '4"', '6"', '8"'],
 };

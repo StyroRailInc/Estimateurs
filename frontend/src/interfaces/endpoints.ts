@@ -4,4 +4,5 @@ export enum Endpoints {
   PREFERENCES = "/user/preferences",
   SIGN_UP = "/auth/sign-up",
   CONTACT = "/contact",
+  SUBMISSIONS = "/compute/buildblock/submissions?email=",
 }

@@ -36,7 +36,7 @@ export default function Contact() {
   useEffect(() => {
     if (computeTotalFileSize() < Constants.MAX_FILE_SIZE) setError("");
     else setError(t("Les fichiers sont trop volumineux. La taille maximale est de 5 MB"));
-  }, [files, t, computeTotalFileSize]);
+  }, [files]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {

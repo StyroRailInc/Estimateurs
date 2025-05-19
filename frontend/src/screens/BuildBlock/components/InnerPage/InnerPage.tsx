@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import LeftMenu from "../LeftMenu";
 import Summary from "../Summary";
 import BuildBlockForm from "../BuildBlockForm";
 import "./../../../../global.css";
 import "./InnerPage.css";
+import { Routes } from "src/interfaces/routes";
 
 function InnerPage() {
-  const [activeSection, setActiveSection] = useState("buildBlockForm");
+  const [activeSection, setActiveSection] = useState<string>(Routes.BUILDBLOCK_FORM);
 
   const renderContent = () => {
     switch (activeSection) {
-      case "buildBlockForm":
+      case Routes.BUILDBLOCK_FORM:
         return <BuildBlockForm setInnerPage={setActiveSection} />;
-      case "summary":
+      case Routes.SUMMARY:
         return <Summary />;
       default:
         return <BuildBlockForm setInnerPage={setActiveSection} />;

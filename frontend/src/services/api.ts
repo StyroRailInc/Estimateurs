@@ -3,9 +3,11 @@ import { User } from "./../interfaces/user";
 import { HttpError } from "./../utils/http-error";
 
 export const apiService = {
-  get: async (endpoint: string) => {
+  get: async (endpoint: string, user?: User | null) => {
     try {
-      const response = await fetch(`${Constants.API}${endpoint}`);
+      const response = await fetch(`${Constants.API}${endpoint}`, {
+        headers: { Authorization: `Bearer ${user?.token}` },
+      });
       if (!response.ok) throw new HttpError(response.status);
       return await response.json();
     } catch (error) {
@@ -33,30 +35,30 @@ export const apiService = {
     }
   },
 
-  put: async (endpoint: string, data: any) => {
+  put: async (endpoint: string, data: any, user?: User | null) => {
     try {
       const response = await fetch(`${Constants.API}${endpoint}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
         },
         body: JSON.stringify(data),
       });
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-      return await response.json();
+      if (!response.ok) throw new HttpError(response.status);
     } catch (error) {
       console.error("PUT request failed:", error);
       throw error;
     }
   },
 
-  delete: async (endpoint: string) => {
+  delete: async (endpoint: string, user?: User | null) => {
     try {
       const response = await fetch(`${Constants.API}${endpoint}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${user ? user.token : "null"}` },
       });
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-      return await response.json();
+      if (!response.ok) throw new HttpError(response.status);
     } catch (error) {
       console.error("DELETE request failed:", error);
       throw error;

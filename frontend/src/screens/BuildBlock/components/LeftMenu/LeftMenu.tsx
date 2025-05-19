@@ -1,29 +1,15 @@
 import React, { Dispatch } from "react";
-import { Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import "./LeftMenu.css";
+import { Routes } from "src/interfaces/routes";
+import StyledButton from "src/components/StyledButton";
 
 interface LeftMenuProps {
   activeSection: string;
   onChangeSection: Dispatch<React.SetStateAction<string>>;
 }
-
-const StyledButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== "isSelected",
-})<{ isSelected: boolean }>(({ theme, isSelected }) => ({
-  backgroundColor: isSelected
-    ? theme.palette.mode === "light"
-      ? "white"
-      : "#404249"
-    : "transparent",
-  "&:hover": {
-    backgroundColor: theme.palette.mode === "light" ? "#e6e6e6" : "#36373c",
-  },
-  color: theme.palette.text.primary,
-}));
 
 const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) => {
   const { t } = useTranslation();
@@ -33,9 +19,9 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       <StyledButton
         fullWidth
         className="button-left-aligned padding-left button-centered"
-        isSelected={activeSection === "buildBlockForm"}
+        isSelected={activeSection === Routes.BUILDBLOCK_FORM}
         onClick={() => {
-          onChangeSection("buildBlockForm");
+          onChangeSection(Routes.BUILDBLOCK_FORM);
         }}
       >
         Build Block
@@ -43,9 +29,9 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ activeSection, onChangeSection }) =
       <StyledButton
         fullWidth
         className="button-left-aligned padding-left button-centered"
-        isSelected={activeSection === "summary"}
+        isSelected={activeSection === Routes.SUMMARY}
         onClick={() => {
-          onChangeSection("summary");
+          onChangeSection(Routes.SUMMARY);
         }}
       >
         {t("Sommaire")}

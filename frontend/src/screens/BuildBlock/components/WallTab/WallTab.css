@@ -1,0 +1,33 @@
+.wall-tab-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px 0;
+}
+
+.wall-tab-scroll-area {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  overflow: auto;
+}
+
+.wall-tab-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wall-tab-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.wall-tab-add-btn {
+  margin-right: 10px;
+}
+
+.icon-small {
+  width: 15px !important;
+  height: 15px !important;
+}

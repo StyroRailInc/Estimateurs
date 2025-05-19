@@ -6,13 +6,15 @@ import "./BuildBlockForm.css";
 import "./../../BuildBlock.css";
 import "./../../../../global.css";
 import { useTranslation } from "react-i18next";
-import { InnerPage, WallState } from "../../types/BBTypes";
+import { WallState } from "../../types/BBTypes";
 import { openingReducer, initialOpeningState, buildBlockFormReducer, initialBuildBlockFormState } from "./../../reducer";
 import WallTab from "../WallTab";
 import { wallReducer, initialWallState } from "../../reducer";
+import { Routes } from "src/interfaces/routes";
+import { Constants } from "src/constants";
 
 interface BuildBlockFormProps {
-  setInnerPage: React.Dispatch<InnerPage>;
+  setInnerPage: React.Dispatch<string>;
 }
 
 const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
@@ -25,11 +27,13 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
     }
     return initialWallState;
   });
+
   const [openingState, openingDispatch] = useReducer(
     openingReducer,
     initialOpeningState,
     () => wallState.walls[wallState.clickedWallIndex].openingState
   );
+
   const [buildBlockFormState, buildBlockFormDispatch] = useReducer(
     buildBlockFormReducer,
     initialBuildBlockFormState,
@@ -54,7 +58,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
 
   const handleComputeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setInnerPage("summary");
+    setInnerPage(Routes.SUMMARY);
   };
 
   return (
@@ -382,11 +386,11 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             color="primary"
           >
             <MenuItem value={""}>ㅤ</MenuItem>
-            <MenuItem value={'1"'}>1"</MenuItem>
-            <MenuItem value={'2"'}>2"</MenuItem>
-            <MenuItem value={'4"'}>4"</MenuItem>
-            <MenuItem value={'6"'}>6"</MenuItem>
-            <MenuItem value={'8"'}>8"</MenuItem>
+            {Constants.THERMALSERT_WIDTH_OPTIONS.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
           </Select>
         </Drawer>
         <Drawer title={t("Armatures Horizontales")} isOpen>
@@ -418,12 +422,11 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             color="primary"
           >
             <MenuItem value={""}>ㅤ</MenuItem>
-            <MenuItem value={"0.375"}>#3</MenuItem>
-            <MenuItem value={"0.5"}>#4</MenuItem>
-            <MenuItem value={"0.625"}>#5</MenuItem>
-            <MenuItem value={"0.75"}>#6</MenuItem>
-            <MenuItem value={"0.875"}>#7</MenuItem>
-            <MenuItem value={"1.0"}>#8</MenuItem>
+            {Constants.REBAR_DIAMETER_OPTIONS.map(({ label, value }) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
           </Select>
         </Drawer>
         <Drawer title={t("Armatures Verticales")} isOpen>

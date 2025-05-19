@@ -5,4 +5,6 @@ export enum Routes {
   BUILDBLOCK = "/buildblock",
   CONTACT = "/contact",
   ACCOUNT = "/account",
+  SUMMARY = "summary",
+  BUILDBLOCK_FORM = "buildBlockForm",
 }

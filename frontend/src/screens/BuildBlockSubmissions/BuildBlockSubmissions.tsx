@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Constants } from "src/constants";
 import { List, ListItemButton, ListItemText, IconButton, TextField, ListItem } from "@mui/material";
 import { useAuth } from "src/context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,34 +11,31 @@ import SingleInputDialog from "src/components/SingleInputDialog";
 import { HTTP_STATUS } from "src/utils/http";
 import FormTextField from "src/components/FormTextField";
 import { Submissions } from "src/interfaces/submissions";
+import { apiService } from "src/services/api";
+import { Routes } from "src/interfaces/routes";
+import { HttpError } from "src/utils/http-error";
+import { Endpoints } from "src/interfaces/endpoints";
 
 const BuildBlockSubmissions: React.FC = () => {
-  const { t } = useTranslation();
-  const [submissions, setSubmissions] = useState<Submissions[] | undefined>(undefined);
-  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [newName, setNewName] = useState("");
-  const [error, setError] = useState("");
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [newName, setNewName] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [submissions, setSubmissions] = useState<Submissions[] | undefined>(undefined);
 
   useEffect(() => {
-    fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user ? user.token : "null"}`,
-      },
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const sub = await response.json();
-          setSubmissions(sub);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function fetchSubmissions() {
+      try {
+        const body = await apiService.get(`${Endpoints.SUBMISSIONS}${user?.email}`, user);
+        setSubmissions(body);
+      } catch (error) {
+        console.error("There has been an error retrieving submissions");
+      }
+    }
+    fetchSubmissions();
   }, []);
 
   const handleEdit = (index: number) => {
@@ -51,74 +47,54 @@ const BuildBlockSubmissions: React.FC = () => {
     if (!submissions) return;
     sessionStorage.setItem("buildblock-estimation", submissions[index].submission);
     sessionStorage.setItem("buildblock-estimation-name", submissions[index].name);
-    navigate("/buildblock");
+    navigate(Routes.BUILDBLOCK);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editingIndex === null || !submissions) return;
     const updatedSubmissions = [...submissions];
     const oldName = updatedSubmissions[editingIndex].name;
     updatedSubmissions[editingIndex].name = newName;
 
-    fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user ? user.token : "null"}`,
-      },
-      body: JSON.stringify({ submissions: updatedSubmissions }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          setSubmissions(updatedSubmissions);
-          setEditingIndex(null);
-        } else {
-          if (response.status === HTTP_STATUS.CONFLICT) {
-            updatedSubmissions[editingIndex].name = oldName;
-            setError("Une soumission avec ce nom existe déjà. Veuillez choisir un autre nom");
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      await apiService.put(`${Endpoints.SUBMISSIONS}${user?.email}`, { submissions: updatedSubmissions }, user);
+      setSubmissions(updatedSubmissions);
+      setEditingIndex(null);
+    } catch (error) {
+      const status = (error as HttpError)?.status;
+
+      if (status === HTTP_STATUS.CONFLICT) {
+        updatedSubmissions[editingIndex].name = oldName;
+        setError("Une soumission avec ce nom existe déjà. Veuillez choisir un autre nom");
+      } else {
+        console.error("There has been an error updating submissions. Retry later");
+      }
+    }
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = async (index: number) => {
     let name = "";
     const updatedSubmissions = submissions?.filter((submission, i) => {
-      if (i === index) {
-        name = submission.name;
-      }
+      if (i === index) name = submission.name;
       return i !== index;
     });
-    fetch(`${Constants.API}/compute/buildblock/submissions?email=${user?.email}&name=${name}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user ? user.token : "null"}`,
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          setSubmissions(updatedSubmissions);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    try {
+      await apiService.delete(`${Endpoints.SUBMISSIONS}${user?.email}&name=${name}`, user);
+      setSubmissions(updatedSubmissions);
+    } catch (error) {}
   };
 
   const filteredSubmissions = submissions?.filter((submission) => submission.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <main>
-      <div style={{ padding: "20px" }}>
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>{t("Mes soumissions Build Block")}</h1>
+      <div className="buildblock-submission-container">
+        <h1 className="buildblock-submission-title">{t("Mes soumissions Build Block")}</h1>
 
         <FormTextField
-          id="inside-90"
+          id="search-bar"
           fullWidth
           size="small"
           className="input-spacing"
@@ -126,12 +102,11 @@ const BuildBlockSubmissions: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+
         <List
           className="buildblock-submission-list"
           sx={{
             backgroundColor: (theme) => (theme.palette.mode === "light" ? "var(--transparent)" : "var(--background-color-very-dark)"),
-            borderRadius: "8px",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
           }}
         >
           {filteredSubmissions?.length ? (
@@ -143,10 +118,10 @@ const BuildBlockSubmissions: React.FC = () => {
                   secondaryAction={
                     <div>
                       <IconButton edge="end" onClick={() => handleEdit(index)} aria-label={t("Modifier")}>
-                        <EditIcon sx={{ color: "#1976d2" }} />
+                        <EditIcon className="edit-icon" />
                       </IconButton>
                       <IconButton edge="end" onClick={() => handleDelete(index)} aria-label={t("Supprimer")}>
-                        <DeleteIcon sx={{ color: "#d32f2f" }} />
+                        <DeleteIcon className="delete-icon" />
                       </IconButton>
                     </div>
                   }
@@ -159,7 +134,7 @@ const BuildBlockSubmissions: React.FC = () => {
               );
             })
           ) : (
-            <p style={{ marginLeft: "20px" }}>{t("Aucune soumission trouvée")}</p>
+            <p className="no-submission-text">{t("Aucune soumission trouvée")}</p>
           )}
         </List>
 
