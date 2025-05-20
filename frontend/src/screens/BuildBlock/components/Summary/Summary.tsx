@@ -247,13 +247,18 @@ const Summary: React.FC = () => {
           </TableHead>
           {data ? (
             <TableBody>
-              {Object.keys(data["bridges"]).map((width) => (
-                <TableRow key={width}>
-                  <TableCell>{width}</TableCell>
-                  <TableCell>{data["bridges"][width].quantity}</TableCell>
-                  <TableCell>{data["bridges"][width].nBundles}</TableCell>
-                </TableRow>
-              ))}
+              {Object.keys(data["bridges"]).map((width) => {
+                const bridge = data["bridges"][width];
+                if (bridge.quantity === 0) return null;
+
+                return (
+                  <TableRow key={width}>
+                    <TableCell>{width}</TableCell>
+                    <TableCell>{bridge.quantity}</TableCell>
+                    <TableCell>{bridge.nBundles}</TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           ) : (
             <TableBody>
@@ -321,7 +326,7 @@ const Summary: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <div className="space-between">
+      <div className="space-between" style={{ marginBottom: 30 }}>
         <Button variant={"outlined"} color="secondary" onClick={generateReport}>
           {t("Générer PDF")}
         </Button>

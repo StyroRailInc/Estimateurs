@@ -12,19 +12,18 @@ class House {
   constructor(private walls: Wall[]) {}
 
   private adjustBlockQuantities(ws: HouseSpecifications) {
-    const [widthKey] = Object.entries(ws.blockQuantities)[0];
-    const width = widthKey as Width;
-
-    if (!this.hs.blockQuantities[width]) {
-      this.hs.blockQuantities = createBlockQuantities(this.hs.blockQuantities, width);
-      this.hs.bridges = createBridgeQuantities(this.hs.bridges, width);
-    }
-
     for (const width of typedKeys(ws.blockQuantities)) {
+      if (!this.hs.blockQuantities[width]) {
+        this.hs.blockQuantities = createBlockQuantities(this.hs.blockQuantities, width);
+        this.hs.bridges = createBridgeQuantities(this.hs.bridges, width);
+      }
+
       for (const blockType of typedKeys(ws.blockQuantities[width])) {
         const quantity = ws.blockQuantities[width][blockType].quantity;
         this.hs.blockQuantities[width][blockType].quantity += quantity;
       }
+
+      this.hs.bridges[width].quantity += ws.bridges[width].quantity;
     }
 
     for (const size of typedKeys(ws.rebars)) {
@@ -36,7 +35,6 @@ class House {
     this.hs.squareFootage.net += ws.squareFootage.net;
     this.hs.squareFootage.gross += ws.squareFootage.gross;
     this.hs.squareFootage.opening += ws.squareFootage.opening;
-    this.hs.bridges[width].quantity += ws.bridges[width].quantity;
   }
 
   private computeBundleQuantity() {

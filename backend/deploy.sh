@@ -17,7 +17,7 @@ deploy_lambda() {
   rm -rf "$ZIP_FILE"
 
   cd dist
-  zip -r "../$ZIP_FILE" handlers/$HANDLER.mjs utils middlewares managers constants classes
+  zip -r "../$ZIP_FILE" handlers/$HANDLER.mjs utils middlewares managers constants classes interfaces
   cd ..
   zip -r "$ZIP_FILE" node_modules package-lock.json package.json
 

@@ -29,7 +29,7 @@ export const REPORT = {
   },
   eng: {
     title: "Build Block Estimate",
-    quantities: "Blocs",
+    quantities: "Blocks",
     blocks: {
       straight: "Straight",
       ninetyCorner: "Ninety corner",

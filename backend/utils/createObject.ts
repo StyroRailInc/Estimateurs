@@ -30,9 +30,13 @@ export function createSquareFootage(): SquareFootage {
 }
 
 export function createBlockQuantities(blockQuantities: BlockQuantities = {} as BlockQuantities, width: Width = '8"'): BlockQuantities {
-  const allBlockTypes = Object.keys(BLOCK_TYPES) as BlockType[];
-  blockQuantities[width] = Object.fromEntries(allBlockTypes.map((type) => [type, createDefaultQuantity()])) as BlockQuantities[Width];
+  blockQuantities[width] = createBlockQuantity();
   return blockQuantities;
+}
+
+export function createBlockQuantity() {
+  const allBlockTypes = Object.keys(BLOCK_TYPES) as BlockType[];
+  return Object.fromEntries(allBlockTypes.map((type) => [type, createDefaultQuantity()])) as BlockQuantities[Width];
 }
 
 export function createBridgeQuantities(bridgeQuantities: BridgeQuantities = {} as BridgeQuantities, width: Width = '8"'): BridgeQuantities {
@@ -51,6 +55,6 @@ export function createHouseSpecifications(): HouseSpecifications {
   };
 }
 
-function createDefaultQuantity(): Quantity {
+export function createDefaultQuantity(): Quantity {
   return { quantity: 0, nBundles: 0 };
 }

@@ -1,11 +1,11 @@
-import Opening from "./../classes/Opening";
-import Corners from "./../classes/Corners";
-import Dimensions from "./../classes/Dimensions";
-import { Straight } from "./../classes/Straight";
-import SpecialBlocks from "./../classes/SpecialBlocks";
-import { ColdJointPin, VerticalRebar, HorizontalRebar } from "./../classes/Rebars";
+import Opening from "./../classes/Opening.js";
+import Corners from "./../classes/Corners.js";
+import Dimensions from "./../classes/Dimensions.js";
+import { Straight } from "./../classes/Straight.js";
+import SpecialBlocks from "./../classes/SpecialBlocks.js";
+import { ColdJointPin, VerticalRebar, HorizontalRebar } from "./../classes/Rebars.js";
 
-export type Width = '4"' | '6"' | '8"';
+export type Width = '1"' | '2"' | '4"' | '6"' | '8"';
 
 export type WallType = "Reg" | "KD" | "HW" | "Pign";
 

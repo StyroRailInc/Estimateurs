@@ -22,6 +22,14 @@ enum HousePaths {
   ANSWER8 = "../mock-data/house8/mock-answer.json",
   HOUSE9 = "../mock-data/house9/mock-house.json",
   ANSWER9 = "../mock-data/house9/mock-answer.json",
+  HOUSE10 = "../mock-data/house10/mock-house.json",
+  ANSWER10 = "../mock-data/house10/mock-answer.json",
+  HOUSE11 = "../mock-data/house11/mock-house.json",
+  ANSWER11 = "../mock-data/house11/mock-answer.json",
+  HOUSE12 = "../mock-data/house12/mock-house.json",
+  ANSWER12 = "../mock-data/house12/mock-answer.json",
+  HOUSE13 = "../mock-data/house13/mock-house.json",
+  ANSWER13 = "../mock-data/house13/mock-answer.json",
 }
 
 function readJsonFile(filePath: string): any {
@@ -100,4 +108,44 @@ describe("Calculate house", () => {
   //   const house = new House(walls);
   //   expect(house.computeHouse()).toEqual(answer);
   // });
+
+  test("should correctly calculate house #9 simple 1 floor", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE9);
+    const answer = readJsonFile(HousePaths.ANSWER9);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #10 brickledge with windows", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE10);
+    const answer = readJsonFile(HousePaths.ANSWER10);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #11 brickledge with windows and taper top", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE11);
+    const answer = readJsonFile(HousePaths.ANSWER11);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #12 real life house", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE12);
+    const answer = readJsonFile(HousePaths.ANSWER12);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #13 real life house with brick ledge and taper top and added 45 corners", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE13);
+    const answer = readJsonFile(HousePaths.ANSWER13);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
 });
