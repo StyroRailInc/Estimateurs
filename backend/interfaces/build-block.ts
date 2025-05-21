@@ -5,7 +5,7 @@ import { Straight } from "./../classes/Straight.js";
 import SpecialBlocks from "./../classes/SpecialBlocks.js";
 import { ColdJointPin, VerticalRebar, HorizontalRebar } from "./../classes/Rebars.js";
 
-export type Width = '1"' | '2"' | '4"' | '6"' | '8"';
+export type Width = '1"' | '2"' | '4"' | '6"' | '8"' | '10"' | '12"';
 
 export type WallType = "Reg" | "KD" | "HW" | "Pign";
 

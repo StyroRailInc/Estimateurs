@@ -31,6 +31,7 @@ class Wall {
     this.computeConcreteVolume();
     this.computeSquareFootage();
 
+    this.adjustQuantitiesIfKd();
     return this.hs;
   }
 
@@ -50,11 +51,11 @@ class Wall {
     if (this.wm.specialBlocks.getTotalDoubleTaperTop()) {
       this.hs.blockQuantities[width].ninetyCorner.quantity -= this.wm.corners.getTotal90("ninetyCorner");
       this.hs.blockQuantities[width].fortyFiveCorner.quantity -= this.wm.corners.getTotal45();
-      this.hs.blockQuantities[width].straight.quantity += this.wm.specialBlocks.getDoubleTaperTopNCorners();
+      this.hs.blockQuantities[width][this.straightType].quantity += this.wm.specialBlocks.getDoubleTaperTopNCorners();
     }
   }
 
-  adjustSpecialBlocks() {
+  private adjustSpecialBlocks() {
     const specialBlocks = this.wm.specialBlocks.getTotalDoubleTaperTop() + this.wm.specialBlocks.getTotalBrickLedge();
     this.hs.blockQuantities[this.wConfig.dimensions.width][this.straightType].quantity +=
       -specialBlocks + this.wm.specialBlocks.getBrickLedgeN45Corners() + this.wm.specialBlocks.getBrickLedgeNCorners();
@@ -66,6 +67,7 @@ class Wall {
     const bq = this.hs.blockQuantities[this.wConfig.dimensions.width];
 
     this.getTotalStraight();
+
     bq.ninetyCorner.quantity = this.getTotalNinetyCorner("ninetyCorner") - this.wm.specialBlocks.getBrickLedgeNCorners();
 
     bq.fortyFiveCorner.quantity = Math.ceil(this.wm.corners.getTotal45() * this.nCourses) - this.wm.specialBlocks.getBrickLedgeN45Corners();
@@ -110,7 +112,7 @@ class Wall {
     const cornersConcreteVolume = this.wm.corners.getTotalConcreteVolume(bq.ninetyCorner.quantity, bq.fortyFiveCorner.quantity);
     const specialBlocksConcreteVolume = this.wm.specialBlocks.getTotalConcreteVolume(bq.brickLedge.quantity, bq.doubleTaperTop.quantity);
     const straightConcreteVolume = bq.straight.quantity * straight.concreteVolume;
-    const kdStraightConcreteVolume = (bq.kdStraight.quantity / 2) * straight.concreteVolume;
+    const kdStraightConcreteVolume = bq.kdStraight.quantity * straight.concreteVolume;
     this.hs.concreteVolume = cornersConcreteVolume + specialBlocksConcreteVolume + straightConcreteVolume + kdStraightConcreteVolume;
   }
 
@@ -131,7 +133,7 @@ class Wall {
   private computeTotalBlocks() {
     const { buck, thermalsert, ...otherBlocks } = this.hs.blockQuantities[this.wConfig.dimensions.width];
     return Object.entries(otherBlocks).reduce((total, [key, block]) => {
-      return total + (key === "kdStraight" ? block.quantity / 2 : block.quantity);
+      return total + block.quantity;
     }, 0);
   }
 
@@ -147,6 +149,15 @@ class Wall {
 
   private getOpeningSurfaceArea(): number {
     return this.wm.openings.reduce((total, opening) => total + opening.surfaceArea, 0);
+  }
+
+  private adjustQuantitiesIfKd() {
+    if (!(this.wConfig.wallType === "KD")) return;
+
+    const width = this.wConfig.dimensions.width;
+    console.log(this.hs.blockQuantities[width].kdStraight.quantity);
+
+    this.hs.blockQuantities[width].kdStraight.quantity *= 2;
   }
 }
 

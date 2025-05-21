@@ -18,7 +18,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.065844,
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 15, // 12 or 15
+      qtyPerBundle: 15,
     },
     '6"': {
       length: { ext: 48, int: 48 },
@@ -67,13 +67,14 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
     },
   },
   kdStraight: {
+    // deconstructed
     '4"': {
       length: { ext: 48, int: 48 },
       width: 9,
       height: 16,
       concreteVolume: 0.065844,
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 24, // To verify
+      qtyPerBundle: 32, // 16 blocks or 32 panels
     },
     '6"': {
       length: { ext: 48, int: 48 },
@@ -81,7 +82,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.098765,
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 24, // To verify
+      qtyPerBundle: 32, // 16 blocks or 32 panels
     },
     '8"': {
       length: { ext: 48, int: 48 },
@@ -89,7 +90,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 16,
       concreteVolume: 0.131687,
       surfaceArea: { ext: 767.52, int: 767.52 },
-      qtyPerBundle: 24, // To verify
+      qtyPerBundle: 32, // 16 blocks or 32 panels
     },
     '10"': {
       length: { ext: 48, int: 48 },
@@ -109,6 +110,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
     },
   },
   kdNinetyCorner: {
+    // assembled
     '10"': {
       length: { ext: 37, int: 22 },
       width: 15,
@@ -208,7 +210,7 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       height: 0,
       concreteVolume: 0,
       surfaceArea: { ext: 0, int: 0 },
-      qtyPerBundle: 1,
+      qtyPerBundle: 1, // no division by 0 since product is not available
     },
     '6"': {
       length: { ext: 48, int: 48 },

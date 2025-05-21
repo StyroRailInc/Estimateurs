@@ -30,6 +30,12 @@ enum HousePaths {
   ANSWER12 = "../mock-data/house12/mock-answer.json",
   HOUSE13 = "../mock-data/house13/mock-house.json",
   ANSWER13 = "../mock-data/house13/mock-answer.json",
+  HOUSE14 = "../mock-data/house14/mock-house.json",
+  ANSWER14 = "../mock-data/house14/mock-answer.json",
+  HOUSE15 = "../mock-data/house15/mock-house.json",
+  ANSWER15 = "../mock-data/house15/mock-answer.json",
+  HOUSE16 = "../mock-data/house16/mock-house.json",
+  ANSWER16 = "../mock-data/house16/mock-answer.json",
 }
 
 function readJsonFile(filePath: string): any {
@@ -93,17 +99,9 @@ describe("Calculate house", () => {
     expect(house.computeHouse()).toEqual(answer);
   });
 
-  test("should correctly calculate house #8 (knock down)", () => {
-    const jsonHouse = readJsonFile(HousePaths.HOUSE8);
-    const answer = readJsonFile(HousePaths.ANSWER8);
-    const walls = jsonHouse.walls.map(parseWall);
-    const house = new House(walls);
-    expect(house.computeHouse()).toEqual(answer);
-  });
-
-  // test("should correctly calculate house #9 (knock down and brickledge and taper)", () => {
-  //   const jsonHouse = readJsonFile(HousePaths.HOUSE9);
-  //   const answer = readJsonFile(HousePaths.ANSWER9);
+  // test("should correctly calculate house #8 (knock down)", () => {
+  //   const jsonHouse = readJsonFile(HousePaths.HOUSE8);
+  //   const answer = readJsonFile(HousePaths.ANSWER8);
   //   const walls = jsonHouse.walls.map(parseWall);
   //   const house = new House(walls);
   //   expect(house.computeHouse()).toEqual(answer);
@@ -144,6 +142,33 @@ describe("Calculate house", () => {
   test("should correctly calculate house #13 real life house with brick ledge and taper top and added 45 corners", () => {
     const jsonHouse = readJsonFile(HousePaths.HOUSE13);
     const answer = readJsonFile(HousePaths.ANSWER13);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  // There is a difference between the excel and the calculator for the brickledges
+  // on the second floor. There will always be 10 more straights per floor that has
+  // brickledges that are not the first floor.
+  test("should correctly calculate house #14 taper top on second floor", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE14);
+    const answer = readJsonFile(HousePaths.ANSWER14);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #15 (knock down and brickledge and taper)", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE15);
+    const answer = readJsonFile(HousePaths.ANSWER15);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #16 (knock down and brickledge and taper and corners and 10 and above)", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE16);
+    const answer = readJsonFile(HousePaths.ANSWER16);
     const walls = jsonHouse.walls.map(parseWall);
     const house = new House(walls);
     expect(house.computeHouse()).toEqual(answer);

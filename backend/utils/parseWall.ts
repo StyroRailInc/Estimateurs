@@ -16,6 +16,7 @@ export const parseWall = (wallData: any): Wall | undefined => {
 
   try {
     tryApplyPinionWallFilter(formState, wallType);
+    tryApplyKdWallFilter(formState, wallType);
 
     const dimensions = new Dimensions(
       parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
@@ -96,6 +97,7 @@ export const parseWall = (wallData: any): Wall | undefined => {
 };
 
 function tryApplyPinionWallFilter(formState: any, wallType: WallType) {
+  // These are all fields that need to be 0 when walltype is pinion
   if (!(wallType === "Pign")) return;
   formState.nInsideCorners = "0";
   formState.n45InsideCorners = "0";
@@ -105,4 +107,11 @@ function tryApplyPinionWallFilter(formState: any, wallType: WallType) {
   formState.doubleTaperTop.length = "";
   formState.brickLedge.nCorners = "0";
   formState.brickLedge.n45Corners = "0";
+}
+
+function tryApplyKdWallFilter(formState: any, wallType: WallType) {
+  // These are all fields that need to be 0 when walltype is kd
+  if (!(wallType === "KD" && (formState.width === '10"' || formState.width === '12"'))) return;
+  formState.nInsideCorners = "0";
+  formState.n45InsideCorners = "0";
 }
