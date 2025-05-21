@@ -36,6 +36,8 @@ const Account: React.FC = () => {
 
       if (status === HTTP_STATUS.UNAUTHORIZED) {
         console.error(t("Jeton de session invalide"));
+        logout();
+        navigate(Routes.LOGIN);
       } else {
         console.error(t("Échec de la déconnexion. Réessayez."));
       }
