@@ -1,5 +1,5 @@
 import Wall from "./Wall.js";
-import { BlockType, HouseSpecifications, Width } from "./../interfaces/build-block.js";
+import { BlockType, HouseSpecifications } from "./../interfaces/build-block.js";
 import getBlockSpecifications from "./BlockSpecifications.js";
 import { createBlockQuantities, createBridgeQuantities, createHouseSpecifications } from "../utils/createObject.js";
 import { typedKeys } from "../utils/typedKeys.js";
@@ -41,6 +41,7 @@ class House {
     for (const width of typedKeys(this.hs.blockQuantities)) {
       for (const blockType of typedKeys(this.hs.blockQuantities[width])) {
         const block = this.hs.blockQuantities[width][blockType];
+        if (block.quantity < 0) block.quantity = 0; // just in case the inputs are invalid
         const qtyPerBundle = getBlockSpecifications(blockType as BlockType, width)?.qtyPerBundle || Infinity;
         block.nBundles += Math.ceil(block.quantity / qtyPerBundle);
       }

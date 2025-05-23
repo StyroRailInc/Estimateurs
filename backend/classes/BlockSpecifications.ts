@@ -272,6 +272,22 @@ const blockSpecifications: Record<BlockType, Record<string, BlockSpecification>>
       surfaceArea: { ext: 649.44, int: 649.44 },
       qtyPerBundle: 16,
     },
+    '10"': {
+      length: { ext: 48, int: 48 },
+      width: 15,
+      height: 2,
+      concreteVolume: 0, // Not provided
+      surfaceArea: { ext: 750, int: 750 }, // not provided
+      qtyPerBundle: 16,
+    },
+    '12"': {
+      length: { ext: 48, int: 48 },
+      width: 17,
+      height: 2,
+      concreteVolume: 0, // Not provided
+      surfaceArea: { ext: 850, int: 850 }, // not provided
+      qtyPerBundle: 16,
+    },
   },
   thermalsert: {
     '1"': {

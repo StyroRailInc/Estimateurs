@@ -36,6 +36,12 @@ enum HousePaths {
   ANSWER15 = "../mock-data/house15/mock-answer.json",
   HOUSE16 = "../mock-data/house16/mock-house.json",
   ANSWER16 = "../mock-data/house16/mock-answer.json",
+  HOUSE17 = "../mock-data/house17/mock-house.json",
+  ANSWER17 = "../mock-data/house17/mock-answer.json",
+  HOUSE18 = "../mock-data/house18/mock-house.json",
+  ANSWER18 = "../mock-data/house18/mock-answer.json",
+  // HOUSE19 = "../mock-data/house19/mock-house.json",
+  // ANSWER19 = "../mock-data/house19/mock-answer.json",
 }
 
 function readJsonFile(filePath: string): any {
@@ -173,4 +179,28 @@ describe("Calculate house", () => {
     const house = new House(walls);
     expect(house.computeHouse()).toEqual(answer);
   });
+
+  test("should correctly calculate house #17 (knock down and brickledge and taper and corners and 12)", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE17);
+    const answer = readJsonFile(HousePaths.ANSWER17);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  test("should correctly calculate house #18 real life house with brick ledge and taper top and added 45 corners", () => {
+    const jsonHouse = readJsonFile(HousePaths.HOUSE18);
+    const answer = readJsonFile(HousePaths.ANSWER18);
+    const walls = jsonHouse.walls.map(parseWall);
+    const house = new House(walls);
+    expect(house.computeHouse()).toEqual(answer);
+  });
+
+  // test("should correctly calculate house #19 bl10 like excel", () => {
+  //   const jsonHouse = readJsonFile(HousePaths.HOUSE19);
+  //   const answer = readJsonFile(HousePaths.ANSWER19);
+  //   const walls = jsonHouse.walls.map(parseWall);
+  //   const house = new House(walls);
+  //   expect(house.computeHouse()).toEqual(answer);
+  // });
 });

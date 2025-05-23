@@ -17,6 +17,7 @@ export const parseWall = (wallData: any): Wall | undefined => {
   try {
     tryApplyPinionWallFilter(formState, wallType);
     tryApplyKdWallFilter(formState, wallType);
+    tryApply4InchWidthFilter(formState);
 
     const dimensions = new Dimensions(
       parseInput(formState.height, IS_FEET, !EMPTY_STRING_VALID),
@@ -112,6 +113,14 @@ function tryApplyPinionWallFilter(formState: any, wallType: WallType) {
 function tryApplyKdWallFilter(formState: any, wallType: WallType) {
   // These are all fields that need to be 0 when walltype is kd
   if (!(wallType === "KD" && (formState.width === '10"' || formState.width === '12"'))) return;
-  formState.nInsideCorners = "0";
+  formState.n45OutsideCorners = "0";
   formState.n45InsideCorners = "0";
+  formState.brickLedge.n45Corners = "0";
+}
+
+function tryApply4InchWidthFilter(formState: any) {
+  // These are all fields that need to be 0 when width is 4"
+  if (formState.width === '4"') return;
+  formState.brickLedge.quantity = "0";
+  formState.doubleTaperTop.quantity = "0";
 }

@@ -9,7 +9,6 @@ import { HTTP_STATUS } from "src/utils/http";
 import "./../../../../global.css";
 import { useNavigate } from "react-router-dom";
 import SingleInputDialog from "src/components/SingleInputDialog";
-import { apiService } from "src/services/api";
 import i18n from "src/i18n";
 
 const Summary: React.FC = () => {
@@ -148,6 +147,8 @@ const Summary: React.FC = () => {
     { key: "thermalsert", label: t("Insertion isolante") },
     { key: "kdStraight", label: t("Déconstruit droit") },
     { key: "kdNinetyCorner", label: t("Déconstruit coin à 90 degrés") },
+    { key: "kdBrickLedge", label: t("Déconstruit support à maçon") },
+    { key: "kdDoubleTaperTop", label: t("Déconstruit double biseau") },
   ];
 
   return (
@@ -289,22 +290,22 @@ const Summary: React.FC = () => {
               <TableRow>
                 <TableCell>{t("Volume de béton") + " (Net)"}</TableCell>
                 <TableCell>{data["concreteVolume"] + " m³"}</TableCell>
-                <TableCell>{"X"}</TableCell>
+                <TableCell>{"-"}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>{t("Superficie (Brute)")}</TableCell>
                 <TableCell>{data["squareFootage"].gross + " ft²"}</TableCell>
-                <TableCell>{"X"}</TableCell>
+                <TableCell>{"-"}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>{t("Superficie (Net)")}</TableCell>
                 <TableCell>{data["squareFootage"].net + " ft²"}</TableCell>
-                <TableCell>{"X"}</TableCell>
+                <TableCell>{"-"}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>{t("Superficie des ouvertures")}</TableCell>
                 <TableCell>{data["squareFootage"].opening + " ft²"}</TableCell>
-                <TableCell>{"X"}</TableCell>
+                <TableCell>{"-"}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>{"Clips"}</TableCell>

@@ -72,17 +72,16 @@ class DoubleTaperTop extends SpecialBlockBase {
 
 class Buck extends SpecialBlockBase {
   private buckExists = true;
-  constructor(length: number, width: Width, wallType: WallType) {
+  constructor(length: number, width: Width) {
     super(length, width);
-    if (wallType === "KD" && ['10"', '12"'].includes(width)) this.buckExists = false;
   }
 
   getLength() {
-    return this.buckExists ? this.length : 0;
+    return this.length;
   }
 
   getBlockLength() {
-    return this.buckExists ? super.getBlockLength("buck") : 1;
+    return super.getBlockLength("buck");
   }
 }
 
@@ -103,7 +102,7 @@ class SpecialBlocks {
   ) {
     this.doubleTaperTop = new DoubleTaperTop(doubleTaperTopLength, width, doubleTaperTopNCorners, wallType);
     this.brickLedge = new BrickLedge(brickLedgeLength, width, brickLedgeNCorners, brickLedgeN45Corners, wallType);
-    this.buck = new Buck(buckLength, width, wallType);
+    this.buck = new Buck(buckLength, width);
   }
 
   getDoubleTaperTopNCorners() {
@@ -125,6 +124,7 @@ class SpecialBlocks {
   }
 
   getTotalDoubleTaperTop() {
+    // if (blockType !== this.doubleTaperTop.doubleTaperTop) return 0;
     const total = Math.ceil(this.doubleTaperTop.getLength() / this.doubleTaperTop.getBlockLength());
     if (Number.isNaN(total)) return 0;
     else return total;

@@ -84,7 +84,7 @@ const BuildBlockForm: React.FC<BuildBlockFormProps> = ({ setInnerPage }) => {
             }}
           >
             <FormControlLabel value={"Reg"} control={<Radio />} label={t("Régulier")} />
-            {/* <FormControlLabel value={"KD"} control={<Radio />} label={t("Déconstruit")} /> */}
+            <FormControlLabel value={"KD"} control={<Radio />} label={t("Déconstruit")} />
             <FormControlLabel value={"Pign"} control={<Radio />} label={t("Pignon")} />
           </RadioGroup>
         </Drawer>

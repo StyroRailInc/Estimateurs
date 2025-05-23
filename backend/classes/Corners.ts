@@ -84,9 +84,8 @@ class Corners {
     return ninetyCornersConcreteVolume + fortyFiveCornersConcreteVolume;
   }
 
-  getTotal90(blockType: BlockType) {
-    if (blockType !== this.ninetyDegreeCorner.corner) return 0;
-    else return this.ninetyDegreeCorner.getTotal();
+  getTotal90() {
+    return this.ninetyDegreeCorner.getTotal();
   }
 
   getTotal45() {
