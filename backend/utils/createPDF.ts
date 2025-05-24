@@ -81,7 +81,7 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
   Object.entries(data.blockQuantities || {}).forEach(([size, blockTypes]) => {
     checkPageEnd(30);
     const cleanSize = size.replace(/\\/g, "");
-    doc.fontSize(PdfFontSize.Section).font(PdfFont.Bold).text(`Blocs ${cleanSize}:`, PdfPosition.Margin).moveDown(0.3);
+    doc.fontSize(PdfFontSize.Section).font(PdfFont.Bold).text(`${REPORT[lang]["quantities"]} ${cleanSize}:`, PdfPosition.Margin).moveDown(0.3);
 
     Object.entries(blockTypes as object).forEach(([type, details]: any) => {
       if (details.quantity > 0) {
@@ -128,7 +128,7 @@ export function generateBuildBlockReport(doc: PDFKit.PDFDocument, lang: "eng" | 
       .font(PdfFont.Bold)
       .text(`• ${details.quantity} ${REPORT[lang]["units"]}`, { indent: PdfPosition.TextIndent, continued: true })
       .font(PdfFont.Regular)
-      .text(`(${details.nBundles} ${REPORT[lang]["bundles"]})`)
+      .text(` (${details.nBundles} ${REPORT[lang]["bundles"]})`)
       .moveDown(0.5);
   });
 
